@@ -5,9 +5,9 @@ import Hero from "@/components/Hero";
 
 export default function Home() {
 	return (
-		<>
+		<div className="bg-neutral-900 text-white h-screen snap-y snap-mandatory">
 			<Header />
 			<Hero />
-		</>
+		</div>
 	);
 }

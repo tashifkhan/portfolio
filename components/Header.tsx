@@ -5,9 +5,7 @@ import { motion } from "framer-motion";
 import { links } from "../lib/data";
 import Link from "next/link";
 
-// type Props = {};
-
-const Header: React.FC = (/*{}: Props */) => {
+const Header: React.FC = () => {
 	return (
 		<header className="z-[999] relative">
 			<motion.div
