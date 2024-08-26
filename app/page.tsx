@@ -5,9 +5,11 @@ import Hero from "@/components/Hero";
 
 export default function Home() {
 	return (
-		<div className="bg-neutral-900 text-white h-screen snap-y snap-mandatory">
+		<div className="bg-cover bg-center bg-custom-bg text-white h-screen snap-y snap-mandatory pt-28 sm:pt-36 overflow-scroll z-0">
 			<Header />
-			<Hero />
+			<section id="hero" className="snap">
+				<Hero />
+			</section>
 		</div>
 	);
 }
