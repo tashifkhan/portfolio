@@ -1,9 +1,14 @@
 import React from "react";
 
-export const links = [
+type Link = {
+  name: string;
+  hash?: string;
+};
+
+export const links: Link[] = [
   {
     name: "Home",
-    hash: "#home",
+    hash: "#",
   },
   {
     name: "Projects",
@@ -18,7 +23,11 @@ export const links = [
     hash: "#education",
   },
   {
+    name: "Recognistions",
+    hash: "#por",
+  },
+  {
     name: "Contact",
     hash: "#contact",
   },
-] as const;
+];

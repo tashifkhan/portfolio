@@ -28,7 +28,7 @@ function Hero({}: Props) {
 		delaySpeed: 2000,
 	});
 	return (
-		<div className="h-screen flex flex-col space-y-8 items-center justify-center text-center overflow-hidden">
+		<div className="h-screen flex flex-col space-y-6 items-center justify-center text-center overflow-hidden">
 			<BgCircles />
 			<motion.div
 				initial={{ opacity: 0, scale: 0 }}
@@ -86,7 +86,7 @@ function Hero({}: Props) {
 				</a>
 			</motion.div>
 			<motion.div
-				className="flex flex-col sm:flex-row items-center justify-center gap-2 px-4 text-lg font-medium"
+				className="flex flex-row items-center justify-center gap-2 px-4 text-lg font-medium"
 				initial={{ opacity: 0, y: 100 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{
