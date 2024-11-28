@@ -25,7 +25,7 @@ const Header: React.FC = () => {
 						>
 							<Link
 								className="flex w-full items-center justify-center px-2 py-3 hover:text-gray-950 transition dark:text-gray-500 dark:hover:text-gray-300"
-								href={link.hash}
+								href={link.hash || "#"}
 							>
 								{link.name}
 							</Link>
