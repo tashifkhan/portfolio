@@ -3,6 +3,7 @@ import Header from "@/components/Header";
 import React from "react";
 import Hero from "@/components/Hero";
 import Projects from "@/components/Projects";
+import Featured from "@/components/Featured";
 
 export default function Home() {
 	return (
@@ -12,7 +13,7 @@ export default function Home() {
 				<Hero />
 			</section>
 			<section id="projects" className="snap-center w-screen h-screen">
-				<Projects />
+				<Featured />
 			</section>
 		</div>
 	);
