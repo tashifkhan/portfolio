@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import React from "react";
 import Hero from "@/components/Hero";
 import Featured from "@/components/Featured";
+import { ProjectsGrid } from "@/components/ProjectsGrid";
 
 export default function Home() {
 	return (
@@ -16,6 +17,7 @@ export default function Home() {
 				   scrollbar-hide"
 			>
 				<Featured />
+				<ProjectsGrid />
 			</section>
 		</div>
 	);
