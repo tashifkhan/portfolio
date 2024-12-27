@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { ProjectCard } from "./ProjectCard";
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 
-const ITEMS_PER_PAGE = 6;
+const PROJECTS_PER_PAGE = 6;
 
 interface Project {
 	id: number;
@@ -101,34 +102,84 @@ const projects: Project[] = [
 ];
 
 export function ProjectsGrid() {
-	const [visibleProjects, setVisibleProjects] = useState(ITEMS_PER_PAGE);
+	const [visibleCount, setVisibleCount] = useState(PROJECTS_PER_PAGE);
 
 	const showMoreProjects = () => {
-		setVisibleProjects((prev) =>
-			Math.min(prev + ITEMS_PER_PAGE, projects.length)
-		);
+		setVisibleCount((prev) => prev + PROJECTS_PER_PAGE);
 	};
 
+	const container = {
+		hidden: { opacity: 0 },
+		show: {
+			opacity: 1,
+			transition: {
+				staggerChildren: 0.2,
+			},
+		},
+	};
+
+	const item = {
+		hidden: { y: 20, opacity: 0 },
+		show: {
+			y: 0,
+			opacity: 1,
+			transition: {
+				type: "spring",
+				bounce: 0.4,
+			},
+		},
+	};
 	return (
 		<section className="py-12 px-4 md:px-6 lg:px-8">
-			<h2 className="text-3xl font-bold mb-8 text-center font-mono">
-				Other Noteworthy Projects
-			</h2>
-			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-				{projects.slice(0, visibleProjects).map((project) => (
-					<ProjectCard key={project.id} {...project} />
+			<motion.div
+				initial={{ opacity: 0 }}
+				whileInView={{ opacity: 1 }}
+				viewport={{ once: true }}
+				transition={{ duration: 0.6 }}
+			>
+				<h2 className="text-3xl font-bold mb-8 text-center font-mono">
+					Other Noteworthy Projects
+				</h2>
+			</motion.div>
+
+			<motion.div
+				variants={container}
+				initial="hidden"
+				whileInView="show"
+				viewport={{ once: true, margin: "-100px" }}
+				className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto"
+			>
+				{projects.slice(0, visibleCount).map((project, index) => (
+					<motion.div
+						key={project.id}
+						variants={item}
+						whileHover={{ scale: 1.02 }}
+						whileTap={{ scale: 0.98 }}
+						className="transition-shadow duration-300 hover:shadow-xl"
+					>
+						<ProjectCard {...project} />
+					</motion.div>
 				))}
-			</div>
-			{visibleProjects < projects.length && (
-				<div className="mt-8 text-center">
+			</motion.div>
+
+			{visibleCount < projects.length && (
+				<motion.div
+					initial={{ opacity: 0 }}
+					whileInView={{ opacity: 1 }}
+					viewport={{ once: true }}
+					transition={{ delay: 0.3 }}
+					className="mt-8 text-center"
+				>
 					<Button
 						onClick={showMoreProjects}
 						variant="ghost"
-						className="backdrop-blur-sm bg-white/10 border-none hover:bg-white/20 hover:text-primary-foreground transition-all shadow-lg rounded-full hover:scale-105"
+						className="backdrop-blur-sm bg-white/10 border-none hover:bg-white/20 
+				hover:text-primary-foreground transition-all duration-300 
+				shadow-lg rounded-full"
 					>
 						Show More Projects
 					</Button>
-				</div>
+				</motion.div>
 			)}
 		</section>
 	);
