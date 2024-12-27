@@ -28,9 +28,33 @@ export function ProjectCard({
 }: ProjectCardProps) {
 	return (
 		<Card className="flex flex-col h-full bg-[#3d2e1f]/80 backdrop-blur-sm border-none transition-all hover:border-white/80">
-			<CardHeader className="flex flex-row items-center gap-2">
-				<Folder className="h-8 w-8 text-primary" />
-				<CardTitle className=" text-lg">{title}</CardTitle>
+			<CardHeader className="">
+				<div className="flex justify-between items-center">
+					<Folder className="h-8 w-8 text-[#fdba74] pb-0 mb-0" />
+					<div className="flex gap-0 ">
+						{githubUrl && (
+							<Link
+								href={githubUrl}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="p-2 hover:text-primary transition-colors"
+							>
+								<Github className="w-[24.25px] h-[28.64px] relative flex-col justify-start items-start flex text-[#fdba74]" />
+							</Link>
+						)}
+						{liveUrl && (
+							<Link
+								href={liveUrl}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="p-2 hover:text-primary transition-colors"
+							>
+								<ExternalLink className="w-[24.25px] h-[28.64px] relative flex-col justify-start items-start flex text-[#fdba74]" />
+							</Link>
+						)}
+					</div>
+				</div>
+				<CardTitle className="text-2xl">{title}</CardTitle>
 			</CardHeader>
 			<CardContent className="flex-grow">
 				<p className="text-muted-foreground">{description}</p>
@@ -48,28 +72,6 @@ export function ProjectCard({
 							</Badge>
 						</span>
 					))}
-				</div>
-				<div className="flex gap-2 ml-auto">
-					{githubUrl && (
-						<Link
-							href={githubUrl}
-							target="_blank"
-							rel="noopener noreferrer"
-							className="p-2 hover:text-primary transition-colors"
-						>
-							<Github className="h-5 w-5" />
-						</Link>
-					)}
-					{liveUrl && (
-						<Link
-							href={liveUrl}
-							target="_blank"
-							rel="noopener noreferrer"
-							className="p-2 hover:text-primary transition-colors"
-						>
-							<ExternalLink className="h-5 w-5" />
-						</Link>
-					)}
 				</div>
 			</CardFooter>
 		</Card>
