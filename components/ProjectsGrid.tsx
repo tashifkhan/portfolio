@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ProjectCard } from "./ProjectCard";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 const PROJECTS_PER_PAGE = 6;
 
@@ -136,6 +137,7 @@ export function ProjectsGrid() {
 	};
 
 	const visibleProjects = projects.slice(0, visibleCount);
+
 	return (
 		<section className="py-12 px-4 md:px-6 lg:px-8">
 			<motion.div
@@ -144,9 +146,14 @@ export function ProjectsGrid() {
 				viewport={{ once: true }}
 				transition={{ duration: 0.6 }}
 			>
-				<h2 className="text-3xl font-bold mb-8 text-center font-mono">
+				<h2 className="text-3xl font-bold text-center font-mono">
 					Other Noteworthy Projects
 				</h2>
+				<div className="flex justify-center">
+					<Link href="/collection" className="text-orange-300 text-center mb-8">
+						view the collection
+					</Link>
+				</div>
 			</motion.div>
 
 			<motion.div

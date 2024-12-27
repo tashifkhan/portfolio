@@ -8,26 +8,26 @@ type Link = {
 export const links: Link[] = [
   {
     name: "Home",
-    hash: "#",
+    hash: "/",
   },
   {
     name: "Projects",
-    hash: "#projects",
+    hash: "/#projects",
   },
   {
     name: "Skills",
-    hash: "#skills",
+    hash: "/#skills",
   },
   {
     name: "Education",
-    hash: "#education",
+    hash: "/#education",
   },
   {
     name: "Recognistions",
-    hash: "#por",
+    hash: "/#por",
   },
   {
     name: "Contact",
-    hash: "#contact",
+    hash: "/#contact",
   },
 ];
