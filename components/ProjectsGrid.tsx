@@ -107,28 +107,35 @@ export function ProjectsGrid() {
 	const showMoreProjects = () => {
 		setVisibleCount((prev) => prev + PROJECTS_PER_PAGE);
 	};
-
-	const container = {
-		hidden: { opacity: 0 },
-		show: {
+	const gridVariants = {
+		hidden: {
+			opacity: 0,
+		},
+		visible: {
 			opacity: 1,
 			transition: {
 				staggerChildren: 0.2,
+				delayChildren: 0.1,
 			},
 		},
 	};
 
-	const item = {
-		hidden: { y: 20, opacity: 0 },
-		show: {
-			y: 0,
+	const projectVariants = {
+		hidden: {
+			opacity: 0,
+			y: 20,
+		},
+		visible: {
 			opacity: 1,
+			y: 0,
 			transition: {
-				type: "spring",
-				bounce: 0.4,
+				duration: 0.5,
+				ease: "easeOut",
 			},
 		},
 	};
+
+	const visibleProjects = projects.slice(0, visibleCount);
 	return (
 		<section className="py-12 px-4 md:px-6 lg:px-8">
 			<motion.div
@@ -143,20 +150,13 @@ export function ProjectsGrid() {
 			</motion.div>
 
 			<motion.div
-				variants={container}
+				variants={gridVariants}
 				initial="hidden"
-				whileInView="show"
-				viewport={{ once: true, margin: "-100px" }}
+				animate="visible"
 				className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto"
 			>
-				{projects.slice(0, visibleCount).map((project, index) => (
-					<motion.div
-						key={project.id}
-						variants={item}
-						whileHover={{ scale: 1.02 }}
-						whileTap={{ scale: 0.98 }}
-						className="transition-shadow duration-300 hover:shadow-xl"
-					>
+				{visibleProjects.map((project) => (
+					<motion.div key={project.id} variants={projectVariants}>
 						<ProjectCard {...project} />
 					</motion.div>
 				))}
@@ -174,8 +174,8 @@ export function ProjectsGrid() {
 						onClick={showMoreProjects}
 						variant="ghost"
 						className="backdrop-blur-sm bg-white/10 border-none hover:bg-white/20 
-				hover:text-primary-foreground transition-all duration-300 
-				shadow-lg rounded-full"
+                     hover:text-primary-foreground transition-all duration-300 
+                     shadow-lg rounded-full"
 					>
 						Show More Projects
 					</Button>

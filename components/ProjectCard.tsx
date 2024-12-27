@@ -27,7 +27,7 @@ export function ProjectCard({
 	liveUrl,
 }: ProjectCardProps) {
 	return (
-		<Card className="flex flex-col h-full bg-[#3d2e1f]/80 backdrop-blur-sm border-none transition-all hover:border-white/80">
+		<Card className="flex flex-col h-full bg-[#3d2e1f]/60 backdrop-blur-sm border-none transition-all hover:border-white/80">
 			<CardHeader className="">
 				<div className="flex justify-between items-center">
 					<Folder className="h-8 w-8 text-[#fdba74] pb-0 mb-0" />
