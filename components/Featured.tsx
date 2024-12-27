@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useRef } from "react";
-import { GatsbyImage, getImage, IGatsbyImageData } from "gatsby-plugin-image";
-import { FaGithubSquare, FaExternalLinkAlt } from "react-icons/fa";
 import { FeaturedProject } from "./Projection";
 
 interface ProjectFrontmatter {
@@ -19,44 +17,29 @@ interface ProjectNode {
 	html: string;
 }
 
-const sampleProjects: ProjectNode[] = [
-	{
-		frontmatter: {
-			external: "https://example.com/project1",
-			title: "Project One",
-			tech: ["React", "TypeScript", "Node.js"],
-			github: "https://github.com/user/project1",
-			cover: "/image.png",
-			cta: "Learn More",
-		},
-		html: "<p>Project one description</p>",
-	},
-	{
-		frontmatter: {
-			external: "https://example.com/project2",
-			title: "Project Two",
-			tech: ["Vue", "JavaScript", "AWS"],
-			github: "https://github.com/user/project2",
-			cover: "/image.png",
-			cta: "View Project",
-		},
-		html: "<p>Project two description</p>",
-	},
-];
-
 const Featured: React.FC = () => {
 	const revealTitle = useRef<HTMLHeadingElement>(null);
 	const revealProjects = useRef<(HTMLLIElement | null)[]>([]);
 	return (
-		<section id="projects" className="w-ful pt-[10rem]">
+		<section id="projects" className="w-full pt-[8rem] ">
 			<div className="mx-auto max-w-7xl">
 				<div className="mb-16">
-					<h2 className="text-4xl font-mono">Noteable Projects</h2>
+					<h2 className="text-4xl font-mono text-center">Noteable Projects</h2>
 				</div>
-				<div className="space-y-24">
+				<div className="space-y-12">
 					<FeaturedProject
 						title="Halcyon Theme"
-						description="A minimal, dark blue theme for VS Code, Sublime Text, Atom, iTerm, and more. Available on Visual Studio Marketplace, Package Control, Atom Package Manager, and npm."
+						description={
+							<p>
+								Next.js app offering{" "}
+								<span className="text-orange-300">
+									crop recommendations, yield predictions, and insurance
+									advisories
+								</span>{" "}
+								with AI-powered chatbot using Gemini's Gen AI API for real-time
+								support.
+							</p>
+						}
 						image="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=2070"
 						technologies={[
 							"VS Code",

@@ -1,8 +1,6 @@
-import Image from "next/image";
 import Header from "@/components/Header";
 import React from "react";
 import Hero from "@/components/Hero";
-import Projects from "@/components/Projects";
 import Featured from "@/components/Featured";
 
 export default function Home() {
@@ -12,7 +10,11 @@ export default function Home() {
 			<section id="hero" className="snap-center">
 				<Hero />
 			</section>
-			<section id="projects" className="snap-center w-screen h-screen">
+			<section
+				id="projects"
+				className="snap-start w-screen h-screen overflow-y-auto
+				   scrollbar-hide"
+			>
 				<Featured />
 			</section>
 		</div>
