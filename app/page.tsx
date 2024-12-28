@@ -4,6 +4,7 @@ import Featured from "@/components/Featured";
 import { ProjectsGrid } from "@/components/ProjectsGrid";
 import { EducationTimeline } from "@/components/EducationTimeline";
 import { ResponsibilitiesGrid } from "@/components/ResponsibilitiesGrid";
+import { SkillsSection } from "@/components/SkillsSection";
 
 export default function Home() {
 	return (
@@ -18,6 +19,9 @@ export default function Home() {
 			>
 				<Featured />
 				<ProjectsGrid />
+			</section>
+			<section id="skills" className="snap-start">
+				<SkillsSection />
 			</section>
 			<section id="education" className="snap-start">
 				<EducationTimeline />
