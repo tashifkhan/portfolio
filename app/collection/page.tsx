@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { IoLogoGooglePlaystore } from "react-icons/io5";
 import {
-	Github,
+	GithubIcon,
 	ExternalLink,
 	LoaderCircle,
 	CheckCheck,
@@ -55,8 +55,8 @@ export default function CollectionPage() {
 						<div className="absolute inset-0 bg-gradient-to-t from-orange-500/20 via-orange-500/5 to-transparent blur-3xl" />
 						<div className="absolute inset-0 bg-gradient-to-b from-orange-500/10 via-transparent to-transparent opacity-75" />
 					</div>
-					<h1 className="pt-20 md:pt-24 font-mono text-4xl font-bold">
-						<span className="bg-gradient-to-r from-orange-100 via-white to-orange-200 bg-clip-text text-transparent">
+					<h1 className="flex justify-center pt-20 md:pt-24 font-mono text-4xl font-bold">
+						<span className="bg-gradient-to-r from-orange-100 via-white to-orange-200 bg-clip-text text-transparent text-center">
 							Project Collection
 						</span>
 					</h1>
@@ -151,7 +151,7 @@ export default function CollectionPage() {
 																target="_blank"
 																className="text-white/70 hover:text-orange-400 transform transition-all duration-300 hover:scale-110"
 															>
-																<Github className="w-5 h-5" />
+																<GithubIcon className="w-5 h-5" />
 															</Link>
 														)}
 														{project.playStoreLink && (
@@ -206,7 +206,7 @@ export default function CollectionPage() {
 														target="_blank"
 														className="text-white/70 hover:text-orange-400 transition-colors duration-300"
 													>
-														<Github className="w-6 h-6" />
+														<GithubIcon className="w-6 h-6" />
 													</Link>
 												)}
 												{project.playStoreLink && (

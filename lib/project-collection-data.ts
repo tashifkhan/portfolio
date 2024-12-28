@@ -1,5 +1,3 @@
-import React from "react";
-
 interface ProjectCollection {
 	id: number;
 	title: string;

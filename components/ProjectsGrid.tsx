@@ -6,22 +6,9 @@ import { ProjectCard } from "./ProjectCard";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 
-import { projectCollection } from "@/lib/project-collection-data";
+import { projects } from "@/lib/other-project-data";
 
 const PROJECTS_PER_PAGE = 6;
-
-interface Project {
-	id: number;
-	title: string;
-	description: string;
-	technologies: string[];
-	githubLink?: string;
-	playStoreLink?: string;
-	liveLink?: string;
-	status: "In Progress" | "Completed" | "Planned";
-}
-
-const projects: Project[] = projectCollection.splice(3);
 
 export function ProjectsGrid() {
 	const [visibleCount, setVisibleCount] = useState(PROJECTS_PER_PAGE);
@@ -68,7 +55,7 @@ export function ProjectsGrid() {
 				viewport={{ once: true }}
 				transition={{ duration: 0.6 }}
 			>
-				<h2 className="text-3xl font-bold text-center font-mono">
+				<h2 className="text-3xl font-bold text-center font-mono pb-11">
 					Other Noteworthy Projects
 				</h2>
 			</motion.div>
