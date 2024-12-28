@@ -17,21 +17,21 @@ export default function Home() {
 			<section
 				id="projects"
 				className="snap-start w-screen h-screen overflow-y-auto
-				   scrollbar-hide pb-11 sm:pb-0"
+				   scrollbar-hide pb-28 sm:pb-0"
 			>
 				<Featured />
 				<ProjectsGrid />
 			</section>
-			<section id="skills" className="snap-start pb-11 sm:pb-0">
+			<section id="skills" className="snap-start pb-28 sm:pb-0">
 				<SkillsSection />
 			</section>
-			<section id="education" className="snap-start pb-11 sm:pb-0">
+			<section id="education" className="snap-start pb-28 sm:pb-0">
 				<EducationTimeline />
 			</section>
-			<section id="por" className="snap-start pb-11 sm:pb-0">
+			<section id="por" className="snap-start pb-28 sm:pb-0">
 				<ResponsibilitiesGrid />
 			</section>
-			<section id="contact" className="snap-center pb-11 sm:pb-0">
+			<section id="contact" className="snap-center pb-24 sm:pb-0">
 				<ContactSection />
 				<Footer />
 			</section>

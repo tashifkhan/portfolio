@@ -43,9 +43,9 @@ export function FeaturedProject({
 							src={image}
 							alt={title}
 							fill
-							className="object-cover transition-transform duration-300 group-hover:scale-105"
+							className="object-cover transition-transform duration-300 opacity-25 md:opacity-100 group-hover:scale-105"
 						/>
-						<div className="absolute inset-0 bg-orange-200/20 transition-opacity duration-300 group-hover:opacity-0" />
+						<div className="absolute inset-0 sm:bg-orange-200/20 transition-opacity duration-300 group-hover:opacity-0" />
 					</div>
 				</div>
 
@@ -58,8 +58,13 @@ export function FeaturedProject({
 				>
 					{/* Mobile background image */}
 					<div className="absolute inset-0 md:hidden">
-						<Image src={image} alt={title} fill className="object-cover" />
-						<div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+						<Image
+							src={image}
+							alt={title}
+							fill
+							className="object-cover opacity-25"
+						/>
+						<div className="absolute inset-0 bg-[#3d2e1f]/70 backdrop-blur-sm" />
 					</div>
 
 					<CardContent className="p-6 relative">
