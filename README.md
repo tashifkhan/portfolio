@@ -47,8 +47,8 @@ hosted at: https://portfolio.tashif.codes/
 
 1. Clone the repository:
    ```sh
-   git clone https://github.com/yourusername/your-repo.git
-   cd your-repo
+   git clone https://github.com/tashikhan/portfio.git
+   cd portfolio
    ```
 2. Installing dependencies:
    ```sh
