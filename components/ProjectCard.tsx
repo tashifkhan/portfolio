@@ -16,18 +16,18 @@ interface ProjectCardProps {
 	title: string;
 	description: string;
 	technologies: string[];
-	githubUrl?: string;
-	playstoreUrl?: string;
-	liveUrl?: string;
+	githubLink?: string;
+	playStoreLink?: string;
+	liveLink?: string;
 }
 
 export function ProjectCard({
 	title,
 	description,
 	technologies,
-	githubUrl,
-	playstoreUrl,
-	liveUrl,
+	githubLink,
+	playStoreLink,
+	liveLink,
 }: ProjectCardProps) {
 	return (
 		<Card className="flex flex-col h-full bg-[#3d2e1f]/60 backdrop-blur-sm border-none transition-all hover:border-white/80">
@@ -35,9 +35,9 @@ export function ProjectCard({
 				<div className="flex justify-between items-center">
 					<Folder className="h-8 w-8 text-[#fdba74] pb-0 mb-0" />
 					<div className="flex gap-0 ">
-						{githubUrl && (
+						{githubLink && (
 							<Link
-								href={githubUrl}
+								href={githubLink}
 								target="_blank"
 								rel="noopener noreferrer"
 								className="p-2 hover:text-primary transition-colors"
@@ -45,18 +45,18 @@ export function ProjectCard({
 								<Github className="w-[24.25px] h-[28.64px] relative flex-col justify-start items-start flex text-[#fdba74]" />
 							</Link>
 						)}
-						{playstoreUrl && (
+						{playStoreLink && (
 							<Link
-								href={playstoreUrl}
-								className="text-muted-foreground hover:text-foreground transition-colors"
+								href={playStoreLink}
+								className="p-2 hover:text-primary transition-colors"
 								target="_blank"
 							>
-								<IoLogoGooglePlaystore className="h-5 w-5 text-orange-300" />
+								<IoLogoGooglePlaystore className="w-[24.25px] h-[28.64px] relative flex-col justify-start items-start flex text-[#fdba74]" />
 							</Link>
 						)}
-						{liveUrl && (
+						{liveLink && (
 							<Link
-								href={liveUrl}
+								href={liveLink}
 								target="_blank"
 								rel="noopener noreferrer"
 								className="p-2 hover:text-primary transition-colors"
@@ -66,23 +66,21 @@ export function ProjectCard({
 						)}
 					</div>
 				</div>
-				<CardTitle className="text-2xl">{title}</CardTitle>
+				<CardTitle className="text-2xl truncate">{title}</CardTitle>
 			</CardHeader>
 			<CardContent className="flex-grow">
-				<p className="text-muted-foreground">{description}</p>
+				<p className=" line-clamp-3">{description}</p>
 			</CardContent>
 			<CardFooter className="">
-				<div className="pr-1">
+				<div className="pr-1 flex flex-wrap gap-1">
 					{technologies.map((tech) => (
-						<span className="pr-1">
-							<Badge
-								key={tech}
-								variant="secondary"
-								className="bg-white/10 font-mono backdrop-blur-sm "
-							>
-								{tech}
-							</Badge>
-						</span>
+						<Badge
+							key={tech}
+							variant="secondary"
+							className="bg-white/10 font-mono backdrop-blur-sm truncate"
+						>
+							{tech}
+						</Badge>
 					))}
 				</div>
 			</CardFooter>

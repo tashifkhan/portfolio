@@ -4,6 +4,7 @@ import React, { useRef } from "react";
 import { FeaturedProject } from "./Projection";
 import { motion } from "framer-motion";
 import { featuredProjects } from "@/lib/featured-project-data";
+import Link from "next/link";
 
 interface ProjectFrontmatter {
 	external: string;
@@ -34,6 +35,14 @@ const Featured: React.FC = () => {
 					<h2 className="text-4xl font-mono text-center">
 						Some Things I have Built
 					</h2>
+					<div className="flex justify-center">
+						<Link
+							href="/collection"
+							className="text-orange-300 text-center mb-2 p-1"
+						>
+							view the complete collection
+						</Link>
+					</div>
 				</motion.div>
 				<div className="space-y-12">
 					{featuredProjects.map((project, index) => (

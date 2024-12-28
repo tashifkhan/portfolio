@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { ProjectCard } from "./ProjectCard";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import Link from "next/link";
+
+import { projectCollection } from "@/lib/project-collection-data";
 
 const PROJECTS_PER_PAGE = 6;
 
@@ -13,94 +15,13 @@ interface Project {
 	title: string;
 	description: string;
 	technologies: string[];
-	githubUrl?: string;
-	liveUrl?: string;
+	githubLink?: string;
+	playStoreLink?: string;
+	liveLink?: string;
+	status: "In Progress" | "Completed" | "Planned";
 }
 
-const projects: Project[] = [
-	{
-		id: 1,
-		title: "Crop Mate",
-		description:
-			"Next.js app offering crop recommendations, yield predictions, and insurance advisories with AI-powered chatbot using Gemini's Gen AI API for real-time support.",
-		technologies: ["TS", "Flask", "ML(sk-learn)", "NextJS"],
-		githubUrl: "https://github.com/example/crop-mate",
-		liveUrl: "https://crop-mate.example.com",
-	},
-	{
-		id: 2,
-		title: "Crop Mate",
-		description:
-			"Next.js app offering crop recommendations, yield predictions, and insurance advisories with AI-powered chatbot using Gemini's Gen AI API for real-time support.",
-		technologies: ["TS", "Flask", "ML(sk-learn)", "NextJS"],
-		githubUrl: "https://github.com/example/crop-mate",
-		liveUrl: "https://crop-mate.example.com",
-	},
-	{
-		id: 3,
-		title: "Crop Mate",
-		description:
-			"Next.js app offering crop recommendations, yield predictions, and insurance advisories with AI-powered chatbot using Gemini's Gen AI API for real-time support.",
-		technologies: ["TS", "Flask", "ML(sk-learn)", "NextJS"],
-		githubUrl: "https://github.com/example/crop-mate",
-		liveUrl: "https://crop-mate.example.com",
-	},
-	{
-		id: 4,
-		title: "Crop Mate",
-		description:
-			"Next.js app offering crop recommendations, yield predictions, and insurance advisories with AI-powered chatbot using Gemini's Gen AI API for real-time support.",
-		technologies: ["TS", "Flask", "ML(sk-learn)", "NextJS"],
-		githubUrl: "https://github.com/example/crop-mate",
-		liveUrl: "https://crop-mate.example.com",
-	},
-	{
-		id: 5,
-		title: "Crop Mate",
-		description:
-			"Next.js app offering crop recommendations, yield predictions, and insurance advisories with AI-powered chatbot using Gemini's Gen AI API for real-time support.",
-		technologies: ["TS", "Flask", "ML(sk-learn)", "NextJS"],
-		githubUrl: "https://github.com/example/crop-mate",
-		liveUrl: "https://crop-mate.example.com",
-	},
-	{
-		id: 6,
-		title: "Crop Mate",
-		description:
-			"Next.js app offering crop recommendations, yield predictions, and insurance advisories with AI-powered chatbot using Gemini's Gen AI API for real-time support.",
-		technologies: ["TS", "Flask", "ML(sk-learn)", "NextJS"],
-		githubUrl: "https://github.com/example/crop-mate",
-		liveUrl: "https://crop-mate.example.com",
-	},
-	{
-		id: 7,
-		title: "Crop Mate",
-		description:
-			"Next.js app offering crop recommendations, yield predictions, and insurance advisories with AI-powered chatbot using Gemini's Gen AI API for real-time support.",
-		technologies: ["TS", "Flask", "ML(sk-learn)", "NextJS"],
-		githubUrl: "https://github.com/example/crop-mate",
-		liveUrl: "https://crop-mate.example.com",
-	},
-	{
-		id: 8,
-		title: "Crop Mate",
-		description:
-			"Next.js app offering crop recommendations, yield predictions, and insurance advisories with AI-powered chatbot using Gemini's Gen AI API for real-time support.",
-		technologies: ["TS", "Flask", "ML(sk-learn)", "NextJS"],
-		githubUrl: "https://github.com/example/crop-mate",
-		liveUrl: "https://crop-mate.example.com",
-	},
-	{
-		id: 9,
-		title: "Crop Mate",
-		description:
-			"Next.js app offering crop recommendations, yield predictions, and insurance advisories with AI-powered chatbot using Gemini's Gen AI API for real-time support.",
-		technologies: ["TS", "Flask", "ML(sk-learn)", "NextJS"],
-		githubUrl: "https://github.com/example/crop-mate",
-		liveUrl: "https://crop-mate.example.com",
-	},
-	// Add more projects as needed
-];
+const projects: Project[] = projectCollection.splice(3);
 
 export function ProjectsGrid() {
 	const [visibleCount, setVisibleCount] = useState(PROJECTS_PER_PAGE);
@@ -137,6 +58,7 @@ export function ProjectsGrid() {
 	};
 
 	const visibleProjects = projects.slice(0, visibleCount);
+	const router = useRouter();
 
 	return (
 		<section className="py-12 px-4 md:px-6 lg:px-8">
@@ -149,11 +71,6 @@ export function ProjectsGrid() {
 				<h2 className="text-3xl font-bold text-center font-mono">
 					Other Noteworthy Projects
 				</h2>
-				<div className="flex justify-center">
-					<Link href="/collection" className="text-orange-300 text-center mb-8">
-						view the collection
-					</Link>
-				</div>
 			</motion.div>
 
 			<motion.div
@@ -182,9 +99,18 @@ export function ProjectsGrid() {
 						variant="ghost"
 						className="backdrop-blur-sm bg-white/10 border-none hover:bg-white/20 
                      hover:text-primary-foreground transition-all duration-300 
-                     shadow-lg rounded-full"
+                     shadow-lg rounded-full mr-3"
 					>
 						Show More Projects
+					</Button>
+					<Button
+						onClick={() => router.push("/collection")}
+						variant="ghost"
+						className="backdrop-blur-sm bg-white/10 border-none hover:bg-white/20 
+                     hover:text-primary-foreground transition-all duration-300 
+                     shadow-lg rounded-full"
+					>
+						Show All Projects
 					</Button>
 				</motion.div>
 			)}
