@@ -29,7 +29,9 @@ const Header: React.FC = () => {
 							>
 								<div className="flex flex-col items-center justify-center">
 									<span className="sm:hidden">{link.icon}</span>
-									<span className="text-[0.7rem] mt-1">{link.name}</span>
+									<span className="text-[0.7rem] sm:text-[0.9rem] mt-1 sm:mt-0">
+										{link.name}
+									</span>
 								</div>
 							</Link>
 						</motion.li>

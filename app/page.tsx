@@ -2,6 +2,8 @@ import React from "react";
 import Hero from "@/components/Hero";
 import Featured from "@/components/Featured";
 import { ProjectsGrid } from "@/components/ProjectsGrid";
+import { EducationTimeline } from "@/components/EducationTimeline";
+import { ResponsibilitiesGrid } from "@/components/ResponsibilitiesGrid";
 
 export default function Home() {
 	return (
@@ -16,6 +18,12 @@ export default function Home() {
 			>
 				<Featured />
 				<ProjectsGrid />
+			</section>
+			<section id="education" className="snap-start">
+				<EducationTimeline />
+			</section>
+			<section id="por" className="snap-start">
+				<ResponsibilitiesGrid />
 			</section>
 		</div>
 	);
