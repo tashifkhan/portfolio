@@ -28,7 +28,10 @@ export default function CollectionPage() {
 	const filteredProjects = projectCollection.filter(
 		(project) =>
 			project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			project.description.toLowerCase().includes(searchTerm.toLowerCase())
+			project.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+			project.technologies.some((tech) =>
+				tech.toLowerCase().includes(searchTerm.toLowerCase())
+			)
 	);
 
 	const renderStatusIcon = (status: string) => {
@@ -140,34 +143,39 @@ export default function CollectionPage() {
 														</span>
 													))}
 												</div>
-												<div className="flex items-center gap-4 sm:hidden">
-													{project.githubLink && (
-														<Link
-															href={project.githubLink}
-															target="_blank"
-															className="text-white/70 hover:text-orange-400 transform transition-all duration-300 hover:scale-110"
-														>
-															<Github className="w-5 h-5" />
-														</Link>
-													)}
-													{project.playStoreLink && (
-														<Link
-															href={project.playStoreLink}
-															target="_blank"
-															className="text-white/70 hover:text-orange-400 transform transition-all duration-300 hover:scale-110"
-														>
-															<IoLogoGooglePlaystore className="w-5 h-5" />
-														</Link>
-													)}
-													{project.liveLink && (
-														<Link
-															href={project.liveLink}
-															target="_blank"
-															className="text-white/70 hover:text-orange-400 transform transition-all duration-300 hover:scale-110"
-														>
-															<ExternalLink className="w-5 h-5" />
-														</Link>
-													)}
+												<div className="flex justify-between sm:hidden">
+													<div className="flex items-center gap-4 sm:hidden">
+														{project.githubLink && (
+															<Link
+																href={project.githubLink}
+																target="_blank"
+																className="text-white/70 hover:text-orange-400 transform transition-all duration-300 hover:scale-110"
+															>
+																<Github className="w-5 h-5" />
+															</Link>
+														)}
+														{project.playStoreLink && (
+															<Link
+																href={project.playStoreLink}
+																target="_blank"
+																className="text-white/70 hover:text-orange-400 transform transition-all duration-300 hover:scale-110"
+															>
+																<IoLogoGooglePlaystore className="w-5 h-5" />
+															</Link>
+														)}
+														{project.liveLink && (
+															<Link
+																href={project.liveLink}
+																target="_blank"
+																className="text-white/70 hover:text-orange-400 transform transition-all duration-300 hover:scale-110"
+															>
+																<ExternalLink className="w-5 h-5" />
+															</Link>
+														)}
+													</div>
+													<div className="flex items-center gap-4 sm:hidden">
+														{renderStatusIcon(project.status)}
+													</div>
 												</div>
 											</div>
 										</TableCell>
@@ -221,7 +229,7 @@ export default function CollectionPage() {
 												)}
 											</div>
 										</TableCell>
-										<TableCell className="hidden lg:table-cell">
+										<TableCell className="hidden md:table-cell">
 											<div className="transform transition-transform duration-300 hover:scale-110">
 												{renderStatusIcon(project.status)}
 											</div>
