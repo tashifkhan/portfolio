@@ -5,6 +5,8 @@ import { ProjectsGrid } from "@/components/ProjectsGrid";
 import { EducationTimeline } from "@/components/EducationTimeline";
 import { ResponsibilitiesGrid } from "@/components/ResponsibilitiesGrid";
 import { SkillsSection } from "@/components/SkillsSection";
+import { ContactSection } from "@/components/ContactSection";
+import { Footer } from "@/components/Footer";
 
 export default function Home() {
 	return (
@@ -28,6 +30,10 @@ export default function Home() {
 			</section>
 			<section id="por" className="snap-start pb-11 sm:pb-0">
 				<ResponsibilitiesGrid />
+			</section>
+			<section id="contact" className="snap-center pb-11 sm:pb-0">
+				<ContactSection />
+				<Footer />
 			</section>
 		</div>
 	);
