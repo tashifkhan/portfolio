@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
+import { useState, useEffect } from "react";
 
 interface TimelineNodeProps {
 	title: string;
@@ -10,7 +11,6 @@ interface TimelineNodeProps {
 	duration: string;
 	index: number;
 }
-
 export function TimelineNode({
 	title,
 	institution,
@@ -18,11 +18,17 @@ export function TimelineNode({
 	duration,
 	index,
 }: TimelineNodeProps) {
+	const [isMobile, setIsMobile] = useState(false);
+
+	useEffect(() => {
+		setIsMobile(window.innerWidth < 768);
+	}, []);
+
 	return (
 		<motion.div
 			initial={{
 				opacity: 0,
-				x: window.innerWidth >= 768 ? (index % 2 === 0 ? -50 : 50) : 0,
+				x: !isMobile ? (index % 2 === 0 ? -50 : 50) : 0,
 			}}
 			whileInView={{ opacity: 1, x: 0 }}
 			viewport={{ once: true }}
@@ -58,7 +64,7 @@ export function TimelineNode({
 			</div>
 
 			{/* Timeline Node */}
-			<div className="relative  flex items-center justify-center h-full min-h-[inherit]">
+			<div className="relative flex items-center justify-center h-full min-h-[inherit]">
 				<motion.div
 					className="h-3 w-3 md:h-4 md:w-4  rounded-full bg-gradient-to-r from-white to-white/70 shadow-lg shadow-white/25"
 					whileHover={{ scale: 1.4 }}
@@ -66,17 +72,14 @@ export function TimelineNode({
 					transition={{ type: "spring", stiffness: 400, damping: 10 }}
 				/>
 				<motion.div
-					className="absolute  h-full w-0.5 bg-gradient-to-b from-white/30 to-white/10 -z-10 backdrop-blur-sm"
-					initial={{ height: 0 }}
-					whileInView={{ height: "100%" }}
-					viewport={{ once: true }}
+					className="absolute h-full w-0.5 bg-gradient-to-b from-white/30 to-white/10 -z-10 backdrop-blur-sm"
 					transition={{ duration: 0.5 }}
 				/>
 			</div>
 
 			{/* Mobile and Desktop Right Side */}
 			<div className="flex-1 md:w-1/2 pl-4 md:pl-8">
-				{(index % 2 !== 0 || window.innerWidth < 768) && (
+				{(index % 2 !== 0 || isMobile) && (
 					<motion.div
 						whileHover={{ scale: 1.02, rotate: -1 }}
 						transition={{ type: "spring", stiffness: 300 }}

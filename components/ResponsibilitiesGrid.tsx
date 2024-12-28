@@ -50,11 +50,11 @@ const responsibilitiesData: Array<{
 
 export function ResponsibilitiesGrid() {
 	return (
-		<section className="py-16 px-4">
-			<h2 className="text-3xl  text-center mb-16 font-mono">
+		<section className="py-8 md:py-16 px-4">
+			<h2 className="text-2xl md:text-3xl text-center mb-8 md:mb-16 font-mono">
 				Positions of Responsibility
 			</h2>
-			<div className="max-w-7xl mx-auto flex flex-wrap justify-center items-center gap-6">
+			<div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
 				{responsibilitiesData.map((responsibility, index) => (
 					<ResponsibilityCard key={index} {...responsibility} index={index} />
 				))}
