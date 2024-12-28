@@ -10,12 +10,14 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import { Badge } from "./ui/badge";
+import { IoLogoGooglePlaystore } from "react-icons/io5";
 
 interface ProjectCardProps {
 	title: string;
 	description: string;
 	technologies: string[];
 	githubUrl?: string;
+	playstoreUrl?: string;
 	liveUrl?: string;
 }
 
@@ -24,6 +26,7 @@ export function ProjectCard({
 	description,
 	technologies,
 	githubUrl,
+	playstoreUrl,
 	liveUrl,
 }: ProjectCardProps) {
 	return (
@@ -40,6 +43,15 @@ export function ProjectCard({
 								className="p-2 hover:text-primary transition-colors"
 							>
 								<Github className="w-[24.25px] h-[28.64px] relative flex-col justify-start items-start flex text-[#fdba74]" />
+							</Link>
+						)}
+						{playstoreUrl && (
+							<Link
+								href={playstoreUrl}
+								className="text-muted-foreground hover:text-foreground transition-colors"
+								target="_blank"
+							>
+								<IoLogoGooglePlaystore className="h-5 w-5 text-orange-300" />
 							</Link>
 						)}
 						{liveUrl && (

@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Github, ExternalLink } from "lucide-react";
+import { IoLogoGooglePlaystore } from "react-icons/io5";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -12,7 +13,8 @@ interface FeaturedProjectProps {
 	image: string;
 	technologies: string[];
 	githubUrl: string;
-	liveUrl: string;
+	liveUrl?: string;
+	playstoreUrl?: string;
 	imagePosition?: "left" | "right";
 }
 
@@ -22,7 +24,8 @@ export function FeaturedProject({
 	image,
 	technologies,
 	githubUrl,
-	liveUrl,
+	playstoreUrl = "",
+	liveUrl = "",
 	imagePosition = "left",
 }: FeaturedProjectProps) {
 	return (
@@ -126,13 +129,24 @@ export function FeaturedProject({
 								>
 									<Github className="h-5 w-5 text-orange-300" />
 								</Link>
-								<Link
-									href={liveUrl}
-									className="text-muted-foreground hover:text-foreground transition-colors"
-									target="_blank"
-								>
-									<ExternalLink className="h-5 w-5 text-orange-300" />
-								</Link>
+								{playstoreUrl && (
+									<Link
+										href={playstoreUrl}
+										className="text-muted-foreground hover:text-foreground transition-colors"
+										target="_blank"
+									>
+										<IoLogoGooglePlaystore className="h-5 w-5 text-orange-300" />
+									</Link>
+								)}
+								{liveUrl && (
+									<Link
+										href={liveUrl}
+										className="text-muted-foreground hover:text-foreground transition-colors"
+										target="_blank"
+									>
+										<ExternalLink className="h-5 w-5 text-orange-300" />
+									</Link>
+								)}
 							</div>
 						</div>
 					</CardContent>
