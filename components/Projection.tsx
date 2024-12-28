@@ -57,7 +57,7 @@ export function FeaturedProject({
 						imagePosition === "right"
 							? "md:col-start-1 md:absolute lg:right-2/4 md:right-1/4"
 							: "md:col-start-6 md:absolute lg:left-2/4 md:left-1/4"
-					} z-10 border-none overflow-hidden`}
+					} border-none overflow-hidden`}
 				>
 					{/* Mobile background image */}
 					<div className="absolute inset-0 md:hidden">

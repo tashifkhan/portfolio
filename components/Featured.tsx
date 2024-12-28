@@ -38,7 +38,7 @@ const Featured: React.FC = () => {
 					<div className="flex justify-center">
 						<Link
 							href="/collection"
-							className="text-orange-300 text-center mb-2 p-1"
+							className="text-orange-300 text-center mb-2 p-1 md:mb-10"
 						>
 							view the complete collection
 						</Link>
@@ -52,6 +52,7 @@ const Featured: React.FC = () => {
 							whileInView={{ opacity: 1, y: 0 }}
 							transition={{ duration: 0.8, delay: index * 0.2 }}
 							viewport={{ once: true }}
+							className="md:pb-28"
 						>
 							<FeaturedProject
 								title={project.title}

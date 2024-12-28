@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { FooterSocials } from "./FooterSocials";
 import { Mail, Phone, MapPin, ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const quickLinks = [
 	{ name: "About Me", href: "/" },
@@ -86,12 +87,12 @@ export function Footer() {
 						<ul className="space-y-2">
 							{quickLinks.map((link) => (
 								<motion.li key={link.name} whileHover={{ x: 8 }}>
-									<a
+									<Link
 										href={link.href}
 										className="text-muted-foreground hover:text-slate-200 transition-all inline-block"
 									>
 										{link.name}
-									</a>
+									</Link>
 								</motion.li>
 							))}
 						</ul>
