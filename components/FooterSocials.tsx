@@ -1,19 +1,27 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Github, Linkedin, Twitter } from "lucide-react";
+import { Github, Linkedin, Instagram } from "lucide-react";
 import Link from "next/link";
 
 const MotionLink = motion(Link);
 
 const socials = [
-	{ name: "GitHub", icon: Github, href: "https://github.com/yourusername" },
+	{
+		name: "GitHub",
+		icon: Github,
+		href: "https://github.com/tashifkhan",
+	},
 	{
 		name: "LinkedIn",
 		icon: Linkedin,
-		href: "https://linkedin.com/in/yourusername",
+		href: "https://www.linkedin.com/in/tashif-ahmad-khan-982304244/",
 	},
-	{ name: "Twitter", icon: Twitter, href: "https://twitter.com/yourusername" },
+	{
+		name: "InstaGram",
+		icon: Instagram,
+		href: "https://www.instagram.com/khan_tashif?igsh=MTVnOThleHFzb3M4aQ==",
+	},
 ];
 
 export function FooterSocials() {
