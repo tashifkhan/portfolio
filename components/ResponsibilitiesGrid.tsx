@@ -37,13 +37,7 @@ const responsibilitiesData: Array<{
 	{
 		title: "Mentor",
 		organization: "The Jaypee Debating Society",
-		duration: "July 2023 - 2025",
-		type: "mentor",
-	},
-	{
-		title: "Senior Mentor",
-		organization: "The Jaypee Debating Society",
-		duration: "2025 - 2026",
+		duration: "July 2023 - 2026",
 		type: "mentor",
 	},
 ];
