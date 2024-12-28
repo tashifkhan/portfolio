@@ -1,9 +1,9 @@
 "use client";
 
-import { motion } from "framer-motion";
+import React, { useState, useRef, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
-import { useState, useRef } from "react";
+import { motion } from "framer-motion";
 
 const frameworks = [
 	{ name: "Next.js", description: "React Framework" },
@@ -15,22 +15,47 @@ const frameworks = [
 	{ name: "Flask", description: "Python Framework" },
 ];
 
-export function FrameworksCarousel() {
+const FrameworksCarousel = () => {
 	const [canScrollLeft, setCanScrollLeft] = useState(false);
 	const [canScrollRight, setCanScrollRight] = useState(true);
-	const containerRef = useRef<HTMLDivElement>(null);
+	const containerRef = useRef<HTMLDivElement | null>(null);
 
 	const checkScroll = () => {
 		if (!containerRef.current) return;
 		const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
 		setCanScrollLeft(scrollLeft > 0);
-		setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+		setCanScrollRight(Math.ceil(scrollLeft) < scrollWidth - clientWidth - 1);
 	};
+
+	useEffect(() => {
+		const container = containerRef.current;
+		if (container) {
+			checkScroll();
+			const observer = new ResizeObserver(() => {
+				checkScroll();
+			});
+			observer.observe(container);
+			container.addEventListener("scroll", checkScroll);
+
+			return () => {
+				observer.disconnect();
+				container.removeEventListener("scroll", checkScroll);
+			};
+		}
+	}, []);
 
 	const scroll = (direction: "left" | "right") => {
 		if (!containerRef.current) return;
-		const scrollAmount = direction === "left" ? -320 : 320;
-		containerRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+		const container = containerRef.current;
+		const cardWidth = 320; // Width of card (256px) + gap (16px)
+		const scrollAmount = direction === "left" ? -cardWidth : cardWidth;
+
+		container.scrollTo({
+			left: container.scrollLeft + scrollAmount,
+			behavior: "smooth",
+		});
+
+		// Update scroll buttons state after animation
 		setTimeout(checkScroll, 300);
 	};
 
@@ -55,7 +80,12 @@ export function FrameworksCarousel() {
 			<div className="relative">
 				<div
 					ref={containerRef}
-					className="flex gap-4 overflow-x-hidden scroll-smooth"
+					className="flex gap-4 overflow-x-auto scroll-smooth"
+					style={{
+						scrollbarWidth: "none",
+						msOverflowStyle: "none",
+						WebkitOverflowScrolling: "touch",
+					}}
 				>
 					{frameworks.map((framework, index) => (
 						<motion.div
@@ -84,6 +114,13 @@ export function FrameworksCarousel() {
 					))}
 				</div>
 			</div>
+			<style jsx>{`
+				div::-webkit-scrollbar {
+					display: none;
+				}
+			`}</style>
 		</div>
 	);
-}
+};
+
+export default FrameworksCarousel;

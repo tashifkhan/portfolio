@@ -1,7 +1,7 @@
 "use client";
 
 import { LanguagesGrid } from "./LanguagesGrid";
-import { FrameworksCarousel } from "./FrameworksCarousel";
+import FrameworksCarousel from "./FrameworksCarousel";
 import { ToolsGrid } from "./ToolsGrid";
 import { SoftSkillsGrid } from "./SoftSkillsGrid";
 
