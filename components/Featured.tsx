@@ -3,7 +3,7 @@
 import React, { useRef } from "react";
 import { FeaturedProject } from "./Projection";
 import { motion } from "framer-motion";
-import { featuredProjects } from "@/lib/project-data";
+import { featuredProjects } from "@/lib/featured-project-data";
 
 interface ProjectFrontmatter {
 	external: string;
