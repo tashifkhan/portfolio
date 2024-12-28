@@ -30,7 +30,7 @@ export function LanguagesGrid() {
 						className="relative group"
 					>
 						<div className="absolute inset-0 bg-gradient-to-r from-orange-300/20 to-orange-300/10 rounded-lg blur-md group-hover:blur-lg transition-all" />
-						<div className="relative p-4 rounded-lg bg-card/80 backdrop-blur-sm border border-orange-300/20 flex items-center gap-2">
+						<div className="relative p-4 rounded-lg bg-card/80 backdrop-blur-sm border-none flex items-center gap-2">
 							<language.icon
 								className={`h-8 w-8 text-orange-300/90 rounded p-1`}
 							/>

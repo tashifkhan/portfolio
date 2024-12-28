@@ -15,18 +15,18 @@ export default function Home() {
 			<section
 				id="projects"
 				className="snap-start w-screen h-screen overflow-y-auto
-				   scrollbar-hide"
+				   scrollbar-hide pb-11 sm:pb-0"
 			>
 				<Featured />
 				<ProjectsGrid />
 			</section>
-			<section id="skills" className="snap-start">
+			<section id="skills" className="snap-start pb-11 sm:pb-0">
 				<SkillsSection />
 			</section>
-			<section id="education" className="snap-start">
+			<section id="education" className="snap-start pb-11 sm:pb-0">
 				<EducationTimeline />
 			</section>
-			<section id="por" className="snap-start">
+			<section id="por" className="snap-start pb-11 sm:pb-0">
 				<ResponsibilitiesGrid />
 			</section>
 		</div>
