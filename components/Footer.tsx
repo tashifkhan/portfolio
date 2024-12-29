@@ -30,7 +30,7 @@ export function Footer() {
 						transition={{ duration: 0.5 }}
 						className="space-y-4 p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all shadow-lg shadow-slate-200/5 hover:shadow-slate-200/10"
 					>
-						<h3 className="font-semibold text-lg bg-gradient-to-r from-slate-200 via-slate-200/80 to-slate-200/50 bg-clip-text text-transparent">
+						<h3 className="font-semibold font-mono text-lg bg-gradient-to-r from-slate-200 via-slate-200/80 to-slate-200/50 bg-clip-text text-transparent">
 							Contact
 						</h3>
 						<div className="space-y-2">
@@ -67,7 +67,7 @@ export function Footer() {
 						transition={{ duration: 0.5, delay: 0.1 }}
 						className="space-y-4 p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all shadow-lg shadow-slate-200/5 hover:shadow-slate-200/10"
 					>
-						<h3 className="font-semibold text-lg bg-gradient-to-r from-slate-200 via-slate-200/80 to-slate-200/50 bg-clip-text text-transparent">
+						<h3 className="font-semibold text-lg font-mono bg-gradient-to-r from-slate-200 via-slate-200/80 to-slate-200/50 bg-clip-text text-transparent">
 							Connect
 						</h3>
 						<FooterSocials />
@@ -81,7 +81,7 @@ export function Footer() {
 						transition={{ duration: 0.5, delay: 0.2 }}
 						className="space-y-4 p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all shadow-lg shadow-slate-200/5 hover:shadow-slate-200/10"
 					>
-						<h3 className="font-semibold text-lg bg-gradient-to-r from-slate-200 via-slate-200/80 to-slate-200/50 bg-clip-text text-transparent">
+						<h3 className="font-semibold text-lg font-mono  bg-gradient-to-r from-slate-200 via-slate-200/80 to-slate-200/50 bg-clip-text text-transparent">
 							Quick Links
 						</h3>
 						<ul className="space-y-2">
