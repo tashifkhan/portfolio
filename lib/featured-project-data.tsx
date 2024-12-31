@@ -15,8 +15,7 @@ const featuredProjects: featuredProject[] = [
 	{
 		id: 1,
 		title: "CropMate",
-		imageLink:
-			"https://images.unsplash.com/photo-1614680376593-902f74cf0d41?auto=format&fit=crop&q=80&w=207",
+		imageLink: "/FeaturedProject/1.png",
 		description: (
 			<p>
 				Next.js app offering{" "}
@@ -37,8 +36,7 @@ const featuredProjects: featuredProject[] = [
 	{
 		id: 2,
 		title: "BiasDetector",
-		imageLink:
-			"https://images.unsplash.com/photo-1614680376593-902f74cf0d41?auto=format&fit=crop&q=80&w=207",
+		imageLink: "/FeaturedProject/2.png",
 		description: (
 			<p>
 				Next.js app in TypeScript for detecting bias in news articles through{" "}
@@ -56,8 +54,7 @@ const featuredProjects: featuredProject[] = [
 	{
 		id: 3,
 		title: "Designique",
-		imageLink:
-			"https://images.unsplash.com/photo-1614680376593-902f74cf0d41?auto=format&fit=crop&q=80&w=207",
+		imageLink: "/FeaturedProject/3.png",
 		description: (
 			<p>
 				A React app that connects{" "}
