@@ -9,6 +9,15 @@ const projects = [
     status: "Completed",
 },
 {
+    id: 15,
+    title: "JIIT Time Table Parser",
+    description: "A Python program to show you your timetable from the entire list as well as profrssor's time table",
+    technologies: ["Python", "JWT", "Flask", "Redix(re)", "Google Calender API"],
+    githubLink: "https://github.com/tashifkhan/JIIT-time-table-parser",
+    liveLink: "https://jiit-timetable.tashif.codes/",
+    status: "Completed"
+},
+{
     id: 5,
     title: "AI Resume Parser ( microSAAS )",
     description: "A microSAAS platform that organizes resumes and extracts crutial data for the employer and recommends the best candidate for the job openning. As well as recommends the best job profile as per the resume. to the job seeker.",
@@ -90,14 +99,6 @@ const projects = [
     githubLink: "https://github.com/tashifkhan/jiit-buddy-2.0",
     playStoreLink: "/",
     status: "In Progress"
-},
-{
-    id: 15,
-    title: "JIIT Time Table Parser",
-    description: "A Python program to show you your timetable from the entire list as well as profrssor's time table",
-    technologies: ["Python", "Selenium", "Flask"],
-    githubLink: "https://github.com/tashifkhan/JIIT-time-table-parser",
-    status: "Completed"
 },
 {
     id: 16,
