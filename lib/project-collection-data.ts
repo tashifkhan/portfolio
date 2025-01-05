@@ -58,6 +58,15 @@ const projectCollection: ProjectCollection[] = [
 		status: "Completed",
 	},
 	{
+		id: 22,
+		title: "JIIT Time Table Simplified",
+		description: "A React + Python (Pyoide) WASM app that shows you your timetable you can download it add to your calender directly",
+		technologies: ["Python", "Pyoide", "WASM", "Redix(re)", "Google Calender API", "React", "TypeScript"],
+		githubLink: "https://github.com/tashifkhan/JIIT-time-table-website",
+		liveLink: "https://simple-timetable.tashif.codes/",
+		status: "Completed"
+	},
+	{
 		id: 15,
 		title: "JIIT Time Table Parser",
 		description: "A Python program to show you your timetable from the entire list as well as profrssor's time table",
@@ -83,6 +92,14 @@ const projectCollection: ProjectCollection[] = [
 		status: "In Progress",
 	},
 	{
+		id: 9,
+		title: "Sophos Auto Login",
+		description: "A python script that logs in to the sophos firewall and logs out after a certain time. It uses the selenium library to automate the login and logout process",
+		technologies: ["Python", "Automation", "SQLite3"],
+		githubLink: "https://github.com/tashifkhan/sophos-auto-login",
+		status: "Completed",
+	},
+	{
 		id: 7,
 		title: "Paisa Split",
 		description: "A React Native App for spliting bills and expenses among friends and family. It uses the user's contacts and the user can add the expenses and the app will split the expenses among the users",
@@ -100,12 +117,12 @@ const projectCollection: ProjectCollection[] = [
 		status: "Planned",
 	},
 	{
-		id: 9,
-		title: "Sophos Auto Login",
-		description: "A python script that logs in to the sophos firewall and logs out after a certain time. It uses the selenium library to automate the login and logout process",
-		technologies: ["Python", "Automation", "SQLite3"],
-		githubLink: "https://github.com/tashifkhan/sophos-auto-login",
-		status: "Completed",
+		id: 16,
+		title: "WhatsApp Bulk Messaging",
+		description: "A Flask-React Local WebApp to bulk message people on whatsapp using a CSV file or custom lsit",
+		technologies: ["React", "Flask", "Selenium", "SQLite3", "React Native Desktop"],
+		githubLink: "https://github.com/tashifkhan/whatsapp-bulk-messaging-system",
+		status: "In Progress"
 	},
 	{
 		id: 10,
@@ -147,14 +164,6 @@ const projectCollection: ProjectCollection[] = [
 		technologies: ["React Native", "TypeScript", "Redux ToolKit", "Python Automation (Selenium)", "ASync Storage"],
 		githubLink: "https://github.com/tashifkhan/jiit-buddy-2.0",
 		playStoreLink: "/",
-		status: "In Progress"
-	},
-	{
-		id: 16,
-		title: "WhatsApp Bulk Messaging",
-		description: "A Flask-React Local WebApp to bulk message people on whatsapp using a CSV file or custom lsit",
-		technologies: ["React", "Flask", "Selenium", "SQLite3", "React Native Desktop"],
-		githubLink: "https://github.com/tashifkhan/whatsapp-bulk-messaging-system",
 		status: "In Progress"
 	},
 	{
