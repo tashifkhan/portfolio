@@ -66,7 +66,16 @@ export function ProjectCard({
 						)}
 					</div>
 				</div>
-				<CardTitle className="text-2xl truncate">{title}</CardTitle>
+				<CardTitle>
+					<div className="flex justify-between items-center">
+						<span>{title.split("(")[0]}</span>
+						{title.includes("(") && (
+							<span className="ml-2 text-sm px-2 py-0.5 rounded-full bg-orange-900/60 text-orange-200 text-center">
+								{title.split("(")[1].replace(")", "")}
+							</span>
+						)}
+					</div>
+				</CardTitle>
 			</CardHeader>
 			<CardContent className="flex-grow">
 				<p className=" line-clamp-3">{description}</p>

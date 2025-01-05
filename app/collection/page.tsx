@@ -124,7 +124,14 @@ export default function CollectionPage() {
 										<TableCell>
 											<div className="space-y-3">
 												<div className="font-medium text-white text-md tracking-tight">
-													{project.title}
+													<div className="flex items-center gap-2">
+														<span>{project.title.split("(")[0]}</span>
+														{project.title.includes("(") && (
+															<span className="px-2 py-0.5 text-xs text-orange-200 text-center">
+																{project.title.split("(")[1].replace(")", "")}
+															</span>
+														)}
+													</div>
 												</div>
 												<div className="text-sm text-white/70 sm:hidden line-clamp-2">
 													{project.description}

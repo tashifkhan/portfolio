@@ -59,7 +59,7 @@ const projectCollection: ProjectCollection[] = [
 	},
 	{
 		id: 22,
-		title: "JIIT Time Table Simplified",
+		title: "JIIT Time Table Simplified (3.5k+ users)",
 		description: "A React + Python (Pyoide) WASM app that shows you your timetable you can download it add to your calender directly",
 		technologies: ["Python", "Pyoide", "WASM", "Redix(re)", "Google Calender API", "React", "TypeScript"],
 		githubLink: "https://github.com/tashifkhan/JIIT-time-table-website",
