@@ -11,8 +11,8 @@ const languages = [
 	{ name: "C++", icon: SiCplusplus },
 	{ name: "JavaScript", icon: FaJsSquare },
 	{ name: "TypeScript", icon: SiTypescript },
-	{ name: "C", icon: SiC },
-	{ name: "Go", icon: SiGo },
+	// { name: "C", icon: SiC },
+	// { name: "Go", icon: SiGo },
 ];
 
 export function LanguagesGrid() {

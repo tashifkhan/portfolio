@@ -6,7 +6,7 @@ const educationData = [
 	{
 		title: "B.Tech (ECE)",
 		institution: "Jaypee Institute of Information Technology, Noida-62",
-		score: "CGPA: 7.3",
+		score: "CGPA: 7.2",
 		duration: "Sept 2022 - June 2026",
 	},
 	{
