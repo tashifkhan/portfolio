@@ -1,8 +1,8 @@
 "use client";
 
 import { useAuth } from "@/lib/auth";
-import { LoginForm } from "@/components/LoginForm";
-import UpdateForm from "@/components/UpdateForm";
+import { LoginForm } from "@/components/admin/LoginForm";
+import UpdateForm from "@/components/admin/UpdateForm";
 
 export default function UpdatePage() {
 	const { isAuthenticated } = useAuth();

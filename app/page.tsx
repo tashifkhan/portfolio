@@ -1,12 +1,12 @@
 import React from "react";
-import Hero from "@/components/Hero";
-import Featured from "@/components/Featured";
-import { ProjectsGrid } from "@/components/ProjectsGrid";
-import { EducationTimeline } from "@/components/EducationTimeline";
-import { ResponsibilitiesGrid } from "@/components/ResponsibilitiesGrid";
-import { SkillsSection } from "@/components/SkillsSection";
-import { ContactSection } from "@/components/ContactSection";
-import { Footer } from "@/components/Footer";
+import Hero from "@/components/home/Hero";
+import Featured from "@/components/projects/Featured";
+import { ProjectsGrid } from "@/components/projects/ProjectsGrid";
+import { EducationTimeline } from "@/components/college/EducationTimeline";
+import { ResponsibilitiesGrid } from "@/components/college/ResponsibilitiesGrid";
+import { SkillsSection } from "@/components/skills/SkillsSection";
+import { ContactSection } from "@/components/contact/ContactSection";
+import { Footer } from "@/components/footer/Footer";
 
 export default function Home() {
 	return (

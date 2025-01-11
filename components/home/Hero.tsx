@@ -9,7 +9,7 @@ import { HiDownload } from "react-icons/hi";
 import { FaGithubSquare } from "react-icons/fa";
 import { Cursor, useTypewriter } from "react-simple-typewriter";
 
-import BgCircles from "@/components/BgCircles";
+import BgCircles from "@/components/home/BgCircles";
 
 type Props = {};
 

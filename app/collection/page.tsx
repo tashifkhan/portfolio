@@ -134,7 +134,7 @@ export default function CollectionPage() {
 													</div>
 												</div>
 												<div className="text-sm text-white/70 sm:hidden line-clamp-2">
-													{project.description}
+													{project.description}{" "}
 												</div>
 												<div className="flex flex-wrap gap-2 sm:hidden">
 													{project.technologies.map((tech) => (

@@ -9,7 +9,7 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
-import { Badge } from "./ui/badge";
+import { Badge } from "../ui/badge";
 import { IoLogoGooglePlaystore } from "react-icons/io5";
 
 interface ProjectCardProps {
