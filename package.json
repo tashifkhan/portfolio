@@ -28,7 +28,8 @@
     "react-social-icons": "^6.18.0",
     "scrollreveal": "^4.0.9",
     "tailwind-merge": "^2.6.0",
-    "zod": "^3.24.1"
+    "zod": "^3.24.1",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@types/node": "^20",
