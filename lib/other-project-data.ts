@@ -11,7 +11,7 @@ export type Project = {
    status: "Completed" | "In Progress" | "Planned"
 }
 
-const BASE_URL = "http://localhost:3000"
+const BASE_URL = ""
 
 const getOtherProjects = async (): Promise<Project[]> => {
    try {
