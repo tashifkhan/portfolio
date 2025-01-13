@@ -5,7 +5,7 @@ import { Collection } from 'mongodb'
 export async function GET() {
   try {
     const client = await clientPromise
-    const collection: Collection = client.db("Portfolio").collection("Project Collection")
+    const collection: Collection = client.db("Portfolio").collection("SkillDesc")
     
     // Retrieve all documents sorted by published date
     const entireData = await collection
