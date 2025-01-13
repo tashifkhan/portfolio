@@ -83,7 +83,7 @@ export default function CollectionPage() {
 						<div className="absolute inset-0 bg-gradient-to-b from-orange-500/10 via-transparent to-transparent opacity-75" />
 					</div>
 					<h1 className="flex justify-center pt-20 md:pt-24 font-mono text-4xl font-bold">
-						<span className="bg-gradient-to-r from-orange-100 via-white to-orange-200 bg-clip-text text-transparent text-center">
+						<span className="bg-gradient-to-r from-orange-100 via-white to-orange-</div>200 bg-clip-text text-transparent text-center">
 							Project Collection
 						</span>
 					</h1>
