@@ -7,8 +7,11 @@ import { ResponsibilitiesGrid } from "@/components/college/ResponsibilitiesGrid"
 import { SkillsSection } from "@/components/skills/SkillsSection";
 import { ContactSection } from "@/components/contact/ContactSection";
 import { Footer } from "@/components/footer/Footer";
+import { getProjects } from "@/lib/other-project-data";
 
-export default function Home() {
+export default async function Home() {
+	const projects = await getProjects();
+	console.log(projects);
 	return (
 		<div className="no-scrollbar bg-cover bg-center bg-custom-bg text-white h-screen snap-y snap-mandatory pt-28 sm:pt-36 overflow-scroll z-0">
 			<section id="hero" className="snap-center">

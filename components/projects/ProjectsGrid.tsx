@@ -6,12 +6,14 @@ import { ProjectCard } from "./ProjectCard";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 
-import { projects } from "@/lib/other-project-data";
+import { getOtherProjects } from "@/lib/other-project-data";
 
 const PROJECTS_PER_PAGE = 6;
 
-export function ProjectsGrid() {
+export async function ProjectsGrid() {
 	const [visibleCount, setVisibleCount] = useState(PROJECTS_PER_PAGE);
+
+	const projects = await getOtherProjects();
 
 	const showMoreProjects = () => {
 		setVisibleCount((prev) => prev + PROJECTS_PER_PAGE);

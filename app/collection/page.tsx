@@ -20,10 +20,12 @@ import {
 } from "lucide-react";
 
 import Link from "next/link";
-import { projectCollection } from "@/lib/project-collection-data";
+import { getProjects } from "@/lib/other-project-data";
 
-export default function CollectionPage() {
+export default async function CollectionPage() {
 	const [searchTerm, setSearchTerm] = useState("");
+
+	const projectCollection = await getProjects();
 
 	const filteredProjects = projectCollection.filter(
 		(project) =>
