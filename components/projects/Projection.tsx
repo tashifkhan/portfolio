@@ -1,16 +1,23 @@
 "use client";
 
+import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Github, ExternalLink } from "lucide-react";
 import { IoLogoGooglePlaystore } from "react-icons/io5";
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 interface FeaturedProjectProps {
 	title: string;
-	description: React.ReactNode;
-	image: string;
+	description: string | React.ReactNode;
+	image: {
+		src: string;
+		alt: string;
+		width: number;
+		height: number;
+	};
 	technologies: string[];
 	githubUrl: string;
 	liveUrl?: string;
@@ -43,10 +50,16 @@ export function FeaturedProject({
 				>
 					<div className="relative aspect-[16/9] overflow-hidden rounded-3xl mx-6 mb-3">
 						<Image
-							src={image}
-							alt={title}
-							fill
+							src={image.src}
+							alt={image.alt}
+							width={image.width}
+							height={image.height}
+							priority
 							className="object-cover transition-transform duration-300 opacity-25 md:opacity-100 group-hover:scale-105"
+							onError={(e) => {
+								console.error(`Failed to load image: ${image.src}`);
+								e.currentTarget.src = "/images/placeholder.jpg";
+							}}
 						/>
 						<div className="absolute inset-0 sm:bg-orange-200/20 transition-opacity duration-300 group-hover:opacity-0" />
 					</div>
@@ -62,10 +75,16 @@ export function FeaturedProject({
 					{/* Mobile background image */}
 					<div className="absolute inset-0 md:hidden">
 						<Image
-							src={image}
-							alt={title}
-							fill
+							src={image.src}
+							alt={image.alt}
+							width={image.width}
+							height={image.height}
+							priority
 							className="object-cover opacity-25"
+							onError={(e) => {
+								console.error(`Failed to load image: ${image.src}`);
+								e.currentTarget.src = "/images/placeholder.jpg";
+							}}
 						/>
 						<div className="absolute inset-0 bg-[#3d2e1f]/70 backdrop-blur-sm" />
 					</div>

@@ -1,7 +1,7 @@
 import axios from "axios"
 
 export type Project = {
-   id: number
+   position: number
    title: string
    description: string
    technologies: string[]

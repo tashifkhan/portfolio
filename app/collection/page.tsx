@@ -9,7 +9,7 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoLogoGooglePlaystore } from "react-icons/io5";
 import {
 	GithubIcon,
@@ -22,10 +22,35 @@ import {
 import Link from "next/link";
 import { getProjects } from "@/lib/other-project-data";
 
-export default async function CollectionPage() {
+export default function CollectionPage() {
 	const [searchTerm, setSearchTerm] = useState("");
 
-	const projectCollection = await getProjects();
+	interface Project {
+		position: number;
+		title: string;
+		description: string;
+		technologies: string[];
+		githubLink?: string;
+		playStoreLink?: string;
+		liveLink?: string;
+		status: string;
+	}
+
+	const [projectCollection, setProjectCollection] = useState<Project[]>([]);
+
+	useEffect(() => {
+		// getProjects is an async function, so we need to handle it properly
+		const fetchProjects = async () => {
+			try {
+				const projects = await getProjects();
+				setProjectCollection(projects);
+			} catch (error) {
+				console.error("Failed to fetch projects:", error);
+			}
+		};
+
+		fetchProjects();
+	}, []);
 
 	const filteredProjects = projectCollection.filter(
 		(project) =>
@@ -120,7 +145,7 @@ export default async function CollectionPage() {
 							<TableBody>
 								{filteredProjects.map((project) => (
 									<TableRow
-										key={project.id}
+										key={project.position}
 										className="border-b border-white/5 hover:bg-white/10 transition-all duration-300"
 									>
 										<TableCell>

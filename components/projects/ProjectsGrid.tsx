@@ -1,23 +1,39 @@
 "use client";
 
-import { useState } from "react";
+import { Project } from "@/lib/other-project-data";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ProjectCard } from "./ProjectCard";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 
-import { getOtherProjects } from "@/lib/other-project-data";
-
 const PROJECTS_PER_PAGE = 6;
 
-export async function ProjectsGrid() {
+export function ProjectsGrid() {
+	const [projects, setProjects] = useState<Project[]>([]);
+	const [isLoading, setIsLoading] = useState(true);
 	const [visibleCount, setVisibleCount] = useState(PROJECTS_PER_PAGE);
 
-	const projects = await getOtherProjects();
+	useEffect(() => {
+		async function fetchProjects() {
+			try {
+				const response = await fetch("/api/projects");
+				const data = await response.json();
+				setProjects(data);
+			} catch (error) {
+				console.error("Failed to fetch projects:", error);
+			} finally {
+				setIsLoading(false);
+			}
+		}
+
+		fetchProjects();
+	}, []);
 
 	const showMoreProjects = () => {
 		setVisibleCount((prev) => prev + PROJECTS_PER_PAGE);
 	};
+
 	const gridVariants = {
 		hidden: {
 			opacity: 0,
@@ -49,6 +65,8 @@ export async function ProjectsGrid() {
 	const visibleProjects = projects.slice(0, visibleCount);
 	const router = useRouter();
 
+	if (isLoading) return <div>Loading...</div>;
+
 	return (
 		<section className="py-12 px-4 md:px-6 lg:px-8">
 			<motion.div
@@ -69,7 +87,7 @@ export async function ProjectsGrid() {
 				className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto"
 			>
 				{visibleProjects.map((project) => (
-					<motion.div key={project.id} variants={projectVariants}>
+					<motion.div key={project.position} variants={projectVariants}>
 						<ProjectCard {...project} />
 					</motion.div>
 				))}

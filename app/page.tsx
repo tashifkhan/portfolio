@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Hero from "@/components/home/Hero";
 import Featured from "@/components/projects/Featured";
 import { ProjectsGrid } from "@/components/projects/ProjectsGrid";
@@ -7,11 +7,8 @@ import { ResponsibilitiesGrid } from "@/components/college/ResponsibilitiesGrid"
 import { SkillsSection } from "@/components/skills/SkillsSection";
 import { ContactSection } from "@/components/contact/ContactSection";
 import { Footer } from "@/components/footer/Footer";
-import { getProjects } from "@/lib/other-project-data";
 
-export default async function Home() {
-	const projects = await getProjects();
-	console.log(projects);
+export default function Home() {
 	return (
 		<div className="no-scrollbar bg-cover bg-center bg-custom-bg text-white h-screen snap-y snap-mandatory pt-28 sm:pt-36 overflow-scroll z-0">
 			<section id="hero" className="snap-center">
@@ -22,8 +19,10 @@ export default async function Home() {
 				className="snap-start w-screen h-screen overflow-y-auto
 				   scrollbar-hide pb-28 sm:pb-0"
 			>
-				<Featured />
-				<ProjectsGrid />
+				<Suspense fallback={<div>Loading...</div>}>
+					<Featured />
+					<ProjectsGrid />
+				</Suspense>
 			</section>
 			<section id="skills" className="snap-start pb-28 sm:pb-0">
 				<SkillsSection />

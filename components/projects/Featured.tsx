@@ -5,6 +5,7 @@ import { FeaturedProject } from "./Projection";
 import { motion } from "framer-motion";
 import { featuredProjects } from "@/lib/featured-project-data";
 import Link from "next/link";
+import Image from "next/image";
 
 interface ProjectFrontmatter {
 	external: string;
@@ -57,7 +58,12 @@ const Featured: React.FC = () => {
 							<FeaturedProject
 								title={project.title}
 								description={project.description}
-								image={project.imageLink}
+								image={{
+									src: project.imageLink,
+									alt: `${project.title} preview`,
+									width: 1920,
+									height: 1080,
+								}}
 								technologies={project.technologies}
 								githubUrl={project.githubLink || "#"}
 								liveUrl={project.liveLink}
