@@ -1,50 +1,82 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { TimelineNode } from "./TimelineNode";
+import { Skeleton } from "@/components/ui/skeleton";
 
-const educationData = [
-	{
-		title: "B.Tech (ECE)",
-		institution: "Jaypee Institute of Information Technology, Noida-62",
-		score: "CGPA: 7.2",
-		duration: "Sept 2022 - June 2026",
-	},
-	{
-		title: "CBSE XII",
-		institution: "Delhi Public School, R.K. Puram",
-		score: "94.6%",
-		duration: "2022",
-	},
-	{
-		title: "CBSE X",
-		institution: "Delhi Public School, R.K. Puram",
-		score: "93.7%",
-		duration: "2020",
-	},
-];
+interface Education {
+	title: string;
+	institution: string;
+	score: string;
+	duration: string;
+}
+
+const getEducation = async () => {
+	const response = await fetch("/api/edu");
+	if (!response.ok) {
+		throw new Error("Failed to fetch education data");
+	}
+	const data = await response.json();
+	return data[0]?.educationData || [];
+};
 
 export function EducationTimeline() {
+	const [educationData, setEducationData] = useState<Education[]>([]);
+	const [isLoading, setIsLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
+
+	useEffect(() => {
+		const fetchEducation = async () => {
+			try {
+				const data = await getEducation();
+				setEducationData(data);
+			} catch (err) {
+				setError(
+					err instanceof Error ? err.message : "Failed to load education data"
+				);
+			} finally {
+				setIsLoading(false);
+			}
+		};
+		fetchEducation();
+	}, []);
+
+	if (error) {
+		return (
+			<section className="py-24 relative">
+				<div className="text-center text-red-500">Error: {error}</div>
+			</section>
+		);
+	}
+
 	return (
 		<section className="py-24 relative">
-			{/* Background gradient blur effect */}
-			<div className="absolute inset-0 bg-gradient-to-b from-orange-300/5 to-transparent pointer-events-none" />
+			<div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
 
-			<h2 className="text-4xl  text-center mb-16 font-mono">
+			<h2 className="text-4xl font-bold text-center mb-16 bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
 				Education Timeline
 			</h2>
 
 			<div className="max-w-5xl mx-auto px-6">
-				{/* Vertical line for timeline */}
-				<div className="absolute left-[51%] h-full w-0.5 bg-gradient-to-b from-orange-300/50 via-orange-300/30 to-transparent transform -translate-x-1/2" />
-
-				<div className="space-y-16 relative">
-					{educationData.map((education, index) => (
-						<div key={index} className="group">
-							<TimelineNode {...education} index={index} />
-							{/* Animated dot for timeline */}
-							<div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-orange-300 shadow-lg shadow-orange-300/50 group-hover:scale-150 transition-transform duration-300" />
-						</div>
-					))}
+				<div className="space-y-8 relative">
+					{isLoading
+						? Array.from({ length: 3 }).map((_, i) => (
+								<div key={i} className="flex gap-4">
+									<Skeleton className="h-4 w-4 rounded-full" />
+									<div className="space-y-2 flex-1">
+										<Skeleton className="h-5 w-1/4" />
+										<Skeleton className="h-4 w-3/4" />
+										<Skeleton className="h-4 w-1/2" />
+									</div>
+								</div>
+						  ))
+						: educationData.map((education, index) => (
+								<TimelineNode
+									key={education.title}
+									{...education}
+									index={index}
+								/>
+						  ))}
 				</div>
 			</div>
 		</section>
