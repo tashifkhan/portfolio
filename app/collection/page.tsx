@@ -57,13 +57,13 @@ export default function CollectionPage() {
 	const handleSearchChange = (value: string) => {
 		setSearchTerm(value);
 		// Update URL with search param
-		const params = new URLSearchParams(searchParams);
+		const params = new URLSearchParams(searchParams.toString());
 		if (value) {
 			params.set("search", value);
 		} else {
 			params.delete("search");
 		}
-		router.push(`/collection?${params.toString()}`);
+		router.push(`/collection?${params.toString()}`, { scroll: false });
 	};
 
 	useEffect(() => {
