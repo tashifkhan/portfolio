@@ -1,5 +1,8 @@
 "use client";
 
+import { Suspense } from "react";
+import { Loader } from "@/components/ui/loader";
+
 // Move interface outside component
 interface Project {
 	position: number;
@@ -30,13 +33,53 @@ import {
 	CheckCheck,
 	Waypoints,
 } from "lucide-react";
-import { Loader } from "@/components/ui/loader";
 
 import Link from "next/link";
 import { getProjects } from "@/lib/other-project-data";
 import { useSearchParams, useRouter } from "next/navigation";
 
-export default function CollectionPage() {
+// Extract the main table functionality into a separate component
+function SearchInput() {
+	const searchParams = useSearchParams();
+	const router = useRouter();
+	const [searchTerm, setSearchTerm] = useState(
+		searchParams.get("search") || ""
+	);
+
+	useEffect(() => {
+		const currentSearch = searchParams.get("search");
+		if (currentSearch !== null) {
+			setSearchTerm(currentSearch);
+		}
+	}, [searchParams]);
+
+	const handleSearchChange = (value: string) => {
+		setSearchTerm(value);
+		const params = new URLSearchParams(searchParams.toString());
+		if (value) {
+			params.set("search", value);
+		} else {
+			params.delete("search");
+		}
+		router.push(`/collection?${params.toString()}`, { scroll: false });
+	};
+
+	return (
+		<Input
+			type="search"
+			placeholder="Search projects..."
+			value={searchTerm}
+			onChange={(e) => handleSearchChange(e.target.value)}
+			className="w-full rounded-xl border-white/10 bg-white/5 pl-12 
+			text-white placeholder:text-white/40 backdrop-blur-xl
+			focus:border-orange-500/30 focus:bg-white/10 focus:ring-orange-500/20
+			transition-all duration-300"
+			aria-label="Search projects"
+		/>
+	);
+}
+
+function SearchableTable() {
 	const searchParams = useSearchParams();
 	const router = useRouter();
 	const [searchTerm, setSearchTerm] = useState(
@@ -146,6 +189,216 @@ export default function CollectionPage() {
 	};
 
 	return (
+		<div className="relative rounded-xl overflow-hidden">
+			<div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-transparent to-orange-500/5 backdrop-blur-xl" />
+			<div className="relative overflow-x-auto">
+				{isLoading ? (
+					<div className="flex justify-center items-center min-h-[400px]">
+						<Loader size="lg" />
+					</div>
+				) : (
+					<Table>
+						<TableHeader>
+							<TableRow className="border-b-white/10 bg-white/5">
+								<TableHead className="text-white/90 font-semibold">
+									Project
+								</TableHead>
+								<TableHead className="hidden sm:table-cell text-white/90 font-semibold">
+									Description
+								</TableHead>
+								<TableHead className="hidden sm:table-cell text-white/90 font-semibold">
+									Tech
+								</TableHead>
+								<TableHead className="hidden lg:table-cell text-white/90 font-semibold">
+									Links
+								</TableHead>
+								<TableHead className="hidden md:table-cell text-white/90 font-semibold">
+									Status
+								</TableHead>
+							</TableRow>
+						</TableHeader>
+						<TableBody>
+							{filteredProjects.map((project, index) => (
+								<TableRow
+									key={`project-${project.position || index}`}
+									className="border-b border-white/5 hover:bg-white/10 transition-all duration-300"
+								>
+									<TableCell>
+										<div className="space-y-3">
+											<div className="font-medium text-white text-md tracking-tight">
+												<div className="flex items-center gap-2">
+													<span>{project.title.split("(")[0]}</span>
+													{project.title.includes("(") && (
+														<span className="px-2 py-0.5 text-xs text-orange-200 text-center">
+															{project.title.split("(")[1].replace(")", "")}
+														</span>
+													)}
+												</div>
+											</div>
+											<div className="text-sm text-white/70 sm:hidden line-clamp-2">
+												{project.description}{" "}
+											</div>
+											<div className="flex flex-wrap gap-2 sm:hidden">
+												{project.technologies.map((tech, techIndex) => (
+													<span
+														key={`mobile-${
+															project.position || index
+														}-${techIndex}-${tech}`}
+														className="px-3 py-1 text-xs font-medium rounded-full 
+															bg-orange-500/10 text-white/90 backdrop-blur-sm
+															border border-orange-500/20 
+															transition-all duration-300
+															hover:bg-orange-500/20 hover:border-orange-500/30"
+													>
+														{tech}
+													</span>
+												))}
+											</div>
+											<div className="flex justify-between sm:hidden">
+												<div className="flex items-center gap-4 sm:hidden">
+													{project.githubLink && (
+														<Link
+															href={project.githubLink}
+															target="_blank"
+															className="text-white/70 hover:text-orange-400 transform transition-all duration-300 hover:scale-110"
+														>
+															<GithubIcon className="w-5 h-5" />
+														</Link>
+													)}
+													{project.playStoreLink && (
+														<Link
+															href={project.playStoreLink}
+															target="_blank"
+															className="text-white/70 hover:text-orange-400 transform transition-all duration-300 hover:scale-110"
+														>
+															<IoLogoGooglePlaystore className="w-5 h-5" />
+														</Link>
+													)}
+													{project.liveLink && (
+														<Link
+															href={project.liveLink}
+															target="_blank"
+															className="text-white/70 hover:text-orange-400 transform transition-all duration-300 hover:scale-110"
+														>
+															<ExternalLink className="w-5 h-5" />
+														</Link>
+													)}
+												</div>
+												<div className="flex items-center gap-4 sm:hidden">
+													{renderStatusIcon(project.status)}
+												</div>
+											</div>
+										</div>
+									</TableCell>
+									<TableCell className="hidden sm:table-cell text-white/80">
+										<div className="line-clamp-2">{project.description}</div>
+									</TableCell>
+									<TableCell className="hidden sm:table-cell">
+										<div className="flex flex-wrap gap-2">
+											{project.technologies.map((tech, techIndex) => (
+												<span
+													key={`desktop-${
+														project.position || index
+													}-${techIndex}-${tech}`}
+													className="px-3 py-1 text-xs font-medium rounded-full 
+														bg-orange-500/10 text-white/90 backdrop-blur-sm
+														border border-orange-500/20 
+														transition-all duration-300
+														hover:bg-orange-500/20 hover:border-orange-500/30"
+												>
+													{tech}
+												</span>
+											))}
+										</div>
+									</TableCell>
+									<TableCell className="hidden md:table-cell">
+										<div className="flex items-center gap-4">
+											{project.githubLink && (
+												<Link
+													href={project.githubLink}
+													target="_blank"
+													className="text-white/70 hover:text-orange-400 transition-colors duration-300"
+												>
+													<GithubIcon className="w-6 h-6" />
+												</Link>
+											)}
+											{project.playStoreLink && (
+												<Link
+													href={project.playStoreLink}
+													target="_blank"
+													className="text-white/70 hover:text-orange-400 transition-colors duration-300"
+												>
+													<IoLogoGooglePlaystore className="w-6 h-6" />
+												</Link>
+											)}
+											{project.liveLink && (
+												<Link
+													href={project.liveLink}
+													target="_blank"
+													className="text-white/70 hover:text-orange-400 transition-colors duration-300"
+												>
+													<ExternalLink className="w-6 h-6" />
+												</Link>
+											)}
+										</div>
+									</TableCell>
+									<TableCell className="hidden lg:table-cell">
+										{renderStatusIcon(project.status)}
+									</TableCell>
+								</TableRow>
+							))}
+						</TableBody>
+					</Table>
+				)}
+			</div>
+		</div>
+	);
+}
+
+const StatusLegend = () => {
+	const [isVisible, setIsVisible] = useState(true);
+
+	return (
+		<div className="fixed md:top-8 bottom-24 right-4 z-50">
+			{isVisible ? (
+				<div className="p-4 rounded-lg bg-black/50 backdrop-blur-lg border border-white/10">
+					<div className="flex items-center justify-between mb-2">
+						<div className="text-sm font-medium text-white/90">
+							Status Legend
+						</div>
+						<button
+							onClick={() => setIsVisible(false)}
+							className="text-white/50 hover:text-white/90 transition-colors pl-3"
+							aria-label="Hide legend"
+						>
+							✕
+						</button>
+					</div>
+					<div className="space-y-2">
+						<div className="flex items-center gap-2">
+							<LoaderCircle className="w-5 h-5 text-orange-500" />
+							<span className="text-xs text-white/70">In Progress</span>
+						</div>
+						<div className="flex items-center gap-2">
+							<CheckCheck className="w-5 h-5 text-green-500" />
+							<span className="text-xs text-white/70">Completed</span>
+						</div>
+						<div className="flex items-center gap-2">
+							<Waypoints className="w-5 h-5 text-blue-500" />
+							<span className="text-xs text-white/70">Planned</span>
+						</div>
+					</div>
+				</div>
+			) : (
+				<></>
+			)}
+		</div>
+	);
+};
+
+// Main page component
+export default function CollectionPage() {
+	return (
 		<div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-orange-300/5 via-gray-900/10 to-black/10 p-4 md:p-8">
 			<StatusLegend />
 			<div className="mx-auto max-w-7xl space-y-12 pb-32 sm:pb-0">
@@ -163,17 +416,7 @@ export default function CollectionPage() {
 					<div className="relative w-full max-w-lg group">
 						<div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-orange-500/20 via-white/10 to-orange-500/20 blur-xl transition-all duration-500 group-hover:blur-2xl group-hover:from-orange-500/30 group-hover:via-white/20 group-hover:to-orange-500/30" />
 						<div className="relative flex items-center">
-							<Input
-								type="search"
-								placeholder="Search projects..."
-								value={searchTerm}
-								onChange={(e) => handleSearchChange(e.target.value)}
-								className="w-full rounded-xl border-white/10 bg-white/5 pl-12 
-									text-white placeholder:text-white/40 backdrop-blur-xl
-									focus:border-orange-500/30 focus:bg-white/10 focus:ring-orange-500/20
-									transition-all duration-300"
-								aria-label="Search projects"
-							/>
+							<SearchInput />
 							<svg
 								className="absolute left-4 h-5 w-5 text-white/50"
 								fill="none"
@@ -186,179 +429,20 @@ export default function CollectionPage() {
 									strokeWidth={1.5}
 									d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
 								/>
-							</svg>
+							</svg>{" "}
 						</div>
 					</div>
 				</header>
 
-				{/* Table Section */}
-				<div className="relative rounded-xl overflow-hidden">
-					<div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-transparent to-orange-500/5 backdrop-blur-xl" />
-					<div className="relative overflow-x-auto">
-						{isLoading ? (
-							<div className="flex justify-center items-center min-h-[400px]">
-								<Loader size="lg" />
-							</div>
-						) : (
-							<Table>
-								<TableHeader>
-									<TableRow className="border-b-white/10 bg-white/5">
-										<TableHead className="text-white/90 font-semibold">
-											Project
-										</TableHead>
-										<TableHead className="hidden sm:table-cell text-white/90 font-semibold">
-											Description
-										</TableHead>
-										<TableHead className="hidden sm:table-cell text-white/90 font-semibold">
-											Tech
-										</TableHead>
-										<TableHead className="hidden lg:table-cell text-white/90 font-semibold">
-											Links
-										</TableHead>
-										<TableHead className="hidden md:table-cell text-white/90 font-semibold">
-											Status
-										</TableHead>
-									</TableRow>
-								</TableHeader>
-								<TableBody>
-									{filteredProjects.map((project, index) => (
-										<TableRow
-											key={`project-${project.position || index}`}
-											className="border-b border-white/5 hover:bg-white/10 transition-all duration-300"
-										>
-											<TableCell>
-												<div className="space-y-3">
-													<div className="font-medium text-white text-md tracking-tight">
-														<div className="flex items-center gap-2">
-															<span>{project.title.split("(")[0]}</span>
-															{project.title.includes("(") && (
-																<span className="px-2 py-0.5 text-xs text-orange-200 text-center">
-																	{project.title.split("(")[1].replace(")", "")}
-																</span>
-															)}
-														</div>
-													</div>
-													<div className="text-sm text-white/70 sm:hidden line-clamp-2">
-														{project.description}{" "}
-													</div>
-													<div className="flex flex-wrap gap-2 sm:hidden">
-														{project.technologies.map((tech, techIndex) => (
-															<span
-																key={`mobile-${
-																	project.position || index
-																}-${techIndex}-${tech}`}
-																className="px-3 py-1 text-xs font-medium rounded-full 
-																	bg-orange-500/10 text-white/90 backdrop-blur-sm
-																	border border-orange-500/20 
-																	transition-all duration-300
-																	hover:bg-orange-500/20 hover:border-orange-500/30"
-															>
-																{tech}
-															</span>
-														))}
-													</div>
-													<div className="flex justify-between sm:hidden">
-														<div className="flex items-center gap-4 sm:hidden">
-															{project.githubLink && (
-																<Link
-																	href={project.githubLink}
-																	target="_blank"
-																	className="text-white/70 hover:text-orange-400 transform transition-all duration-300 hover:scale-110"
-																>
-																	<GithubIcon className="w-5 h-5" />
-																</Link>
-															)}
-															{project.playStoreLink && (
-																<Link
-																	href={project.playStoreLink}
-																	target="_blank"
-																	className="text-white/70 hover:text-orange-400 transform transition-all duration-300 hover:scale-110"
-																>
-																	<IoLogoGooglePlaystore className="w-5 h-5" />
-																</Link>
-															)}
-															{project.liveLink && (
-																<Link
-																	href={project.liveLink}
-																	target="_blank"
-																	className="text-white/70 hover:text-orange-400 transform transition-all duration-300 hover:scale-110"
-																>
-																	<ExternalLink className="w-5 h-5" />
-																</Link>
-															)}
-														</div>
-														<div className="flex items-center gap-4 sm:hidden">
-															{renderStatusIcon(project.status)}
-														</div>
-													</div>
-												</div>
-											</TableCell>
-											<TableCell className="hidden sm:table-cell text-white/80">
-												<div className="line-clamp-2">
-													{project.description}
-												</div>
-											</TableCell>
-											<TableCell className="hidden sm:table-cell">
-												<div className="flex flex-wrap gap-2">
-													{project.technologies.map((tech, techIndex) => (
-														<span
-															key={`desktop-${
-																project.position || index
-															}-${techIndex}-${tech}`}
-															className="px-3 py-1 text-xs font-medium rounded-full 
-																bg-orange-500/10 text-white/90 backdrop-blur-sm
-																border border-orange-500/20 
-																transition-all duration-300
-																hover:bg-orange-500/20 hover:border-orange-500/30"
-														>
-															{tech}
-														</span>
-													))}
-												</div>
-											</TableCell>
-											<TableCell className="hidden md:table-cell">
-												<div className="flex items-center gap-4">
-													{project.githubLink && (
-														<Link
-															href={project.githubLink}
-															target="_blank"
-															className="text-white/70 hover:text-orange-400 transition-colors duration-300"
-														>
-															<GithubIcon className="w-6 h-6" />
-														</Link>
-													)}
-													{project.playStoreLink && (
-														<Link
-															href={project.playStoreLink}
-															target="_blank"
-															className="text-white/70 hover:text-orange-400 transition-colors duration-300"
-														>
-															<IoLogoGooglePlaystore className="w-6 h-6" />
-														</Link>
-													)}
-													{project.liveLink && (
-														<Link
-															href={project.liveLink}
-															target="_blank"
-															className="text-white/70 hover:text-orange-400 transition-colors duration-300"
-														>
-															<ExternalLink className="w-6 h-6" />
-														</Link>
-													)}
-												</div>
-											</TableCell>
-											<TableCell className="hidden md:table-cell">
-												<div className="transform transition-transform duration-300 hover:scale-110">
-													{renderStatusIcon(project.status)}
-												</div>
-											</TableCell>
-										</TableRow>
-									))}
-								</TableBody>
-							</Table>
-						)}
-					</div>
-				</div>
+				<Suspense
+					fallback={
+						<div className="flex justify-center items-center min-h-[400px]">
+							<Loader size="lg" />
+						</div>
+					}
+				>
+					<SearchableTable />
+				</Suspense>
 			</div>
 		</div>
 	);
