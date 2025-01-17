@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { FaPython, FaJsSquare } from "react-icons/fa";
 import { SiCplusplus, SiTypescript } from "react-icons/si";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -42,9 +43,11 @@ const getLanguages = async () => {
 function LanguageCard({
 	language,
 	index,
+	onClick,
 }: {
 	language: Language;
 	index: number;
+	onClick: () => void;
 }) {
 	return (
 		<motion.div
@@ -53,7 +56,8 @@ function LanguageCard({
 			whileInView={{ opacity: 1, y: 0 }}
 			transition={{ duration: 0.3, delay: index * 0.1 }}
 			whileHover={{ scale: 1.05 }}
-			className="relative group"
+			className="relative group cursor-pointer"
+			onClick={onClick}
 		>
 			<div className="absolute inset-0 bg-gradient-to-r from-orange-300/20 to-orange-300/10 rounded-lg blur-md group-hover:blur-lg transition-all" />
 			<div className="relative p-4 rounded-lg bg-card/80 backdrop-blur-sm border-none flex items-center gap-2">
@@ -65,9 +69,14 @@ function LanguageCard({
 }
 
 export function LanguagesGrid() {
+	const router = useRouter();
 	const [languages, setLanguages] = useState<Language[]>(defaultLanguages);
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
+
+	const handleLanguageClick = (language: Language) => {
+		router.push(`/collection?search=${encodeURIComponent(language.name)}`);
+	};
 
 	useEffect(() => {
 		const fetchLanguages = async () => {
@@ -107,7 +116,12 @@ export function LanguagesGrid() {
 			<h3 className="text-xl font-semibold">Languages</h3>
 			<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
 				{languages.map((language, index) => (
-					<LanguageCard key={language.name} language={language} index={index} />
+					<LanguageCard
+						key={language.name}
+						language={language}
+						index={index}
+						onClick={() => handleLanguageClick(language)}
+					/>
 				))}
 			</div>
 		</div>

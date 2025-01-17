@@ -34,12 +34,37 @@ import { Loader } from "@/components/ui/loader";
 
 import Link from "next/link";
 import { getProjects } from "@/lib/other-project-data";
+import { useSearchParams, useRouter } from "next/navigation";
 
 export default function CollectionPage() {
-	const [searchTerm, setSearchTerm] = useState("");
+	const searchParams = useSearchParams();
+	const router = useRouter();
+	const [searchTerm, setSearchTerm] = useState(
+		searchParams.get("search") || ""
+	);
 	const [isLoading, setIsLoading] = useState(true);
-
 	const [projectCollection, setProjectCollection] = useState<Project[]>([]);
+
+	// Update search term when URL params change
+	useEffect(() => {
+		const currentSearch = searchParams.get("search");
+		if (currentSearch !== null) {
+			setSearchTerm(currentSearch);
+		}
+	}, [searchParams]);
+
+	// Handle search input changes
+	const handleSearchChange = (value: string) => {
+		setSearchTerm(value);
+		// Update URL with search param
+		const params = new URLSearchParams(searchParams);
+		if (value) {
+			params.set("search", value);
+		} else {
+			params.delete("search");
+		}
+		router.push(`/collection?${params.toString()}`);
+	};
 
 	useEffect(() => {
 		// getProjects is an async function, so we need to handle it properly
@@ -142,7 +167,7 @@ export default function CollectionPage() {
 								type="search"
 								placeholder="Search projects..."
 								value={searchTerm}
-								onChange={(e) => setSearchTerm(e.target.value)}
+								onChange={(e) => handleSearchChange(e.target.value)}
 								className="w-full rounded-xl border-white/10 bg-white/5 pl-12 
 									text-white placeholder:text-white/40 backdrop-blur-xl
 									focus:border-orange-500/30 focus:bg-white/10 focus:ring-orange-500/20

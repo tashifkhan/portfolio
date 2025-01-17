@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useRouter } from "next/navigation";
 
 interface Framework {
 	name: string;
@@ -32,6 +33,7 @@ const getFrameworks = async () => {
 };
 
 const FrameworksCarousel = () => {
+	const router = useRouter();
 	const [frameworks, setFrameworks] = useState<Framework[]>(defaultFrameworks);
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
@@ -94,6 +96,10 @@ const FrameworksCarousel = () => {
 		setTimeout(checkScroll, 300);
 	};
 
+	const handleFrameworkClick = (framework: Framework) => {
+		router.push(`/collection?search=${encodeURIComponent(framework.name)}`);
+	};
+
 	if (isLoading) {
 		return (
 			<div className="space-y-4">
@@ -150,7 +156,10 @@ const FrameworksCarousel = () => {
 							transition={{ duration: 0.3, delay: index * 0.1 }}
 							className="flex-none w-64"
 						>
-							<Card className="p-4 border border-orange-300/10 bg-orange-300/5 backdrop-blur-md hover:bg-orange-300/10 transition-all group">
+							<Card
+								className="p-4 border border-orange-300/10 bg-orange-300/5 backdrop-blur-md hover:bg-orange-300/10 transition-all group cursor-pointer"
+								onClick={() => handleFrameworkClick(framework)}
+							>
 								<div className="flex items-center justify-between">
 									<div>
 										<h4 className="font-semibold text-orange-300/90">
