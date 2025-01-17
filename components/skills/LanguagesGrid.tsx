@@ -2,23 +2,61 @@
 
 import { motion } from "framer-motion";
 import { Code2, FileCode, Braces } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import { FaPython, FaJsSquare } from "react-icons/fa";
 import { SiC, SiCplusplus, SiGo, SiTypescript } from "react-icons/si";
 
-const languages = [
+interface Language {
+	name: string;
+	icon: React.ElementType;
+}
+
+const defaultLanguages: Language[] = [
 	{ name: "Python", icon: FaPython },
 	{ name: "C++", icon: SiCplusplus },
 	{ name: "JavaScript", icon: FaJsSquare },
 	{ name: "TypeScript", icon: SiTypescript },
-	// { name: "C", icon: SiC },
-	// { name: "Go", icon: SiGo },
 ];
 
+const getLanguages = async () => {
+	const response = await fetch("/api/skills");
+	if (!response.ok) {
+		throw new Error("Failed to fetch languages");
+	}
+	const data = await response.json();
+	return data.languages;
+};
+
 export function LanguagesGrid() {
+	const [languages, setLanguages] = useState<Language[]>(defaultLanguages);
+	const [isLoading, setIsLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
+
+	useEffect(() => {
+		const fetchLanguages = async () => {
+			try {
+				const data = await getLanguages();
+				setLanguages(data);
+			} catch (err) {
+				setError(
+					err instanceof Error ? err.message : "Failed to load languages"
+				);
+				// Fallback to default languages on error
+			} finally {
+				setIsLoading(false);
+			}
+		};
+		fetchLanguages();
+	}, []);
+
+	if (error) {
+		return <div className="text-red-500">Error: {error}</div>;
+	}
+
 	return (
 		<div className="space-y-4">
-			<h3 className="text-xl font-semibold ">Languages</h3>
+			<h3 className="text-xl font-semibold">Languages</h3>
 			<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
 				{languages.map((language, index) => (
 					<motion.div
