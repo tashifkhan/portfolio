@@ -31,14 +31,12 @@ const getLanguages = async () => {
 	}
 	const data = await response.json();
 
-	// Extract languages from first item and map icons
-	const languages =
+	return (
 		data[0]?.languages.map((lang: { name: string; icon: string }) => ({
 			name: lang.name,
 			icon: iconMap[lang.icon],
-		})) || [];
-
-	return languages;
+		})) || defaultLanguages
+	);
 };
 
 function LanguageCard({

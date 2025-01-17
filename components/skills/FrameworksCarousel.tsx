@@ -4,8 +4,14 @@ import React, { useState, useRef, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { Skeleton } from "@/components/ui/skeleton";
 
-const frameworks = [
+interface Framework {
+	name: string;
+	description: string;
+}
+
+const defaultFrameworks: Framework[] = [
 	{ name: "Next.js", description: "React Framework" },
 	{ name: "React.js", description: "UI Library" },
 	{ name: "React Native", description: "Mobile Development" },
@@ -15,10 +21,39 @@ const frameworks = [
 	{ name: "Flask", description: "Python Framework" },
 ];
 
+const getFrameworks = async () => {
+	const response = await fetch("/api/skills");
+	if (!response.ok) {
+		throw new Error("Failed to fetch frameworks");
+	}
+	const data = await response.json();
+	console.log(data);
+	return data[0]?.frameworks || defaultFrameworks;
+};
+
 const FrameworksCarousel = () => {
+	const [frameworks, setFrameworks] = useState<Framework[]>(defaultFrameworks);
+	const [isLoading, setIsLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
 	const [canScrollLeft, setCanScrollLeft] = useState(false);
 	const [canScrollRight, setCanScrollRight] = useState(true);
 	const containerRef = useRef<HTMLDivElement | null>(null);
+
+	useEffect(() => {
+		const fetchFrameworks = async () => {
+			try {
+				const data = await getFrameworks();
+				setFrameworks(data);
+			} catch (err) {
+				setError(
+					err instanceof Error ? err.message : "Failed to load frameworks"
+				);
+			} finally {
+				setIsLoading(false);
+			}
+		};
+		fetchFrameworks();
+	}, []);
 
 	const checkScroll = () => {
 		if (!containerRef.current) return;
@@ -58,6 +93,26 @@ const FrameworksCarousel = () => {
 		// Update scroll buttons state after animation
 		setTimeout(checkScroll, 300);
 	};
+
+	if (isLoading) {
+		return (
+			<div className="space-y-4">
+				<div className="flex gap-2">
+					<Skeleton className="h-8 w-8 rounded-full" />
+					<Skeleton className="h-8 w-8 rounded-full" />
+				</div>
+				<div className="flex gap-4">
+					{Array.from({ length: 3 }).map((_, i) => (
+						<Skeleton key={i} className="h-24 w-64" />
+					))}
+				</div>
+			</div>
+		);
+	}
+
+	if (error) {
+		return <div className="text-red-500">Error: {error}</div>;
+	}
 
 	return (
 		<div className="space-y-4">
