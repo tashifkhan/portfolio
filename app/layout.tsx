@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Image from "next/image";
 import Header from "@/components/home/Header";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
@@ -18,9 +19,18 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en" suppressHydrationWarning>
-			<body
-				className={`${inter.className}  bg-cover bg-center bg-custom-bg h-screen `}
-			>
+			<body className={inter.className}>
+				<div className="fixed inset-0 -z-10">
+					<Image
+						src="/bg02.jpg"
+						alt="Background"
+						fill
+						priority
+						quality={100}
+						className="object-cover"
+						sizes="100vw"
+					/>
+				</div>
 				<Analytics />
 				<Header />
 				{children}

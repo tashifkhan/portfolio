@@ -10,7 +10,7 @@ import { Footer } from "@/components/footer/Footer";
 
 export default function Home() {
 	return (
-		<div className="no-scrollbar bg-cover bg-center bg-custom-bg text-white h-screen snap-y snap-mandatory pt-28 sm:pt-36 overflow-scroll z-0">
+		<div className="no-scrollbar bg-cover text-white h-screen snap-y snap-mandatory pt-28 sm:pt-36 overflow-scroll z-0">
 			<section id="hero" className="snap-center">
 				<Hero />
 			</section>
