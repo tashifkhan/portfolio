@@ -53,7 +53,7 @@ export function EducationTimeline() {
 		<section className="py-24 relative">
 			<div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
 
-			<h2 className="text-4xl font-bold text-center mb-16 bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
+			<h2 className="text-4xl font-mono text-center mb-16 bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
 				Education Timeline
 			</h2>
 

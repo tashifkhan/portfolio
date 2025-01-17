@@ -101,23 +101,31 @@ export function Footer() {
 
 				{/* Copyright and Back to Top */}
 				<motion.div
-					initial={{ opacity: 0 }}
-					whileInView={{ opacity: 1 }}
-					transition={{ delay: 0.3 }}
-					className="mt-12 pt-8 border-t border-white/10 flex items-center justify-between"
+					initial={{ opacity: 0, y: 20 }}
+					whileInView={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.5, delay: 0.3 }}
+					className="mt-12 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center gap-4 sm:justify-between"
 				>
-					<p className="text-sm text-muted-foreground hover:text-slate-200 transition-colors">
-						© {new Date().getFullYear()} (tashif.codes) Tashif Ahmad Khan. All
-						rights reserved.
-					</p>
-					<motion.div whileHover={{ scale: 1.1 }}>
+					<motion.p
+						whileHover={{ x: 4 }}
+						className="text-sm text-muted-foreground hover:text-slate-200 transition-all"
+					>
+						© {new Date().getFullYear()} Tashif Ahmad Khan. All rights reserved.
+					</motion.p>
+
+					<motion.div
+						whileHover={{ scale: 1.05 }}
+						transition={{ type: "spring", stiffness: 300 }}
+					>
 						<Button
 							variant="ghost"
 							size="icon"
 							onClick={scrollToTop}
-							className="rounded-full hover:bg-slate-200/20 backdrop-blur-sm bg-white/5 border border-white/10 hover:border-slate-200/50 transition-all"
+							className="rounded-full hover:bg-slate-200/20 backdrop-blur-sm bg-white/5 
+										border border-white/10 hover:border-slate-200/50 transition-all
+										hover:shadow-lg hover:shadow-slate-200/10"
 						>
-							<ArrowUp className="h-5 w-5" />
+							<ArrowUp className="h-5 w-5 transition-transform group-hover:translate-y-0.5" />
 						</Button>
 					</motion.div>
 				</motion.div>
