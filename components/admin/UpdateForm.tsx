@@ -37,28 +37,27 @@ export default function UpdateForm() {
 	// Initialize empty form data for each content type
 	const [formData, setFormData] = useState({
 		projects: {
-			name: "",
+			title: "",
 			description: "",
-			url: "",
-			technologies: [],
+			technologies: [] as string[],
+			status: "In Progress" as "Completed" | "In Progress" | "Planned",
 			githubLink: "",
 			liveLink: "",
 			playstoreLink: "",
+			location: 0,
 		},
 		education: {
+			title: "",
 			institution: "",
-			degree: "",
-			field: "",
-			startDate: "",
-			endDate: "",
-			grade: "",
-			description: "",
+			score: "",
+			duration: "",
 		},
 		skills: {
 			name: "",
-			category: "frontend",
-			proficiency: 3,
-			yearsOfExperience: 0,
+			type: "language" as "language" | "framework" | "tool" | "softSkill",
+			icon: "",
+			description: "",
+			category: "Soft Skills" as "Soft Skills" | "Other Avocations",
 		},
 	});
 
@@ -82,84 +81,6 @@ export default function UpdateForm() {
 		if (response.data) setItems(response.data);
 	}, [contentType]);
 
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
-		if (pending) return;
-
-		const data = formData[contentType];
-		let result;
-
-		if (selectedItem?._id) {
-			switch (contentType) {
-				case "projects": {
-					const projectData = data as typeof formData.projects;
-					result = await updateProject({
-						...projectData,
-						_id: selectedItem._id,
-						technologies: projectData.technologies || [],
-						createdAt: selectedItem.createdAt,
-						updatedAt: new Date(),
-					});
-					break;
-				}
-				case "education": {
-					const educationData = data as typeof formData.education;
-					result = await updateEducation({
-						...educationData,
-						_id: selectedItem._id,
-						startDate: new Date(educationData.startDate),
-						endDate: new Date(educationData.endDate),
-						createdAt: selectedItem.createdAt,
-						updatedAt: new Date(),
-					});
-					break;
-				}
-				case "skills":
-					result = await updateSkill({
-						...data,
-						_id: selectedItem._id,
-					} as Skill);
-					break;
-			}
-		} else {
-			switch (contentType) {
-				case "projects": {
-					const projectData = {
-						...(data as typeof formData.projects),
-						createdAt: new Date(),
-						updatedAt: new Date(),
-					};
-					result = await addProject(projectData);
-					break;
-				}
-				case "education": {
-					const educationData = data as typeof formData.education;
-					const formattedData = {
-						...educationData,
-						startDate: new Date(educationData.startDate),
-						endDate: new Date(educationData.endDate),
-						createdAt: new Date(),
-						updatedAt: new Date(),
-					};
-					result = await addEducation(formattedData);
-					break;
-				}
-				case "skills":
-					result = await addSkill(data as Omit<Skill, "_id">);
-					break;
-			}
-		}
-
-		if (result?.error) {
-			// Handle error (you might want to add a toast notification here)
-			console.error(result.error);
-			return;
-		}
-
-		resetForm();
-		loadItems();
-	};
-
 	const resetForm = () => {
 		setSelectedItem(null);
 		setFormData((prev) => ({
@@ -170,8 +91,92 @@ export default function UpdateForm() {
 		}));
 	};
 
-	const [selectedAction, setSelectedAction] = useState<string | null>(null);
+	const handleSubmit = async (e: React.FormEvent) => {
+		e.preventDefault();
+		if (pending) return;
 
+		const data = formData[contentType];
+		let result;
+
+		switch (contentType) {
+			case "projects": {
+				const projectData = data as typeof formData.projects;
+				const payload: Project = {
+					...projectData,
+					createdAt: selectedItem?.createdAt || new Date(),
+					updatedAt: new Date(),
+				};
+				result = selectedItem?._id
+					? await updateProject({ ...payload, _id: selectedItem._id })
+					: await addProject(payload);
+				break;
+			}
+			case "education": {
+				const educationData = data as typeof formData.education;
+				const payload: Education = {
+					...educationData,
+					createdAt: selectedItem?.createdAt || new Date(),
+					updatedAt: new Date(),
+				};
+				result = selectedItem?._id
+					? await updateEducation({ ...payload, _id: selectedItem._id })
+					: await addEducation(payload);
+				break;
+			}
+			case "skills": {
+				const skillData = data as typeof formData.skills;
+				const basePayload = {
+					name: skillData.name,
+					createdAt: selectedItem?.createdAt || new Date(),
+					updatedAt: new Date(),
+				};
+
+				let payload: Skill;
+				switch (skillData.type) {
+					case "language":
+						payload = {
+							...basePayload,
+							type: "language",
+							icon: skillData.icon,
+						};
+						break;
+					case "framework":
+						payload = {
+							...basePayload,
+							type: "framework",
+							description: skillData.description,
+						};
+						break;
+					case "tool":
+						payload = {
+							...basePayload,
+							type: "tool",
+							icon: skillData.icon,
+							description: skillData.description,
+						};
+						break;
+					case "softSkill":
+						payload = {
+							...basePayload,
+							type: "softSkill",
+							icon: skillData.icon,
+							category: skillData.category,
+						};
+						break;
+				}
+
+				result = selectedItem?._id
+					? await updateSkill({ ...payload, _id: selectedItem._id })
+					: await addSkill(payload);
+				break;
+			}
+		}
+
+		await loadItems();
+		resetForm();
+	};
+
+	const [selectedAction, setSelectedAction] = useState<string | null>(null);
 	if (!selectedAction) {
 		return (
 			<div className="relative backdrop-blur-lg bg-white/10 dark:bg-gray-800/30 rounded-2xl p-8 shadow-xl border border-none">
@@ -228,11 +233,11 @@ export default function UpdateForm() {
 
 	// Add a back button and show the rest of the content when an action is selected
 	return (
-		<div className="relative backdrop-blur-lg bg-white/10 dark:bg-gray-800/30 rounded-2xl p-6 shadow-xl border border-none">
+		<div className="relative backdrop-blur-lg bg-gray-800/30 rounded-2xl p-6 shadow-xl border border-none">
 			<Button
 				variant="ghost"
 				onClick={() => setSelectedAction(null)}
-				className="mb-4"
+				className="mb-4 text-slate-400"
 			>
 				← Back to menu
 			</Button>
@@ -257,12 +262,12 @@ export default function UpdateForm() {
 
 							<Input
 								type="text"
-								placeholder="Project Name"
-								value={formData.projects.name}
+								placeholder="Project Title"
+								value={formData.projects.title}
 								onChange={(e) =>
 									setFormData((prev) => ({
 										...prev,
-										projects: { ...prev.projects, name: e.target.value },
+										projects: { ...prev.projects, title: e.target.value },
 									}))
 								}
 								className="bg-white/5 text-gray-400 border-none transition-colors"
@@ -281,13 +286,54 @@ export default function UpdateForm() {
 							/>
 
 							<Input
-								type="url"
-								placeholder="Project URL"
-								value={formData.projects.url}
+								placeholder="Technologies (comma-separated)"
+								value={formData.projects.technologies.join(", ")}
 								onChange={(e) =>
 									setFormData((prev) => ({
 										...prev,
-										projects: { ...prev.projects, url: e.target.value },
+										projects: {
+											...prev.projects,
+											technologies: e.target.value
+												.split(",")
+												.map((t) => t.trim()),
+										},
+									}))
+								}
+								className="bg-white/5 text-gray-400 border-none transition-colors"
+							/>
+
+							<Select
+								value={formData.projects.status}
+								onValueChange={(
+									value: "Completed" | "In Progress" | "Planned"
+								) =>
+									setFormData((prev) => ({
+										...prev,
+										projects: { ...prev.projects, status: value },
+									}))
+								}
+							>
+								<SelectTrigger>
+									<SelectValue placeholder="Status" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem value="Completed">Completed</SelectItem>
+									<SelectItem value="In Progress">In Progress</SelectItem>
+									<SelectItem value="Planned">Planned</SelectItem>
+								</SelectContent>
+							</Select>
+
+							<Input
+								type="number"
+								placeholder="Location"
+								value={formData.projects.location}
+								onChange={(e) =>
+									setFormData((prev) => ({
+										...prev,
+										projects: {
+											...prev.projects,
+											location: parseInt(e.target.value),
+										},
 									}))
 								}
 								className="bg-white/5 text-gray-400 border-none transition-colors"
@@ -333,11 +379,11 @@ export default function UpdateForm() {
 							/>
 							<Input
 								placeholder="Degree"
-								value={formData.education.degree}
+								value={formData.education.title}
 								onChange={(e) =>
 									setFormData((prev) => ({
 										...prev,
-										education: { ...prev.education, degree: e.target.value },
+										education: { ...prev.education, title: e.target.value },
 									}))
 								}
 								className="bg-white/5 text-gray-400 border-none"
@@ -364,7 +410,7 @@ export default function UpdateForm() {
 							/>
 							<Select
 								value={formData.skills.category}
-								onValueChange={(value) =>
+								onValueChange={(value: "Soft Skills" | "Other Avocations") =>
 									setFormData((prev) => ({
 										...prev,
 										skills: { ...prev.skills, category: value },
@@ -375,10 +421,10 @@ export default function UpdateForm() {
 									<SelectValue placeholder="Select category" />
 								</SelectTrigger>
 								<SelectContent>
-									<SelectItem value="frontend">Frontend</SelectItem>
-									<SelectItem value="backend">Backend</SelectItem>
-									<SelectItem value="tools">Tools</SelectItem>
-									<SelectItem value="other">Other</SelectItem>
+									<SelectItem value="Soft Skills">Soft Skills</SelectItem>
+									<SelectItem value="Other Avocations">
+										Other Avocations
+									</SelectItem>
 								</SelectContent>
 							</Select>
 							{/* Add other skill fields */}
