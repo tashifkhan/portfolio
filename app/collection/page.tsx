@@ -70,7 +70,7 @@ function SearchInput() {
 			placeholder="Search projects..."
 			value={searchTerm}
 			onChange={(e) => handleSearchChange(e.target.value)}
-			className="w-full rounded-xl border-white/10 bg-white/5 pl-12 
+			className="w-full rounded-xl border-white/10 bg-white/5 pl-10 
 			text-white placeholder:text-white/40 backdrop-blur-xl
 			focus:border-orange-500/30 focus:bg-white/10 focus:ring-orange-500/20
 			transition-all duration-300"
@@ -424,7 +424,7 @@ export default function CollectionPage() {
 							<SearchInput />
 						</Suspense>
 						<svg
-							className="absolute left-4 h-5 w-5 text-white/50"
+							className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-white/50"
 							fill="none"
 							stroke="currentColor"
 							viewBox="0 0 24 24"
