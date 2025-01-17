@@ -1,5 +1,17 @@
 "use client";
 
+// Move interface outside component
+interface Project {
+	position: number;
+	title: string;
+	description: string;
+	technologies: string[];
+	githubLink?: string;
+	playStoreLink?: string;
+	liveLink?: string;
+	status: string;
+}
+
 import {
 	Table,
 	TableBody,
@@ -26,17 +38,6 @@ import { getProjects } from "@/lib/other-project-data";
 export default function CollectionPage() {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [isLoading, setIsLoading] = useState(true);
-
-	interface Project {
-		position: number;
-		title: string;
-		description: string;
-		technologies: string[];
-		githubLink?: string;
-		playStoreLink?: string;
-		liveLink?: string;
-		status: string;
-	}
 
 	const [projectCollection, setProjectCollection] = useState<Project[]>([]);
 
@@ -78,8 +79,50 @@ export default function CollectionPage() {
 		}
 	};
 
+	const StatusLegend = () => {
+		const [isVisible, setIsVisible] = useState(true);
+
+		return (
+			<div className="fixed md:top-8 bottom-24 right-4 z-50">
+				{isVisible ? (
+					<div className="p-4 rounded-lg bg-black/50 backdrop-blur-lg border border-white/10">
+						<div className="flex items-center justify-between mb-2">
+							<div className="text-sm font-medium text-white/90">
+								Status Legend
+							</div>
+							<button
+								onClick={() => setIsVisible(false)}
+								className="text-white/50 hover:text-white/90 transition-colors pl-3"
+								aria-label="Hide legend"
+							>
+								✕
+							</button>
+						</div>
+						<div className="space-y-2">
+							<div className="flex items-center gap-2">
+								<LoaderCircle className="w-5 h-5 text-orange-500" />
+								<span className="text-xs text-white/70">In Progress</span>
+							</div>
+							<div className="flex items-center gap-2">
+								<CheckCheck className="w-5 h-5 text-green-500" />
+								<span className="text-xs text-white/70">Completed</span>
+							</div>
+							<div className="flex items-center gap-2">
+								<Waypoints className="w-5 h-5 text-blue-500" />
+								<span className="text-xs text-white/70">Planned</span>
+							</div>
+						</div>
+					</div>
+				) : (
+					<></>
+				)}
+			</div>
+		);
+	};
+
 	return (
 		<div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-orange-300/5 via-gray-900/10 to-black/10 p-4 md:p-8">
+			<StatusLegend />
 			<div className="mx-auto max-w-7xl space-y-12 pb-32 sm:pb-0">
 				{/* Header Section */}
 				<header className="relative flex flex-col items-center gap-8">
@@ -153,9 +196,9 @@ export default function CollectionPage() {
 									</TableRow>
 								</TableHeader>
 								<TableBody>
-									{filteredProjects.map((project) => (
+									{filteredProjects.map((project, index) => (
 										<TableRow
-											key={project.position}
+											key={`project-${project.position || index}`}
 											className="border-b border-white/5 hover:bg-white/10 transition-all duration-300"
 										>
 											<TableCell>
@@ -174,9 +217,11 @@ export default function CollectionPage() {
 														{project.description}{" "}
 													</div>
 													<div className="flex flex-wrap gap-2 sm:hidden">
-														{project.technologies.map((tech) => (
+														{project.technologies.map((tech, techIndex) => (
 															<span
-																key={tech}
+																key={`mobile-${
+																	project.position || index
+																}-${techIndex}-${tech}`}
 																className="px-3 py-1 text-xs font-medium rounded-full 
 																	bg-orange-500/10 text-white/90 backdrop-blur-sm
 																	border border-orange-500/20 
@@ -230,9 +275,11 @@ export default function CollectionPage() {
 											</TableCell>
 											<TableCell className="hidden sm:table-cell">
 												<div className="flex flex-wrap gap-2">
-													{project.technologies.map((tech) => (
+													{project.technologies.map((tech, techIndex) => (
 														<span
-															key={tech}
+															key={`desktop-${
+																project.position || index
+															}-${techIndex}-${tech}`}
 															className="px-3 py-1 text-xs font-medium rounded-full 
 																bg-orange-500/10 text-white/90 backdrop-blur-sm
 																border border-orange-500/20 

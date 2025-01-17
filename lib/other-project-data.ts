@@ -1,6 +1,7 @@
 import axios from "axios"
 
 export type Project = {
+   id: string // or number
    position: number
    title: string
    description: string

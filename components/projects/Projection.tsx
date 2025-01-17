@@ -110,10 +110,12 @@ export function FeaturedProject({
 						>
 							<h3 className="mb-4 text-2xl font-bold">{title}</h3>
 						</div>
-						<p className="mb-4 rounded-2xl bg-[#3d2e1f]/60 backdrop-blur-[7.80px] border-none p-9 shadow-lg z-10 hidden sm:block">
+						<div className="mb-4 rounded-2xl bg-[#3d2e1f]/60 backdrop-blur-[7.80px] border-none p-9 shadow-lg z-10 hidden sm:block">
 							{description}
-						</p>
-						<p className="mb-4 rounded-2xl sm:hidden block">{description}</p>
+						</div>
+						<div className="mb-4 rounded-2xl sm:hidden block">
+							{description}
+						</div>
 						<div
 							className={`flex ${
 								imagePosition === "right"

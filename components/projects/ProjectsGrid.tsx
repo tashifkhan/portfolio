@@ -86,8 +86,8 @@ export function ProjectsGrid() {
 				animate="visible"
 				className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto"
 			>
-				{visibleProjects.map((project) => (
-					<motion.div key={project.position} variants={projectVariants}>
+				{visibleProjects.map((project, index) => (
+					<motion.div key={project.id ?? index} variants={projectVariants}>
 						<ProjectCard {...project} />
 					</motion.div>
 				))}

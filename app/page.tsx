@@ -16,8 +16,7 @@ export default function Home() {
 			</section>
 			<section
 				id="projects"
-				className="snap-start w-screen h-screen overflow-y-auto
-				   scrollbar-hide pb-28 sm:pb-0"
+				className="snap-start w-screen min-h-screen pb-28 sm:pb-0"
 			>
 				<Suspense fallback={<div>Loading...</div>}>
 					<Featured />
