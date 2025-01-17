@@ -1,16 +1,14 @@
-"use client";
-
-import { useAuth } from "@/lib/auth";
-import { LoginForm } from "@/components/admin/LoginForm";
+import { Suspense } from "react";
 import UpdateForm from "@/components/admin/UpdateForm";
+import { Loader } from "@/components/ui/loader";
 
 export default function UpdatePage() {
-	const { isAuthenticated } = useAuth();
-
 	return (
 		<main className="min-h-screen flex items-center justify-center p-4">
 			<div className="w-full max-w-md">
-				{isAuthenticated ? <UpdateForm /> : <LoginForm />}
+				<Suspense fallback={<Loader />}>
+					<UpdateForm />
+				</Suspense>
 			</div>
 		</main>
 	);
