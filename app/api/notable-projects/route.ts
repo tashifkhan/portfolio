@@ -7,7 +7,6 @@ export async function GET() {
     const client = await clientPromise
     const collection: Collection = client.db("Portfolio").collection("MajorProjects")
     
-    // Retrieve all documents sorted by published date
     const entireData = await collection
       .find({})
       .toArray()

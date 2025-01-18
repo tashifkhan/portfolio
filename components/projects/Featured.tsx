@@ -1,29 +1,32 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { FeaturedProject } from "./Projection";
 import { motion } from "framer-motion";
-import { featuredProjects } from "@/lib/fallback-featured-project-data";
+// import { featuredProjects } from "@/lib/fallback-featured-project-data";
 import Link from "next/link";
 import Image from "next/image";
+import { getFeaturedProjects } from "@/hooks/get-project-data";
 
 interface ProjectFrontmatter {
 	external: string;
 	title: string;
 	tech: string[];
 	github: string;
-	cover: any; // Adjust type as needed
+	cover: any;
 	cta: string;
 }
 
-interface ProjectNode {
-	frontmatter: ProjectFrontmatter;
-	html: string;
-}
-
 const Featured: React.FC = () => {
-	const revealTitle = useRef<HTMLHeadingElement>(null);
-	const revealProjects = useRef<(HTMLLIElement | null)[]>([]);
+	const [featuredProjects, setFeaturedProjects] = React.useState<any[]>([]);
+	useEffect(() => {
+		const fetchProjects = async () => {
+			const projects = await getFeaturedProjects();
+			setFeaturedProjects(projects);
+		};
+		fetchProjects();
+	}, []);
+
 	return (
 		<section id="projects" className="w-full pt-[8rem]">
 			<div className="mx-auto max-w-7xl">

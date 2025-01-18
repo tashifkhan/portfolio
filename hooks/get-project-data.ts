@@ -1,5 +1,7 @@
 import axios from "axios"
-import { projectCollection } from "../lib/fallback-project-data"
+import { featuredProjects } from "@/lib/fallback-featured-project-data"
+import { projectCollection } from "@/lib/fallback-project-data"
+
 
 export type Project = {
    _id?: string // or number
@@ -11,6 +13,17 @@ export type Project = {
    liveLink?: string
    playStoreLink?: string
    status: "Completed" | "In Progress" | "Planned"
+}
+
+interface FeaturedProject {
+   _id: string;
+   title: string;
+   imageLink: string;
+   description: React.ReactNode;
+   technologies: string[];
+   githubLink?: string;
+   liveLink?: string;
+   playstoreLink?: string;
 }
 
 const BASE_URL = ""
@@ -26,7 +39,22 @@ const getOtherProjects = async (): Promise<Project[]> => {
       return response.data.slice(3)
    } catch (error) {
       console.error("Failed to fetch projects:", error)
-      return []
+      return projectCollection.slice(3)
+   }
+}
+
+const getFeaturedProjects = async () =>{
+   try {
+      const response = await axios.get(`${BASE_URL}/api/notable-projects`, {
+         timeout: 5000,
+         headers: {
+            "Accept": "application/json"
+         }
+      })
+      return response.data
+   } catch (error) {
+      console.error("Failed to fetch projects:", error)
+      return featuredProjects
    }
 }
 
@@ -51,4 +79,4 @@ const getProjects = async (): Promise<Project[]> => {
    }
 }
 
-export {getOtherProjects,  getProjects}
+export {getOtherProjects,  getProjects, getFeaturedProjects}

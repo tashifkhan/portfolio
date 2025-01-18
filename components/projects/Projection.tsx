@@ -7,11 +7,10 @@ import { Github, ExternalLink } from "lucide-react";
 import { IoLogoGooglePlaystore } from "react-icons/io5";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
 
 interface FeaturedProjectProps {
 	title: string;
-	description: string | React.ReactNode;
+	description: string;
 	image: {
 		src: string;
 		alt: string;
@@ -23,6 +22,10 @@ interface FeaturedProjectProps {
 	liveUrl?: string;
 	playstoreUrl?: string;
 	imagePosition?: "left" | "right";
+}
+
+function createMarkup(html: string) {
+	return { __html: html };
 }
 
 export function FeaturedProject({
@@ -111,10 +114,10 @@ export function FeaturedProject({
 							<h3 className="mb-4 text-2xl font-bold">{title}</h3>
 						</div>
 						<div className="mb-4 rounded-2xl bg-[#3d2e1f]/60 backdrop-blur-[7.80px] border-none p-9 shadow-lg z-10 hidden sm:block">
-							{description}
+							<div dangerouslySetInnerHTML={createMarkup(description)} />
 						</div>
 						<div className="mb-4 rounded-2xl sm:hidden block">
-							{description}
+							<div dangerouslySetInnerHTML={createMarkup(description)} />
 						</div>
 						<div
 							className={`flex ${
