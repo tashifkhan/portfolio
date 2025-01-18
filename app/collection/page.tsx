@@ -67,7 +67,6 @@ function SearchInput() {
 			value={searchTerm}
 			onChange={(e) => handleSearchChange(e.target.value)}
 			onKeyUp={(e) => {
-				// Handle when user presses escape or clears the input
 				if (e.key === "Escape" || (e.target as HTMLInputElement).value === "") {
 					handleSearchChange("");
 				}
@@ -91,7 +90,6 @@ function SearchableTable() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [projectCollection, setProjectCollection] = useState<Project[]>([]);
 
-	// Update search term when URL params change
 	useEffect(() => {
 		const currentSearch = searchParams.get("search");
 		if (currentSearch !== null) {
@@ -99,10 +97,8 @@ function SearchableTable() {
 		}
 	}, [searchParams]);
 
-	// Handle search input changes
 	const handleSearchChange = (value: string) => {
 		setSearchTerm(value);
-		// Update URL with search param
 		const params = new URLSearchParams(searchParams.toString());
 		if (value) {
 			params.set("search", value);
@@ -217,10 +213,10 @@ function SearchableTable() {
 								<TableHead className="hidden sm:table-cell text-white/90 font-semibold">
 									Tech
 								</TableHead>
-								<TableHead className="hidden lg:table-cell text-white/90 font-semibold">
+								<TableHead className="hidden sm:table-cell text-white/90 font-semibold">
 									Links
 								</TableHead>
-								<TableHead className="hidden md:table-cell text-white/90 font-semibold">
+								<TableHead className="hidden sm:table-cell text-white/90 font-semibold">
 									Status
 								</TableHead>
 							</TableRow>
@@ -243,7 +239,7 @@ function SearchableTable() {
 													)}
 												</div>
 											</div>
-											<div className="text-sm text-white/70 sm:hidden line-clamp-2">
+											<div className="text-sm text-white/70 sm:hidden">
 												{project.description}{" "}
 											</div>
 											<div className="flex flex-wrap gap-2 sm:hidden">
@@ -299,7 +295,7 @@ function SearchableTable() {
 										</div>
 									</TableCell>
 									<TableCell className="hidden sm:table-cell text-white/80">
-										<div className="line-clamp-2">{project.description}</div>
+										<div className="">{project.description}</div>
 									</TableCell>
 									<TableCell className="hidden sm:table-cell">
 										<div className="flex flex-wrap gap-2">
@@ -319,7 +315,7 @@ function SearchableTable() {
 											))}
 										</div>
 									</TableCell>
-									<TableCell className="hidden md:table-cell">
+									<TableCell className="hidden sm:table-cell">
 										<div className="flex items-center gap-4">
 											{project.githubLink && (
 												<Link
@@ -350,7 +346,7 @@ function SearchableTable() {
 											)}
 										</div>
 									</TableCell>
-									<TableCell className="hidden lg:table-cell">
+									<TableCell className="hidden sm:table-cell">
 										{renderStatusIcon(project.status)}
 									</TableCell>
 								</TableRow>
