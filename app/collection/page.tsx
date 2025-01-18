@@ -38,7 +38,6 @@ import Link from "next/link";
 import { getProjects } from "@/hooks/get-project-data";
 import { useSearchParams, useRouter } from "next/navigation";
 
-// Extract the main table functionality into a separate component
 function SearchInput() {
 	const searchParams = useSearchParams();
 	const router = useRouter();
@@ -67,11 +66,10 @@ function SearchInput() {
 			value={searchTerm}
 			onChange={(e) => handleSearchChange(e.target.value)}
 			onKeyUp={(e) => {
-				if (e.key === "Escape" || (e.target as HTMLInputElement).value === "") {
+				if (e.key === "Escape") {
 					handleSearchChange("");
 				}
 			}}
-			onReset={() => handleSearchChange("")}
 			className="w-full rounded-xl border-white/10 bg-white/5 pl-10 
 			text-white placeholder:text-white/40 backdrop-blur-xl
 			focus:border-orange-500/30 focus:bg-white/10 focus:ring-orange-500/20
