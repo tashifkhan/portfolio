@@ -14,9 +14,12 @@ export async function GET() {
       const collection: Collection = client.db("Portfolio").collection("Project Collection")
       const entireData = await collection.find({}).sort({ location: 1 }).toArray()
       
-      
       return NextResponse.json(entireData)
    } catch (error) {
       console.error('Database error:', error)
+      return NextResponse.json(
+         { error: 'Failed to fetch projects' },
+         { status: 500 }
+      )
    }
 }

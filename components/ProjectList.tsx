@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getProjects } from "@/lib/other-project-data";
-import type { Project } from "@/lib/other-project-data";
+import { getProjects } from "@/hooks/get-project-data";
+import type { Project } from "@/hooks/get-project-data";
 
 export default function ProjectList() {
 	const [projects, setProjects] = useState<Project[]>([]);

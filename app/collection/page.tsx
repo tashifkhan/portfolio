@@ -35,7 +35,7 @@ import {
 } from "lucide-react";
 
 import Link from "next/link";
-import { getProjects } from "@/lib/other-project-data";
+import { getProjects } from "@/hooks/get-project-data";
 import { useSearchParams, useRouter } from "next/navigation";
 
 // Extract the main table functionality into a separate component
@@ -46,21 +46,17 @@ function SearchInput() {
 		searchParams.get("search") || ""
 	);
 
-	useEffect(() => {
-		const currentSearch = searchParams.get("search");
-		if (currentSearch !== null) {
-			setSearchTerm(currentSearch);
-		}
-	}, [searchParams]);
-
 	const handleSearchChange = (value: string) => {
 		setSearchTerm(value);
 		const params = new URLSearchParams(searchParams.toString());
-		if (value) {
+
+		if (value.trim()) {
 			params.set("search", value);
 		} else {
 			params.delete("search");
+			setSearchTerm("");
 		}
+
 		router.push(`/collection?${params.toString()}`, { scroll: false });
 	};
 
@@ -70,6 +66,13 @@ function SearchInput() {
 			placeholder="Search projects..."
 			value={searchTerm}
 			onChange={(e) => handleSearchChange(e.target.value)}
+			onKeyUp={(e) => {
+				// Handle when user presses escape or clears the input
+				if (e.key === "Escape" || (e.target as HTMLInputElement).value === "") {
+					handleSearchChange("");
+				}
+			}}
+			onReset={() => handleSearchChange("")}
 			className="w-full rounded-xl border-white/10 bg-white/5 pl-10 
 			text-white placeholder:text-white/40 backdrop-blur-xl
 			focus:border-orange-500/30 focus:bg-white/10 focus:ring-orange-500/20
@@ -126,14 +129,19 @@ function SearchableTable() {
 		fetchProjects();
 	}, []);
 
-	const filteredProjects = projectCollection.filter(
-		(project) =>
-			project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			project.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			project.technologies.some((tech) =>
-				tech.toLowerCase().includes(searchTerm.toLowerCase())
-			)
-	);
+	const filteredProjects =
+		searchTerm !== ""
+			? projectCollection.filter(
+					(project) =>
+						project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+						project.description
+							.toLowerCase()
+							.includes(searchTerm.toLowerCase()) ||
+						project.technologies.some((tech) =>
+							tech.toLowerCase().includes(searchTerm.toLowerCase())
+						)
+			  )
+			: projectCollection;
 
 	const renderStatusIcon = (status: string) => {
 		if (status === "In Progress") {

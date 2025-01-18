@@ -1,5 +1,5 @@
 interface ProjectCollection {
-	id: number;
+	position: number;
 	title: string;
 	description: string;
 	technologies: string[];
@@ -9,9 +9,10 @@ interface ProjectCollection {
 	status: "Completed" | "In Progress" | "Planned";
 }
 
+
 const projectCollection: ProjectCollection[] = [
 	{
-		id: 1,
+		position: 1,
 		title: "Crop Mate",
 		description: "AI-powered crop management system",
 		technologies: ["Next.js", "TypeScript", "Flask", "scikit-learn", "Gen AI"],
@@ -20,7 +21,7 @@ const projectCollection: ProjectCollection[] = [
 		status: "Completed",
 	},
 	{
-		id: 2,
+		position: 2,
 		title: "BiasDetector",
 		description:
 			"Next.js app in TypeScript for detecting bias in news articles through automated analysis and insights. Implements a web scraping pipeline to collect news articles, stores data in MongoDB, and uses the XgBoost ML model to identify patterns of bias. Features a sleek, intuitive frontend for easy access to results.",
@@ -31,7 +32,7 @@ const projectCollection: ProjectCollection[] = [
 		status: "Completed",
 	},
 	{
-		id: 3,
+		position: 3,
 		title: "Designique",
 		description:
 			"A Next.js / React app that connects designers, manufacturers, and consumers. Features a full-fledged e-commerce portal, anonymous chatting between manufacturers and designers using Socket.IO (with safeguards against sharing personal data), and a support chatbot powered by Gemini's Gen AI API for resolving customer queries.",
@@ -49,7 +50,7 @@ const projectCollection: ProjectCollection[] = [
 		status: "Completed",
 	},
 	{
-		id: 4,
+		position: 4,
 		title: "Crypto Website \n( kalkiyug.in )",
 		description: "A website for a crypto company",
 		technologies: ["React", "Next.js", "TypeScript", "Node.js", "framer-motion"],
@@ -58,7 +59,7 @@ const projectCollection: ProjectCollection[] = [
 		status: "Completed",
 	},
 	{
-		id: 22,
+		position: 22,
 		title: "JIIT Time Table Simplified (3.5k+ users)",
 		description: "A React + Python (Pyoide) WASM app that shows you your timetable you can download it add to your calender directly",
 		technologies: ["Python", "Pyoide", "WASM", "Redix(re)", "Google Calender API", "React", "TypeScript"],
@@ -67,7 +68,7 @@ const projectCollection: ProjectCollection[] = [
 		status: "Completed"
 	},
 	{
-		id: 15,
+		position: 15,
 		title: "JIIT Time Table Parser",
 		description: "A Python program to show you your timetable from the entire list as well as profrssor's time table",
 		technologies: ["Python", "JWT", "Flask", "Redix(re)", "Google Calender API"],
@@ -76,7 +77,7 @@ const projectCollection: ProjectCollection[] = [
 		status: "Completed"
 	},
 	{
-		id: 5,
+		position: 5,
 		title: "AI Resume Parser ( microSAAS )",
 		description: "A microSAAS platform that organizes resumes and extracts crutial data for the employer and recommends the best candidate for the job openning. As well as recommends the best job profile as per the resume. to the job seeker.",
 		technologies: ["Next.js", "TypeScript", "Flask", "JWT", "MongoDB", "streamlit (prototype)"],
@@ -84,7 +85,7 @@ const projectCollection: ProjectCollection[] = [
 		status: "In Progress", 
 	},
 	{
-		id: 6,
+		position: 6,
 		title: "Waste Wise",
 		description: "A React WebApp, React Native App and a Flask API for waste management and recycling. It takes the user's location and image of the waste and it classifies it into different categories of waste and gives the user the nearest recycling center. and also gives the user instrctions on how to recycle the waste. As well as yt video tutorials. Also a reward system for the user. (social media integration as well as a leaderboard)",
 		technologies: ["React", "React Native", "Flask", "JWT", "MongoDB", "GenAI"],
@@ -92,7 +93,7 @@ const projectCollection: ProjectCollection[] = [
 		status: "In Progress",
 	},
 	{
-		id: 9,
+		position: 9,
 		title: "Sophos Auto Login",
 		description: "A python script that logs in to the sophos firewall and logs out after a certain time. It uses the selenium library to automate the login and logout process",
 		technologies: ["Python", "Automation", "SQLite3"],
@@ -100,7 +101,7 @@ const projectCollection: ProjectCollection[] = [
 		status: "Completed",
 	},
 	{
-		id: 7,
+		position: 7,
 		title: "Paisa Split",
 		description: "A React Native App for spliting bills and expenses among friends and family. It uses the user's contacts and the user can add the expenses and the app will split the expenses among the users",
 		technologies: ["React Native", "TypeScript", "Node.js", "MongoDB"],
@@ -108,7 +109,7 @@ const projectCollection: ProjectCollection[] = [
 		status: "Planned",
 	},
 	{
-		id: 8,
+		position: 8,
 		title: "Paisa Manager",
 		description: "A React Native App for managing the user's expenses and income. It uses the user's bank account and the user can add the expenses. The app will categorize the expenses and give the user a detailed report of the expenses and income.",
 		technologies: ["React Native", "TypeScript", "Node.js", "SQLlite3"],
@@ -117,7 +118,7 @@ const projectCollection: ProjectCollection[] = [
 		status: "Planned",
 	},
 	{
-		id: 16,
+		position: 16,
 		title: "WhatsApp Bulk Messaging",
 		description: "A Flask-React Local WebApp to bulk message people on whatsapp using a CSV file or custom lsit",
 		technologies: ["React", "Flask", "Selenium", "SQLite3", "React Native Desktop"],
@@ -125,7 +126,7 @@ const projectCollection: ProjectCollection[] = [
 		status: "In Progress"
 	},
 	{
-		id: 10,
+		position: 10,
 		title: "Sophos Auto Login ( Mobile App )",
 		description: "A React Native App for the sophos auto login. The user can set the time for the login and logout and the app will automatically login and logout the user from the sophos firewall",
 		technologies: ["React Native", "TypeScript", "Node.js", "SQLite3"],
@@ -134,7 +135,7 @@ const projectCollection: ProjectCollection[] = [
 		status: "In Progress",
 	},
 	{
-		id: 11,
+		position: 11,
 		title: "To Do List CLI",
 		description: "A CLI tool for managing the user's to-do list.",
 		technologies: ["C++","DSA"],
@@ -142,7 +143,7 @@ const projectCollection: ProjectCollection[] = [
 		status: "Completed",
 	},
 	{
-		id: 12,
+		position: 12,
 		title: "SplitWise CLI",
 		description: "A CLI tool for managing the user's expenses and splitting the bills among friends and family.",
 		technologies: ["C++","DSA (Graphs, MST)"],
@@ -150,7 +151,7 @@ const projectCollection: ProjectCollection[] = [
 		status: "Completed",
 	},
 	{
-		id: 13,
+		position: 13,
 		title: "Rock Paper Scissors CLI",
 		description: "A CLI tool for playing rock paper scissors with the computer & other players",
 		technologies: ["Python"],
@@ -158,7 +159,7 @@ const projectCollection: ProjectCollection[] = [
 		status: "Completed",
 	},
 	{
-		id: 14,
+		position: 14,
 		title: "JIIT Buddy 2.0",
 		description: "A React Native App Wrapper for JIIT WebPortal",
 		technologies: ["React Native", "TypeScript", "Redux ToolKit", "Python Automation (Selenium)", "ASync Storage"],
@@ -167,7 +168,7 @@ const projectCollection: ProjectCollection[] = [
 		status: "In Progress"
 	},
 	{
-		id: 17,
+		position: 17,
 		title: "Snake Game",
 		description: "The Classic Snake Game in Python",
 		technologies: ["Python", "PyGames", "OOP"],
@@ -175,7 +176,7 @@ const projectCollection: ProjectCollection[] = [
 		status: "Completed"
 	},
 	{
-		id: 18,
+		position: 18,
 		title: "Password Manager CLI",
 		description: "A CLI tool for managing the user's passwords",
 		technologies: ["Python"],
@@ -183,7 +184,7 @@ const projectCollection: ProjectCollection[] = [
 		status: "Completed"
 	},
 	{
-		id: 19,
+		position: 19,
 		title: "Bank Management System",
 		description: "A C program for managing the bank accounts",
 		technologies: ["C"],
@@ -191,7 +192,7 @@ const projectCollection: ProjectCollection[] = [
 		status: "Completed"
 	},
 	{
-		id: 20,
+		position: 20,
 		title: "Quip Quest",
 		description: "A Next.js app which is a combination of Scrible.io and Pysch",
 		technologies: ["React", "Next.js", "TypeScript", "Socket.io", "JWT", "MongoDB"],
@@ -199,7 +200,7 @@ const projectCollection: ProjectCollection[] = [
 		status: "In Progress"
 	},
 	{
-		id: 21,
+		position: 21,
 		title: "Solar Helper",
 		description: "A Next.js app for solar panel installation and maintenance",
 		technologies: ["React", "Next.js", "TypeScript", "Node.js", "MongoDB"],

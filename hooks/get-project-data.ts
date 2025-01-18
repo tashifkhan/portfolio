@@ -1,12 +1,13 @@
 import axios from "axios"
+import { projectCollection } from "../lib/fallback-project-data"
 
 export type Project = {
-   id: string // or number
+   _id?: string // or number
    position: number
    title: string
    description: string
    technologies: string[]
-   githubLink: string
+   githubLink?: string
    liveLink?: string
    playStoreLink?: string
    status: "Completed" | "In Progress" | "Planned"
@@ -30,18 +31,24 @@ const getOtherProjects = async (): Promise<Project[]> => {
 }
 
 const getProjects = async (): Promise<Project[]> => {
-    try {
-        const response = await axios.get(`${BASE_URL}/api/projects`, {
-            timeout: 5000,
-            headers: {
-                "Accept": "application/json"
-            }
-        })
-        return response.data
-    } catch (error) {
-        console.error("Failed to fetch projects:", error)
-        return []
-    }
+   try {
+      const response = await axios.get(`${BASE_URL}/api/projects`, {
+         timeout: 5000,
+         headers: {
+            "Accept": "application/json"
+         }
+      })
+      
+      if (!response.data || !Array.isArray(response.data)) {
+         console.warn("Invalid data format received from API")
+         return projectCollection
+      }
+      
+      return response.data
+   } catch (error) {
+      console.error("Failed to fetch projects:", error)
+      return projectCollection
+   }
 }
 
 export {getOtherProjects,  getProjects}

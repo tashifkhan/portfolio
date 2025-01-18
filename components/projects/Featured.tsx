@@ -3,7 +3,7 @@
 import React, { useRef } from "react";
 import { FeaturedProject } from "./Projection";
 import { motion } from "framer-motion";
-import { featuredProjects } from "@/lib/featured-project-data";
+import { featuredProjects } from "@/lib/fallback-featured-project-data";
 import Link from "next/link";
 import Image from "next/image";
 

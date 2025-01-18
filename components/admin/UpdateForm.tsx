@@ -23,7 +23,7 @@ import {
 	getSkills,
 	addSkill,
 	updateSkill,
-} from "@/lib/actions";
+} from "@/hooks/mongo-actions";
 import { Project, Education, Skill } from "@/types/content";
 
 type ContentType = "projects" | "education" | "skills";

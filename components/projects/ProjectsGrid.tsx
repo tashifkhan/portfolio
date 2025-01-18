@@ -1,6 +1,6 @@
 "use client";
 
-import { Project } from "@/lib/other-project-data";
+import { Project } from "@/hooks/get-project-data";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ProjectCard } from "./ProjectCard";
