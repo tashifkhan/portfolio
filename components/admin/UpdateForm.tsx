@@ -34,7 +34,6 @@ export default function UpdateForm() {
 	const [items, setItems] = useState<(Project | Education | Skill)[]>([]);
 	const [selectedItem, setSelectedItem] = useState<any>(null);
 
-	// Initialize empty form data for each content type
 	const [formData, setFormData] = useState({
 		projects: {
 			title: "",
@@ -180,7 +179,7 @@ export default function UpdateForm() {
 	if (!selectedAction) {
 		return (
 			<div className="relative backdrop-blur-lg bg-white/10 dark:bg-gray-800/30 rounded-2xl p-8 shadow-xl border border-none">
-				<h2 className="text-2xl font-bold mb-6 text-center bg-gradient-to-r from-orange-500 to-amber-600 bg-clip-text text-transparent">
+				<h2 className="text-2xl font-mono mb-6 text-center bg-gradient-to-r from-orange-300 to-gray-300 via-amber-500 bg-clip-text text-transparent">
 					Portfolio Management
 				</h2>
 
@@ -231,7 +230,6 @@ export default function UpdateForm() {
 		);
 	}
 
-	// Add a back button and show the rest of the content when an action is selected
 	return (
 		<div className="relative backdrop-blur-lg bg-gray-800/30 rounded-2xl p-6 shadow-xl border border-none">
 			<Button
@@ -242,223 +240,6 @@ export default function UpdateForm() {
 				← Back to menu
 			</Button>
 			<div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-amber-600/20 dark:from-orange-800/5 dark:to-amber-900/20 rounded-2xl -z-10" />
-
-			<div className="mt-4">
-				<Tabs
-					defaultValue="projects"
-					onValueChange={(v) => setContentType(v as ContentType)}
-				>
-					<TabsList className="w-full mb-6">
-						<TabsTrigger value="projects">Projects</TabsTrigger>
-						<TabsTrigger value="education">Education</TabsTrigger>
-						<TabsTrigger value="skills">Skills</TabsTrigger>
-					</TabsList>
-
-					<TabsContent value="projects">
-						<form onSubmit={handleSubmit} className="space-y-4">
-							<h2 className="text-2xl font-bold text-white mb-6 font-mono text-center">
-								{selectedItem ? "Edit Project" : "Add New Project"}
-							</h2>
-
-							<Input
-								type="text"
-								placeholder="Project Title"
-								value={formData.projects.title}
-								onChange={(e) =>
-									setFormData((prev) => ({
-										...prev,
-										projects: { ...prev.projects, title: e.target.value },
-									}))
-								}
-								className="bg-white/5 text-gray-400 border-none transition-colors"
-							/>
-
-							<Textarea
-								placeholder="Project Description"
-								value={formData.projects.description}
-								onChange={(e) =>
-									setFormData((prev) => ({
-										...prev,
-										projects: { ...prev.projects, description: e.target.value },
-									}))
-								}
-								className="bg-white/5 text-gray-400 border-none transition-colors min-h-[100px]"
-							/>
-
-							<Input
-								placeholder="Technologies (comma-separated)"
-								value={formData.projects.technologies.join(", ")}
-								onChange={(e) =>
-									setFormData((prev) => ({
-										...prev,
-										projects: {
-											...prev.projects,
-											technologies: e.target.value
-												.split(",")
-												.map((t) => t.trim()),
-										},
-									}))
-								}
-								className="bg-white/5 text-gray-400 border-none transition-colors"
-							/>
-
-							<Select
-								value={formData.projects.status}
-								onValueChange={(
-									value: "Completed" | "In Progress" | "Planned"
-								) =>
-									setFormData((prev) => ({
-										...prev,
-										projects: { ...prev.projects, status: value },
-									}))
-								}
-							>
-								<SelectTrigger>
-									<SelectValue placeholder="Status" />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectItem value="Completed">Completed</SelectItem>
-									<SelectItem value="In Progress">In Progress</SelectItem>
-									<SelectItem value="Planned">Planned</SelectItem>
-								</SelectContent>
-							</Select>
-
-							<Input
-								type="number"
-								placeholder="Location"
-								value={formData.projects.location}
-								onChange={(e) =>
-									setFormData((prev) => ({
-										...prev,
-										projects: {
-											...prev.projects,
-											location: parseInt(e.target.value),
-										},
-									}))
-								}
-								className="bg-white/5 text-gray-400 border-none transition-colors"
-							/>
-
-							<div className="flex gap-2">
-								<Button
-									type="submit"
-									className="flex-1 bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 transition-colors text-white"
-								>
-									{selectedItem ? "Update Project" : "Add Project"}
-								</Button>
-
-								{selectedItem && (
-									<Button
-										type="button"
-										variant="ghost"
-										onClick={resetForm}
-										className="text-gray-400 hover:text-white"
-									>
-										Cancel
-									</Button>
-								)}
-							</div>
-						</form>
-					</TabsContent>
-
-					<TabsContent value="education">
-						<form onSubmit={handleSubmit} className="space-y-4">
-							<Input
-								placeholder="Institution"
-								value={formData.education.institution}
-								onChange={(e) =>
-									setFormData((prev) => ({
-										...prev,
-										education: {
-											...prev.education,
-											institution: e.target.value,
-										},
-									}))
-								}
-								className="bg-white/5 text-gray-400 border-none"
-							/>
-							<Input
-								placeholder="Degree"
-								value={formData.education.title}
-								onChange={(e) =>
-									setFormData((prev) => ({
-										...prev,
-										education: { ...prev.education, title: e.target.value },
-									}))
-								}
-								className="bg-white/5 text-gray-400 border-none"
-							/>
-							{/* Add other education fields */}
-							<Button type="submit">
-								{selectedItem ? "Update Education" : "Add Education"}
-							</Button>
-						</form>
-					</TabsContent>
-
-					<TabsContent value="skills">
-						<form onSubmit={handleSubmit} className="space-y-4">
-							<Input
-								placeholder="Skill Name"
-								value={formData.skills.name}
-								onChange={(e) =>
-									setFormData((prev) => ({
-										...prev,
-										skills: { ...prev.skills, name: e.target.value },
-									}))
-								}
-								className="bg-white/5 text-gray-400 border-none"
-							/>
-							<Select
-								value={formData.skills.category}
-								onValueChange={(value: "Soft Skills" | "Other Avocations") =>
-									setFormData((prev) => ({
-										...prev,
-										skills: { ...prev.skills, category: value },
-									}))
-								}
-							>
-								<SelectTrigger>
-									<SelectValue placeholder="Select category" />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectItem value="Soft Skills">Soft Skills</SelectItem>
-									<SelectItem value="Other Avocations">
-										Other Avocations
-									</SelectItem>
-								</SelectContent>
-							</Select>
-							{/* Add other skill fields */}
-							<Button type="submit">
-								{selectedItem ? "Update Skill" : "Add Skill"}
-							</Button>
-						</form>
-					</TabsContent>
-				</Tabs>
-
-				{/* Display existing items */}
-				<div className="mt-6"></div>
-			</div>
-			<h3 className="text-lg font-semibold text-white mb-2">
-				Existing {contentType}
-			</h3>
-			<div className="space-y-2">
-				{items.map((item) => (
-					<Button
-						key={item._id}
-						variant="ghost"
-						className="w-full text-left"
-						onClick={() => {
-							setSelectedItem(item);
-							setFormData((prev) => ({
-								...prev,
-								[contentType]: item,
-							}));
-						}}
-					>
-						{(item as any).name || (item as any).institution}
-					</Button>
-				))}
-			</div>
 		</div>
 	);
 }
