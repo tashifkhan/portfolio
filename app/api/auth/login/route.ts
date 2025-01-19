@@ -1,35 +1,31 @@
 import { NextResponse } from "next/server"
-import { sign } from "jsonwebtoken"
+import { cookies } from "next/headers"
+import { authenticateUser } from "@/utils/auth"
 
 export async function POST(req: Request) {
    try {
       const { email, password } = await req.json()
 
-      // Validate credentials (replace with your actual validation)
-      const isValidEmail = email === process.env.ADMIN_EMAL
-      const isValidPassword = password === process.env.ADMIN_PASSWORD
-
-      if (!isValidEmail || !isValidPassword) {
+      const token = await authenticateUser(email, password)
+      
+      if (!token) {
          return NextResponse.json(
             { error: "Invalid credentials" },
             { status: 401 }
          )
       }
 
-      const secret = process.env.JWT_SECRET
-      if (!secret) {
-         throw new Error("JWT_SECRET is not defined")
-      }
+      (await cookies()).set({
+         name: "auth_token",
+         value: token,
+         httpOnly: true,
+         secure: process.env.NODE_ENV === "production",
+         sameSite: "strict",
+         maxAge: 60 * 60 * 24 * 30 // 30 days
+      })
 
-      // Generate JWT token
-      const token = sign(
-         { email, role: "admin" },
-         secret,
-         { expiresIn: "24h" }
-      )
-
-      return NextResponse.json({ token })
-   } catch (error: any) {
+      return NextResponse.json({ success: true })
+   } catch (error) {
       return NextResponse.json(
          { error: "Authentication failed" },
          { status: 500 }

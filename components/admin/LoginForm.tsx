@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useAuthContext } from "@/lib/auth";
+import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react";
@@ -12,7 +12,7 @@ export function LoginForm() {
 	const [showPassword, setShowPassword] = useState(false);
 	const [error, setError] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
-	const { login } = useAuthContext();
+	const router = useRouter();
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -20,9 +20,19 @@ export function LoginForm() {
 		setIsLoading(true);
 
 		try {
-			const success = await login(email, password);
-			if (!success) {
-				setError("Invalid credentials");
+			const res = await fetch("/api/auth/login", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ email, password }),
+			});
+
+			const data = await res.json();
+
+			if (res.ok) {
+				router.push("/update");
+				router.refresh();
+			} else {
+				setError(data.error || "Invalid credentials");
 			}
 		} catch (err) {
 			setError("An error occurred");

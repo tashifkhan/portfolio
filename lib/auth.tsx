@@ -1,80 +1,64 @@
-import { create } from "zustand";
+"use client";
 
-interface AuthState {
-	isAuthenticated: boolean;
-	login: (email: string, password: string) => boolean;
-	logout: () => void;
-}
-
-export const useAuthStore = create<AuthState>((set) => ({
-	isAuthenticated: false,
-	login: (email: string, password: string) => {
-		const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL;
-		const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
-
-		if (!adminEmail || !adminPassword) {
-			console.error("Environment variables not properly loaded");
-			return false;
-		}
-
-		const isValid = email === adminEmail && password === adminPassword;
-		set({ isAuthenticated: isValid });
-		return isValid;
-	},
-	logout: () => set({ isAuthenticated: false }),
-}));
-
-import React, { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 interface AuthContextType {
 	isAuthenticated: boolean;
-	token: string | null;
 	login: (email: string, password: string) => Promise<boolean>;
-	logout: () => void;
+	logout: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType>({} as AuthContextType);
+const AuthContext = createContext<AuthContextType>({
+	isAuthenticated: false,
+	login: async () => false,
+	logout: async () => {},
+});
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
-	const [token, setToken] = useState<string | null>(null);
 
 	useEffect(() => {
-		const storedToken = localStorage.getItem("auth_token");
-		if (storedToken) {
-			setToken(storedToken);
-			setIsAuthenticated(true);
-		}
+		checkAuth();
 	}, []);
+
+	const checkAuth = async () => {
+		try {
+			const res = await fetch("/api/auth/check");
+			setIsAuthenticated(res.ok);
+		} catch (err) {
+			setIsAuthenticated(false);
+		}
+	};
 
 	const login = async (email: string, password: string) => {
 		try {
-			const response = await fetch("/api/auth/login", {
+			const res = await fetch("/api/auth/login", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ email, password }),
 			});
 
-			if (!response.ok) return false;
-
-			const { token } = await response.json();
-			localStorage.setItem("auth_token", token);
-			setToken(token);
-			setIsAuthenticated(true);
-			return true;
-		} catch (error) {
+			if (res.ok) {
+				setIsAuthenticated(true);
+				return true;
+			}
+			return false;
+		} catch (err) {
 			return false;
 		}
 	};
 
-	const logout = () => {
-		localStorage.removeItem("auth_token");
-		setToken(null);
-		setIsAuthenticated(false);
+	const logout = async () => {
+		try {
+			await fetch("/api/auth/logout", { method: "POST" });
+			setIsAuthenticated(false);
+		} catch (err) {
+			console.error("Logout failed:", err);
+		}
 	};
 
 	return (
-		<AuthContext.Provider value={{ isAuthenticated, token, login, logout }}>
+		<AuthContext.Provider value={{ isAuthenticated, login, logout }}>
 			{children}
 		</AuthContext.Provider>
 	);
