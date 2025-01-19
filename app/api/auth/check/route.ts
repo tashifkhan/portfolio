@@ -5,7 +5,7 @@ export async function GET() {
    const isAuthed = await isAuthenticated()
    
    if (!isAuthed) {
-      return new NextResponse(null, { status: 401 })
+      return NextResponse.json({ authenticated: false })
    }
 
    return NextResponse.json({ authenticated: true })
