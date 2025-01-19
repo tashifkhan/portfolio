@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useAuth } from "@/lib/auth";
+import { useAuthContext } from "@/lib/auth";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react";
@@ -11,17 +11,23 @@ export function LoginForm() {
 	const [password, setPassword] = useState("");
 	const [showPassword, setShowPassword] = useState(false);
 	const [error, setError] = useState("");
-	const { login } = useAuth();
+	const [isLoading, setIsLoading] = useState(false);
+	const { login } = useAuthContext();
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		setError("");
+		setIsLoading(true);
 
-		if (login(email, password)) {
-			setEmail("");
-			setPassword("");
-		} else {
-			setError("Invalid credentials");
+		try {
+			const success = await login(email, password);
+			if (!success) {
+				setError("Invalid credentials");
+			}
+		} catch (err) {
+			setError("An error occurred");
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -62,9 +68,10 @@ export function LoginForm() {
 				)}
 				<Button
 					type="submit"
+					disabled={isLoading}
 					className="w-full bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 transition-colors text-white"
 				>
-					Login
+					{isLoading ? "Logging in..." : "Login"}
 				</Button>
 			</form>
 		</div>
