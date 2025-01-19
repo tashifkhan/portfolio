@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,165 +14,55 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
-	getProjects,
-	addProject,
-	updateProject,
-	getEducation,
-	addEducation,
-	updateEducation,
-	getSkills,
-	addSkill,
-	updateSkill,
-} from "@/hooks/mongo-actions";
-import { Project, Education, Skill } from "@/types/content";
+	Project,
+	Education,
+	Skill,
+	NotableProject,
+	Responsibility,
+	ProgrammingLanguage,
+	Framework,
+	BaseSkill,
+	SoftSkill,
+	CollageData,
+} from "@/types/content";
 
 type ContentType = "projects" | "education" | "skills";
 
 export default function UpdateForm() {
 	const { pending } = useFormStatus();
 	const [contentType, setContentType] = useState<ContentType>("projects");
-	const [items, setItems] = useState<(Project | Education | Skill)[]>([]);
 	const [selectedItem, setSelectedItem] = useState<any>(null);
+	const [notableProjects, setNotableProjects] = useState<NotableProject[]>([]);
+	const [education, setEducation] = useState<Education[]>([]);
+	const [skills, setSkills] = useState<Skill[]>([]);
+	const [languages, setLanguages] = useState<ProgrammingLanguage[]>([]);
+	const [frameworks, setFrameworks] = useState<Framework[]>([]);
+	const [tools, setTools] = useState<BaseSkill[]>([]);
+	const [softSkills, setSoftSkills] = useState<SoftSkill[]>([]);
+	const [collageData, setCollageData] = useState<CollageData[]>([]);
+	const [responsibilities, setResponsibilities] = useState<Responsibility[]>(
+		[]
+	);
+	const [projects, setProjects] = useState<Project[]>([]);
 
-	const [formData, setFormData] = useState({
-		projects: {
-			title: "",
-			description: "",
-			technologies: [] as string[],
-			status: "In Progress" as "Completed" | "In Progress" | "Planned",
-			githubLink: "",
-			liveLink: "",
-			playstoreLink: "",
-			location: 0,
-		},
-		education: {
-			title: "",
-			institution: "",
-			score: "",
-			duration: "",
-		},
-		skills: {
-			name: "",
-			type: "language" as "language" | "framework" | "tool" | "softSkill",
-			icon: "",
-			description: "",
-			category: "Soft Skills" as "Soft Skills" | "Other Avocations",
-		},
-	});
+	const [notableprojectFormVisible, setnotabkeProjectFormVisible] =
+		useState<NotableProject>();
+	const [projectFormData, setProjectFormData] = useState<Project>();
+	const [responsibilityFormData, setResponsibilityFormData] =
+		useState<Responsibility>();
+	const [educationFormData, setEducationFormData] = useState<Education>();
+	const [skillFormData, setSkillFormData] = useState<Skill>();
+	const [languageFormData, setLanguageFormData] =
+		useState<ProgrammingLanguage>();
+	const [frameworkFormData, setFrameworkFormData] = useState<Framework>();
+	const [toolFormData, setToolFormData] = useState<BaseSkill>();
+	const [softSkillFormData, setSoftSkillFormData] = useState<SoftSkill>();
 
-	useEffect(() => {
-		loadItems();
-	}, [contentType]);
-
-	const loadItems = useCallback(async () => {
-		let response;
-		switch (contentType) {
-			case "projects":
-				response = await getProjects();
-				break;
-			case "education":
-				response = await getEducation();
-				break;
-			case "skills":
-				response = await getSkills();
-				break;
-		}
-		if (response.data) setItems(response.data);
-	}, [contentType]);
-
-	const resetForm = () => {
-		setSelectedItem(null);
-		setFormData((prev) => ({
-			...prev,
-			[contentType]: Object.fromEntries(
-				Object.keys(prev[contentType]).map((key) => [key, ""])
-			),
-		}));
-	};
+	useEffect(() => {}, [contentType]);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		if (pending) return;
-
-		const data = formData[contentType];
-		let result;
-
-		switch (contentType) {
-			case "projects": {
-				const projectData = data as typeof formData.projects;
-				const payload: Project = {
-					...projectData,
-					createdAt: selectedItem?.createdAt || new Date(),
-					updatedAt: new Date(),
-				};
-				result = selectedItem?._id
-					? await updateProject({ ...payload, _id: selectedItem._id })
-					: await addProject(payload);
-				break;
-			}
-			case "education": {
-				const educationData = data as typeof formData.education;
-				const payload: Education = {
-					...educationData,
-					createdAt: selectedItem?.createdAt || new Date(),
-					updatedAt: new Date(),
-				};
-				result = selectedItem?._id
-					? await updateEducation({ ...payload, _id: selectedItem._id })
-					: await addEducation(payload);
-				break;
-			}
-			case "skills": {
-				const skillData = data as typeof formData.skills;
-				const basePayload = {
-					name: skillData.name,
-					createdAt: selectedItem?.createdAt || new Date(),
-					updatedAt: new Date(),
-				};
-
-				let payload: Skill;
-				switch (skillData.type) {
-					case "language":
-						payload = {
-							...basePayload,
-							type: "language",
-							icon: skillData.icon,
-						};
-						break;
-					case "framework":
-						payload = {
-							...basePayload,
-							type: "framework",
-							description: skillData.description,
-						};
-						break;
-					case "tool":
-						payload = {
-							...basePayload,
-							type: "tool",
-							icon: skillData.icon,
-							description: skillData.description,
-						};
-						break;
-					case "softSkill":
-						payload = {
-							...basePayload,
-							type: "softSkill",
-							icon: skillData.icon,
-							category: skillData.category,
-						};
-						break;
-				}
-
-				result = selectedItem?._id
-					? await updateSkill({ ...payload, _id: selectedItem._id })
-					: await addSkill(payload);
-				break;
-			}
-		}
-
-		await loadItems();
-		resetForm();
+		console.log("Form data: \n-------> dead <-------");
 	};
 
 	const [selectedAction, setSelectedAction] = useState<string | null>(null);
@@ -185,26 +75,46 @@ export default function UpdateForm() {
 
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 					{[
-						{ icon: "✨", label: "Update Skills", action: "updateSkills" },
-						{ icon: "➕", label: "Add Skills", action: "addSkills" },
+						{ icon: "🎯", label: "Add Skills", action: "addSkills" },
 						{
 							icon: "🎓",
 							label: "Update Education",
 							action: "updateEducation",
 						},
-						{ icon: "📚", label: "Add Education", action: "addEducation" },
 						{
 							icon: "📝",
 							label: "Edit Responsibilities",
 							action: "editResponsibilities",
 						},
-						{
-							icon: "✍️",
-							label: "Add Responsibilities",
-							action: "addResponsibilities",
-						},
+						{ icon: "🌐", label: "Update Socials", action: "updateSocials" },
 						{ icon: "🚀", label: "Edit Projects", action: "editProjects" },
 						{ icon: "💡", label: "Add Projects", action: "addProjects" },
+						{ icon: "🗑️", label: "Delete Projects", action: "deleteProjects" },
+						{
+							icon: "↕️",
+							label: "Reorder Projects",
+							action: "reorderProjects",
+						},
+						{
+							icon: "⭐",
+							label: "Add Notable Projects",
+							action: "addNotableProjects",
+						},
+						{
+							icon: "✨",
+							label: "Update Notable Projects",
+							action: "updateNotableProjects",
+						},
+						{
+							icon: "❌",
+							label: "Delete Notable Projects",
+							action: "deleteNotableProjects",
+						},
+						{
+							icon: "📊",
+							label: "Reorder Notable Projects",
+							action: "reorderNotableProjects",
+						},
 					].map(({ icon, label, action }) => (
 						<Button
 							key={action}

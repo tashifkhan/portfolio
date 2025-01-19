@@ -12,6 +12,17 @@ export type Project = {
     updatedAt: Date
 }
 
+export type NotableProject = {
+    _id?: string;
+    title: string;
+    imageLink: string;
+    description: React.ReactNode;
+    technologies: string[];
+    githubLink?: string;
+    liveLink?: string;
+    playstoreLink?: string;
+}
+
 export type Education = {
     _id?: string
     title: string // e.g., "B.Tech (ECE)", "CBSE XII"
@@ -62,3 +73,4 @@ export type SoftSkill = BaseSkill & {
 }
 
 export type Skill = ProgrammingLanguage | Framework | Tool | SoftSkill
+export type CollageData = Education | Responsibility
