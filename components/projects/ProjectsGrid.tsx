@@ -65,7 +65,7 @@ export function ProjectsGrid() {
 	const visibleProjects = projects.slice(0, visibleCount);
 	const router = useRouter();
 
-	if (isLoading) return <div>Loading...</div>;
+	if (isLoading) return <div className="flex justify-center">Loading...</div>;
 
 	return (
 		<section className="py-12 px-4 md:px-6 lg:px-8">

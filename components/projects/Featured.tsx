@@ -5,7 +5,7 @@ import { FeaturedProject } from "./Projection";
 import { motion } from "framer-motion";
 // import { featuredProjects } from "@/lib/fallback-featured-project-data";
 import Link from "next/link";
-import Image from "next/image";
+// import Image from "next/image";
 import { getFeaturedProjects } from "@/hooks/get-project-data";
 
 interface ProjectFrontmatter {
