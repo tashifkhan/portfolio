@@ -7,29 +7,27 @@ import { ResponsibilitiesGrid } from "@/components/college/ResponsibilitiesGrid"
 import { SkillsSection } from "@/components/skills/SkillsSection";
 import { ContactSection } from "@/components/contact/ContactSection";
 import { Footer } from "@/components/footer/Footer";
+import { Loader } from "@/components/ui/loader";
 
 export default function Home() {
 	return (
-		<div className="no-scrollbar bg-cover text-white h-screen snap-y snap-mandatory pt-28 sm:pt-36 overflow-scroll z-0">
+		<div className="no-scrollbar bg-cover text-white h-screen snap-y pt-28 sm:pt-36 overflow-scroll z-0">
 			<section id="hero" className="snap-center">
 				<Hero />
 			</section>
-			<section
-				id="projects"
-				className="snap-start w-screen min-h-screen pb-28 sm:pb-0"
-			>
-				<Suspense fallback={<div>Loading...</div>}>
+			<section id="projects" className="w-screen min-h-screen pb-28 sm:pb-0">
+				<Suspense fallback={<Loader />}>
 					<Featured />
 					<ProjectsGrid />
 				</Suspense>
 			</section>
-			<section id="skills" className="snap-start pb-28 sm:pb-0">
+			<section id="skills" className="md:snap-start pb-28 sm:pb-0">
 				<SkillsSection />
 			</section>
-			<section id="education" className="snap-start pb-28 sm:pb-0">
+			<section id="education" className="md:snap-start pb-28 sm:pb-0">
 				<EducationTimeline />
 			</section>
-			<section id="por" className="snap-start pb-28 sm:pb-0">
+			<section id="por" className="md:snap-start pb-28 sm:pb-0">
 				<ResponsibilitiesGrid />
 			</section>
 			<section id="contact" className="snap-center pb-24 sm:pb-0">
