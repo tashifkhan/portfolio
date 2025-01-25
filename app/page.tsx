@@ -15,22 +15,25 @@ export default function Home() {
 			<section id="hero" className="snap-center">
 				<Hero />
 			</section>
-			<section id="projects" className="w-screen min-h-screen pb-28 sm:pb-0">
+			<section
+				id="projects"
+				className="snap-none w-screen min-h-screen pb-28 sm:pb-0"
+			>
 				<Suspense fallback={<Loader />}>
 					<Featured />
 					<ProjectsGrid />
 				</Suspense>
 			</section>
-			<section id="skills" className="md:snap-start pb-28 sm:pb-0">
+			<section id="skills" className="snap-none md:snap-start pb-28 sm:pb-0">
 				<SkillsSection />
 			</section>
-			<section id="education" className="md:snap-start pb-28 sm:pb-0">
+			<section id="education" className="snap-none md:snap-start pb-28 sm:pb-0">
 				<EducationTimeline />
 			</section>
-			<section id="por" className="md:snap-start pb-28 sm:pb-0">
+			<section id="por" className="snap-none md:snap-start pb-28 sm:pb-0">
 				<ResponsibilitiesGrid />
 			</section>
-			<section id="contact" className="snap-center pb-24 sm:pb-0">
+			<section id="contact" className="snap-none snap-center pb-24 sm:pb-0">
 				<ContactSection />
 				<Footer />
 			</section>
