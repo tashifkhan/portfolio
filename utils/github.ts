@@ -3,22 +3,25 @@ interface ContributionDay {
   date: string;
 }
 
-interface ContributionResponse {
+export type ContributionResponse = {
   data?: {
-    user: {
+    user?: {
       createdAt: string;
-      contributionsCollection: {
+      contributionsCollection?: {
         contributionYears: number[];
-        contributionCalendar: {
-          weeks: {
-            contributionDays: ContributionDay[];
-          }[];
+        contributionCalendar?: {
+          weeks: Array<{
+            contributionDays: Array<{
+              contributionCount: number;
+              date: string;
+            }>;
+          }>;
         };
       };
     };
   };
   errors?: Array<{ message: string; type: string }>;
-}
+};
 
 const buildContributionGraphQuery = (user: string, year: number): string => {
   const start = `${year}-01-01T00:00:00Z`;
