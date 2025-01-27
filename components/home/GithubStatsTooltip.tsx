@@ -1,44 +1,10 @@
 "use client";
 
-import { getContributionGraphs } from "@/utils/github";
-import {
-	calculateTotalCommits,
-	calculateLongestStreak,
-} from "@/utils/githubStats";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { fetchLanguageStats } from "@/utils/languageStats";
-
-interface GitHubStats {
-	topLanguages: { name: string; percentage: number }[];
-	totalCommits: number;
-	longestStreak: number;
-}
+import { useTooltipStats } from "@/context/TooltipStatsContext";
 
 export default function GithubStatsTooltip({ x, y }: { x: number; y: number }) {
-	const [stats, setStats] = useState<GitHubStats | null>(null);
-
-	useEffect(() => {
-		const fetchGithubStats = async () => {
-			try {
-				const username = "tashifkhan";
-				const contributionData = await getContributionGraphs(username);
-				const languageStats = await fetchLanguageStats(username);
-
-				const stats: GitHubStats = {
-					topLanguages: languageStats,
-					totalCommits: calculateTotalCommits(contributionData),
-					longestStreak: calculateLongestStreak(contributionData),
-				};
-
-				setStats(stats);
-			} catch (error) {
-				console.error("Error fetching GitHub stats:", error);
-			}
-		};
-
-		fetchGithubStats();
-	}, []);
+	const { githubStats: stats, isLoading } = useTooltipStats();
 
 	return (
 		<motion.div

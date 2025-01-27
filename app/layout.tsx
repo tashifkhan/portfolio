@@ -4,6 +4,7 @@ import Image from "next/image";
 import Header from "@/components/home/Header";
 import { Analytics } from "@vercel/analytics/react";
 import { AuthProvider } from "@/lib/auth";
+import { TooltipStatsProvider } from "@/context/TooltipStatsContext";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -33,8 +34,10 @@ export default function RootLayout({
 					/>
 				</div>
 				<Analytics />
-				<Header />
-				<AuthProvider>{children}</AuthProvider>
+				<TooltipStatsProvider>
+					<Header />
+					<AuthProvider>{children}</AuthProvider>
+				</TooltipStatsProvider>
 			</body>
 		</html>
 	);

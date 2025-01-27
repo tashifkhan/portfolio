@@ -2,6 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import { useTooltipStats } from "@/context/TooltipStatsContext";
 
 interface LeetcodeStats {
 	totalSolved: number;
@@ -25,31 +26,7 @@ const LeetcodeStatsTooltip: React.FC<LeetcodeStatsTooltipProps> = ({
 	x,
 	y,
 }) => {
-	const [stats, setStats] = React.useState<LeetcodeStats | null>(null);
-	const [loading, setLoading] = React.useState(true);
-	const [error, setError] = React.useState<string | null>(null);
-
-	React.useEffect(() => {
-		const fetchStats = async () => {
-			try {
-				const response = await fetch(
-					"https://leetcode-stats-api.herokuapp.com/khan-tashif"
-				);
-				const data = await response.json();
-				if (data.status === "success") {
-					setStats(data);
-				} else {
-					setError("Failed to fetch LeetCode stats");
-				}
-			} catch (err) {
-				setError("Error fetching LeetCode stats");
-			} finally {
-				setLoading(false);
-			}
-		};
-
-		fetchStats();
-	}, []);
+	const { leetcodeStats: stats, isLoading: loading, error } = useTooltipStats();
 
 	if (loading) {
 		return (
