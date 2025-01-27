@@ -49,7 +49,7 @@ export const fetchLanguageStats = async (username: string): Promise<LanguageData
       });
     });
 
-    // Calculate percentages and fetch colors
+    // Calculate percentages
     const totalBytes = Object.values(languageTotals).reduce((a, b) => a + b, 0);
 
     const languageStats = Object.entries(languageTotals)
