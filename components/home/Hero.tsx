@@ -143,12 +143,19 @@ function Hero({}: Props) {
 					<SiLeetcode />
 				</a>
 			</motion.div>
-			{showGithubStats && <GithubStatsTooltip x={mousePos.x} y={mousePos.y} />}
-			{showLeetcodeStats && (
-				<LeetcodeStatsTooltip x={mousePos.x} y={mousePos.y} />
-			)}
-			{showLinkedInStats && (
-				<LinkedInStatsTooltip x={mousePos.x} y={mousePos.y} />
+			{/* Only show tooltips on non-mobile devices */}
+			{typeof window !== "undefined" && window.innerWidth > 768 && (
+				<>
+					{showGithubStats && (
+						<GithubStatsTooltip x={mousePos.x} y={mousePos.y} />
+					)}
+					{showLeetcodeStats && (
+						<LeetcodeStatsTooltip x={mousePos.x} y={mousePos.y} />
+					)}
+					{showLinkedInStats && (
+						<LinkedInStatsTooltip x={mousePos.x} y={mousePos.y} />
+					)}
+				</>
 			)}
 			<div>
 				<span className="text-orange-300">{text}</span>

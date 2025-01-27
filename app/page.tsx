@@ -17,7 +17,7 @@ export default function Home() {
 			</section>
 			<section
 				id="projects"
-				className="snap-none w-screen min-h-screen pb-28 sm:pb-0"
+				className="snap-proximity w-screen min-h-screen pb-28 sm:pb-0"
 			>
 				<Suspense fallback={<Loader />}>
 					<Featured />
