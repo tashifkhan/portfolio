@@ -11,7 +11,7 @@ import { Loader } from "@/components/ui/loader";
 
 export default function Home() {
 	return (
-		<div className="no-scrollbar bg-cover text-white h-screen pt-28 sm:pt-36 overflow-scroll z-0">
+		<div className="no-scrollbar bg-cover text-white snap-y  h-screen pt-28 sm:pt-36 overflow-scroll z-0">
 			<section id="hero" className="snap-center">
 				<Hero />
 			</section>
@@ -24,16 +24,16 @@ export default function Home() {
 					<ProjectsGrid />
 				</Suspense>
 			</section>
-			<section id="skills" className="snap-none md:snap-start pb-28 sm:pb-0">
+			<section id="skills" className="snap-none pb-28 sm:pb-0">
 				<SkillsSection />
 			</section>
-			<section id="education" className="snap-none md:snap-start pb-28 sm:pb-0">
+			<section id="education" className="snap-none pb-28 sm:pb-0">
 				<EducationTimeline />
 			</section>
-			<section id="por" className="snap-none md:snap-start pb-28 sm:pb-0">
+			<section id="por" className="snap-none pb-28 sm:pb-0">
 				<ResponsibilitiesGrid />
 			</section>
-			<section id="contact" className="snap-none snap-center pb-24 sm:pb-0">
+			<section id="contact" className="snap-none md:snap-center pb-24 sm:pb-0">
 				<ContactSection />
 				<Footer />
 			</section>

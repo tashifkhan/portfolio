@@ -6,14 +6,24 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { BsArrowRight, BsLinkedin } from "react-icons/bs";
 import { HiDownload } from "react-icons/hi";
+import { SiLeetcode } from "react-icons/si";
 import { FaGithubSquare } from "react-icons/fa";
 import { Cursor, useTypewriter } from "react-simple-typewriter";
+import { useState } from "react";
+import GithubStatsTooltip from "./GithubStatsTooltip";
+import LeetcodeStatsTooltip from "./LeetcodeStatsTooltip";
+import LinkedInStatsTooltip from "./LinkedInStatsTooltip";
 
 import BgCircles from "@/components/home/BgCircles";
 
 type Props = {};
 
 function Hero({}: Props) {
+	const [showGithubStats, setShowGithubStats] = useState(false);
+	const [showLeetcodeStats, setShowLeetcodeStats] = useState(false);
+	const [showLinkedInStats, setShowLinkedInStats] = useState(false);
+	const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
 	const [text, count] = useTypewriter({
 		words: [
 			"Web Developer",
@@ -97,18 +107,49 @@ function Hero({}: Props) {
 					className="p-4 hover:text-gray-950 flex items-center gap-2 rounded-full focus:scale-[1.15] hover:scale-[1.15] active:scale-105 transition cursor-pointer borderBlack bg-white/10 text-white/60 z-50"
 					href="https://www.linkedin.com/in/tashif-ahmad-khan-982304244/"
 					target="_blank"
+					onMouseEnter={(e) => {
+						setShowLinkedInStats(true);
+						setMousePos({ x: e.clientX, y: e.clientY });
+					}}
+					onMouseLeave={() => setShowLinkedInStats(false)}
+					onMouseMove={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
 				>
 					<BsLinkedin />
 				</a>
-
 				<a
 					className="p-4 hover:text-gray-950 flex items-center gap-2 rounded-full focus:scale-[1.15] hover:scale-[1.15] active:scale-105 transition cursor-pointer borderBlack bg-white/10 text-white/60 z-50"
 					href="https://github.com/tashifkhan"
 					target="_blank"
+					onMouseEnter={(e) => {
+						setShowGithubStats(true);
+						setMousePos({ x: e.clientX, y: e.clientY });
+					}}
+					onMouseLeave={() => setShowGithubStats(false)}
+					onMouseMove={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
 				>
 					<FaGithubSquare />
 				</a>
+				<a
+					className="p-4 hover:text-gray-950 flex items-center gap-2 rounded-full focus:scale-[1.15] hover:scale-[1.15] active:scale-105 transition cursor-pointer borderBlack bg-white/10 text-white/60 z-50"
+					href="https://leetcode.com/khan-tashif"
+					target="_blank"
+					onMouseEnter={(e) => {
+						setShowLeetcodeStats(true);
+						setMousePos({ x: e.clientX, y: e.clientY });
+					}}
+					onMouseLeave={() => setShowLeetcodeStats(false)}
+					onMouseMove={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
+				>
+					<SiLeetcode />
+				</a>
 			</motion.div>
+			{showGithubStats && <GithubStatsTooltip x={mousePos.x} y={mousePos.y} />}
+			{showLeetcodeStats && (
+				<LeetcodeStatsTooltip x={mousePos.x} y={mousePos.y} />
+			)}
+			{showLinkedInStats && (
+				<LinkedInStatsTooltip x={mousePos.x} y={mousePos.y} />
+			)}
 			<div>
 				<span className="text-orange-300">{text}</span>
 				<Cursor cursorColor="#F7ABBA" />{" "}
