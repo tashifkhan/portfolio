@@ -5,10 +5,14 @@ import { calculateTotalCommits, calculateLongestStreak } from "@/utils/githubSta
 
 export async function GET(
    request: NextRequest,
-   { params }: { params: { username: string } }
+   { params }: { params: { username: string 
+      | null
+      | undefined
+    } }
 ): Promise<NextResponse> {
    try {
       const parameters = await params
+      console.log(parameters)
       const username = parameters.username
       const searchParams = await request.nextUrl.searchParams
       const excludedLanguages = searchParams.get("exclude")?.split(",") || []
