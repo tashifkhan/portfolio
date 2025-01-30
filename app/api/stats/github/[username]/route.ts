@@ -1,21 +1,18 @@
-import { NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 import { getContributionGraphs } from "@/utils/github"
 import { fetchLanguageStats } from "@/utils/languageStats"
 import { calculateTotalCommits, calculateLongestStreak } from "@/utils/githubStats"
 
 export async function GET(
-   request: NextRequest,
-   { params }: { params: { username: string 
-      | null
-      | undefined
-    } }
+   request: Request,
+   { params }: { params: Promise<{ username: string }> }
 ): Promise<NextResponse> {
    try {
       const parameters = await params
       console.log(parameters)
       const username = parameters.username
-      const searchParams = await request.nextUrl.searchParams
-      const excludedLanguages = searchParams.get("exclude")?.split(",") || []
+      const url = new URL(request.url)
+      const excludedLanguages = url.searchParams.get("exclude")?.split(",") || []
       
       if (!username) {
          return NextResponse.json(
@@ -40,9 +37,9 @@ export async function GET(
       }
 
       return NextResponse.json(stats)
-   } catch (error) {
+   } catch (err) {
       return NextResponse.json(
-         { error: error instanceof Error ? error.message : "Failed to fetch GitHub stats" },
+         { error: err instanceof Error ? err.message : "Failed to fetch GitHub stats" },
          { status: 500 }
       )
    }

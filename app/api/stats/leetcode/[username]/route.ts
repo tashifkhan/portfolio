@@ -94,10 +94,11 @@ async function fetchLeetCodeStats(username: string): Promise<LeetCodeStats> {
 
 export async function GET(
    request: Request,
-   { params }: { params: { username: string } }
+   { params }: { params: Promise<{ username: string }> }  
 ) {
    try {
-      const stats = await fetchLeetCodeStats(params.username)
+      const parameters = await params
+      const stats = await fetchLeetCodeStats(parameters.username)
       return NextResponse.json(stats)
    } catch (error) {
       return NextResponse.json(
