@@ -1,12 +1,6 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { fetchLanguageStats } from "@/utils/languageStats";
-import { getContributionGraphs } from "@/utils/github";
-import {
-	calculateTotalCommits,
-	calculateLongestStreak,
-} from "@/utils/githubStats";
 import type { GitHubStats, LeetCodeStats } from "@/types/stats";
 
 interface TooltipStatsContextType {
@@ -38,41 +32,21 @@ export function TooltipStatsProvider({
 	useEffect(() => {
 		const fetchAllStats = async () => {
 			try {
-				const username = "tashifkhan";
+				const [githubResponse, leetcodeResponse] = await Promise.all([
+					fetch("/api/stats/github"),
+					fetch("/api/stats/leetcode"),
+				]);
 
-				// Fetch GitHub stats
-				const [contributionData, languageStats] = await Promise.all([
-					getContributionGraphs(username),
-					fetchLanguageStats(username),
-				]).catch((err) => {
-					throw new Error(`GitHub stats fetch failed: ${err.message}`);
-				});
-
-				if (!contributionData || !languageStats) {
-					throw new Error("Invalid GitHub stats response");
+				if (!githubResponse.ok || !leetcodeResponse.ok) {
+					throw new Error("Failed to fetch stats");
 				}
 
-				setGithubStats({
-					topLanguages: languageStats,
-					totalCommits: calculateTotalCommits(contributionData),
-					longestStreak: calculateLongestStreak(contributionData),
-				});
+				const [githubData, leetcodeData] = await Promise.all([
+					githubResponse.json(),
+					leetcodeResponse.json(),
+				]);
 
-				// Fetch LeetCode stats
-				const leetcodeResponse = await fetch(
-					"https://leetcode-stats-api.herokuapp.com/khan-tashif"
-				);
-
-				if (!leetcodeResponse.ok) {
-					throw new Error(`LeetCode API error: ${leetcodeResponse.statusText}`);
-				}
-
-				const leetcodeData: LeetCodeStats = await leetcodeResponse.json();
-
-				if (!leetcodeData || leetcodeData.status !== "success") {
-					throw new Error("Invalid LeetCode stats response");
-				}
-
+				setGithubStats(githubData);
 				setLeetcodeStats(leetcodeData);
 			} catch (err) {
 				console.error("Stats fetching error:", err);
