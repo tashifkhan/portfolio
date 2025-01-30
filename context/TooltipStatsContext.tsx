@@ -39,7 +39,9 @@ export function TooltipStatsProvider({
 		const fetchAllStats = async () => {
 			try {
 				const [githubResponse, leetcodeResponse] = await Promise.all([
-					fetch(`/api/stats/github/${githubUsername}`),
+					fetch(
+						`/api/stats/github/${githubUsername}?exclude=HTML,CSS,Jupyter Notebook,SCSS`
+					),
 					fetch(`/api/stats/leetcode/${leetcodeUsername}`),
 				]);
 
