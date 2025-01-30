@@ -1,16 +1,31 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { getContributionGraphs } from "@/utils/github"
 import { fetchLanguageStats } from "@/utils/languageStats"
 import { calculateTotalCommits, calculateLongestStreak } from "@/utils/githubStats"
 
+type RouteParams = {
+   params: {
+      username: string
+   }
+}
+
 export async function GET(
-   request: Request,
-   { params }: { params: { username: string } }
+   request: NextRequest,
+   params: RouteParams
 ) {
    try {
+      if (!params?.params?.username) {
+         return NextResponse.json(
+            { error: "Username is required" },
+            { status: 400 }
+         )
+      }
+
+      const username = params.params.username
+
       const [contributionData, languageStats] = await Promise.all([
-         getContributionGraphs(params.username),
-         fetchLanguageStats(params.username)
+         getContributionGraphs(username),
+         fetchLanguageStats(username)
       ])
 
       if (!contributionData || !languageStats) {
