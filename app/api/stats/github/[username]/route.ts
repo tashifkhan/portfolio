@@ -3,13 +3,13 @@ import { getContributionGraphs } from "@/utils/github"
 import { fetchLanguageStats } from "@/utils/languageStats"
 import { calculateTotalCommits, calculateLongestStreak } from "@/utils/githubStats"
 
-
 export async function GET(
-   request,
-   { params }
-) {
+   request: NextRequest,
+   { params }: { params: { username: string } }
+): Promise<NextResponse> {
    try {
-      const username = await params.username
+      const param = await params 
+      const username = param.username
       
       if (!username) {
          return NextResponse.json(
@@ -17,16 +17,16 @@ export async function GET(
             { status: 400 }
          )
       }
-
+      
       const [contributionData, languageStats] = await Promise.all([
          getContributionGraphs(username),
          fetchLanguageStats(username)
       ])
-      
+
       if (!contributionData || !languageStats) {
          throw new Error("Invalid GitHub stats response")
       }
-      
+
       const stats = {
          topLanguages: languageStats,
          totalCommits: calculateTotalCommits(contributionData),

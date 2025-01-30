@@ -33,7 +33,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-, "app/api/stats/github/[username]/route.js"  ],
+],
   "exclude": [
     "node_modules"
   ]
