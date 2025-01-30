@@ -8,8 +8,10 @@ export async function GET(
    { params }: { params: { username: string } }
 ): Promise<NextResponse> {
    try {
-      const param = await params 
-      const username = param.username
+      const parameters = await params
+      const username = parameters.username
+      const searchParams = await request.nextUrl.searchParams
+      const excludedLanguages = searchParams.get("exclude")?.split(",") || []
       
       if (!username) {
          return NextResponse.json(
@@ -20,7 +22,7 @@ export async function GET(
       
       const [contributionData, languageStats] = await Promise.all([
          getContributionGraphs(username),
-         fetchLanguageStats(username)
+         fetchLanguageStats(username, excludedLanguages)
       ])
 
       if (!contributionData || !languageStats) {

@@ -2,7 +2,7 @@ import jsyaml from "js-yaml";
 import path from "path";
 import fs from "fs";
 
-const EXCLUDED_LANGUAGES = [
+const DEFAULT_EXCLUDED_LANGUAGES = [
   "Jupyter Notebook",
   "HTML",
   "CSS",
@@ -17,7 +17,10 @@ interface LanguageData {
   percentage: number;
 }
 
-export const fetchLanguageStats = async (username: string): Promise<LanguageData[]> => {
+export const fetchLanguageStats = async (
+  username: string, 
+  excludedLanguages: string[] = DEFAULT_EXCLUDED_LANGUAGES
+): Promise<LanguageData[]> => {
   try {
     // Fetch user repositories
     const reposResponse = await fetch(`https://api.github.com/users/${username}/repos`, {
@@ -44,7 +47,7 @@ export const fetchLanguageStats = async (username: string): Promise<LanguageData
     repoLanguages.forEach((langs) => {
       Object.entries(langs).forEach(([lang, bytes]: [string, unknown]) => {
         // Skip excluded languages
-        if (EXCLUDED_LANGUAGES.includes(lang)) return;
+        if (excludedLanguages.includes(lang)) return;
         languageTotals[lang] = (languageTotals[lang] || 0) + (bytes as number);
       });
     });
