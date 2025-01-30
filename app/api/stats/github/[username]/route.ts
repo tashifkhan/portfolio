@@ -3,25 +3,19 @@ import { getContributionGraphs } from "@/utils/github"
 import { fetchLanguageStats } from "@/utils/languageStats"
 import { calculateTotalCommits, calculateLongestStreak } from "@/utils/githubStats"
 
-type RouteParams = {
-   params: {
-      username: string
-   }
-}
-
 export async function GET(
    request: NextRequest,
-   params: RouteParams
-) {
+   { params }: { params: { username: string | null | undefined} }
+): Promise<NextResponse> {
    try {
-      if (!params?.params?.username) {
+      if (!params?.username) {
          return NextResponse.json(
             { error: "Username is required" },
             { status: 400 }
          )
       }
 
-      const username = params.params.username
+      const username = params.username
 
       const [contributionData, languageStats] = await Promise.all([
          getContributionGraphs(username),
