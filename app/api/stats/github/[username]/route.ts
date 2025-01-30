@@ -3,13 +3,14 @@ import { getContributionGraphs } from "@/utils/github"
 import { fetchLanguageStats } from "@/utils/languageStats"
 import { calculateTotalCommits, calculateLongestStreak } from "@/utils/githubStats"
 
-export async function GET() {
+export async function GET(
+   request: Request,
+   { params }: { params: { username: string } }
+) {
    try {
-      const username = "tashifkhan"
-      
       const [contributionData, languageStats] = await Promise.all([
-         getContributionGraphs(username),
-         fetchLanguageStats(username)
+         getContributionGraphs(params.username),
+         fetchLanguageStats(params.username)
       ])
 
       if (!contributionData || !languageStats) {

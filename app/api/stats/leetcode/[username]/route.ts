@@ -92,9 +92,12 @@ async function fetchLeetCodeStats(username: string): Promise<LeetCodeStats> {
    }
 }
 
-export async function GET() {
+export async function GET(
+   request: Request,
+   { params }: { params: { username: string } }
+) {
    try {
-      const stats = await fetchLeetCodeStats("khan-tashif")
+      const stats = await fetchLeetCodeStats(params.username)
       return NextResponse.json(stats)
    } catch (error) {
       return NextResponse.json(

@@ -34,7 +34,10 @@ export default function RootLayout({
 					/>
 				</div>
 				<Analytics />
-				<TooltipStatsProvider>
+				<TooltipStatsProvider
+					githubUsername="tashifkhan"
+					leetcodeUsername="khan-tashif"
+				>
 					<Header />
 					<AuthProvider>{children}</AuthProvider>
 				</TooltipStatsProvider>

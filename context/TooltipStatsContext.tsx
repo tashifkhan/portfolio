@@ -17,11 +17,17 @@ const TooltipStatsContext = createContext<TooltipStatsContextType>({
 	error: null,
 });
 
+interface TooltipStatsProviderProps {
+	children: React.ReactNode;
+	githubUsername: string;
+	leetcodeUsername: string;
+}
+
 export function TooltipStatsProvider({
 	children,
-}: {
-	children: React.ReactNode;
-}) {
+	githubUsername,
+	leetcodeUsername,
+}: TooltipStatsProviderProps) {
 	const [githubStats, setGithubStats] = useState<GitHubStats | null>(null);
 	const [leetcodeStats, setLeetcodeStats] = useState<LeetCodeStats | null>(
 		null
@@ -33,8 +39,8 @@ export function TooltipStatsProvider({
 		const fetchAllStats = async () => {
 			try {
 				const [githubResponse, leetcodeResponse] = await Promise.all([
-					fetch("/api/stats/github"),
-					fetch("/api/stats/leetcode"),
+					fetch(`/api/stats/github/${githubUsername}`),
+					fetch(`/api/stats/leetcode/${leetcodeUsername}`),
 				]);
 
 				if (!githubResponse.ok || !leetcodeResponse.ok) {
@@ -57,7 +63,7 @@ export function TooltipStatsProvider({
 		};
 
 		fetchAllStats();
-	}, []);
+	}, [githubUsername, leetcodeUsername]);
 
 	return (
 		<TooltipStatsContext.Provider
