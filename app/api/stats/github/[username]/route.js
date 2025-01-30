@@ -4,16 +4,10 @@ import { fetchLanguageStats } from "@/utils/languageStats"
 import { calculateTotalCommits, calculateLongestStreak } from "@/utils/githubStats"
 
 
-interface RouteParams {
-   params: {
-      username: string
-   }
-}
-
 export async function GET(
-   request: NextRequest,
-   { params }: RouteParams
-): Promise<NextResponse> {
+   request,
+   { params }
+) {
    try {
       const username = await params.username
       
