@@ -13,6 +13,7 @@ import { useState } from "react";
 import GithubStatsTooltip from "./GithubStatsTooltip";
 import LeetcodeStatsTooltip from "./LeetcodeStatsTooltip";
 import LinkedInStatsTooltip from "./LinkedInStatsTooltip";
+import { MobileStats } from "./MobileStats";
 
 import BgCircles from "@/components/home/BgCircles";
 
@@ -23,8 +24,22 @@ function Hero({}: Props) {
 	const [showLeetcodeStats, setShowLeetcodeStats] = useState(false);
 	const [showLinkedInStats, setShowLinkedInStats] = useState(false);
 	const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+	const [mobileStatsType, setMobileStatsType] = useState<
+		"github" | "leetcode" | "linkedin" | null
+	>(null);
+	const isMobile = typeof window !== "undefined" && window.innerWidth <= 768;
 
-	const [text, count] = useTypewriter({
+	const handleSocialClick = (
+		type: "github" | "leetcode" | "linkedin",
+		e: React.MouseEvent
+	) => {
+		if (isMobile) {
+			e.preventDefault();
+			setMobileStatsType(type);
+		}
+	};
+
+	const [text] = useTypewriter({
 		words: [
 			"Web Developer",
 			"UI/UX Designer",
@@ -85,7 +100,7 @@ function Hero({}: Props) {
 					<BsArrowRight className="opacity-70 group-hover:translate-x-1 transition" />
 				</Link>
 
-				<a
+				<Link
 					className="group px-7 py-3 flex items-center gap-2 rounded-full outline-none focus:scale-110 hover:scale-110 active:scale-105 transition cursor-pointer borderBlack bg-white/10 z-50"
 					href="/Resume.pdf"
 					target="_blank"
@@ -93,7 +108,7 @@ function Hero({}: Props) {
 				>
 					Resume{" "}
 					<HiDownload className="opacity-60 group-hover:translate-y-1 transition" />
-				</a>
+				</Link>
 			</motion.div>
 			<motion.div
 				className="flex flex-row items-center justify-center gap-2 px-4 text-lg font-medium"
@@ -103,48 +118,57 @@ function Hero({}: Props) {
 					delay: 0.1,
 				}}
 			>
-				<a
+				<Link
 					className="p-4 hover:text-gray-950 flex items-center gap-2 rounded-full focus:scale-[1.15] hover:scale-[1.15] active:scale-105 transition cursor-pointer borderBlack bg-white/10 text-white/60 z-50"
 					href="https://www.linkedin.com/in/tashif-ahmad-khan-982304244/"
 					target="_blank"
+					onClick={(e) => handleSocialClick("linkedin", e)}
 					onMouseEnter={(e) => {
-						setShowLinkedInStats(true);
-						setMousePos({ x: e.clientX, y: e.clientY });
+						if (!isMobile) {
+							setShowLinkedInStats(true);
+							setMousePos({ x: e.clientX, y: e.clientY });
+						}
 					}}
 					onMouseLeave={() => setShowLinkedInStats(false)}
 					onMouseMove={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
 				>
 					<BsLinkedin />
-				</a>
-				<a
+				</Link>
+				<Link
 					className="p-4 hover:text-gray-950 flex items-center gap-2 rounded-full focus:scale-[1.15] hover:scale-[1.15] active:scale-105 transition cursor-pointer borderBlack bg-white/10 text-white/60 z-50"
 					href="https://github.com/tashifkhan"
 					target="_blank"
+					onClick={(e) => handleSocialClick("github", e)}
 					onMouseEnter={(e) => {
-						setShowGithubStats(true);
-						setMousePos({ x: e.clientX, y: e.clientY });
+						if (!isMobile) {
+							setShowGithubStats(true);
+							setMousePos({ x: e.clientX, y: e.clientY });
+						}
 					}}
 					onMouseLeave={() => setShowGithubStats(false)}
 					onMouseMove={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
 				>
 					<FaGithubSquare />
-				</a>
-				<a
+				</Link>
+				<Link
 					className="p-4 hover:text-gray-950 flex items-center gap-2 rounded-full focus:scale-[1.15] hover:scale-[1.15] active:scale-105 transition cursor-pointer borderBlack bg-white/10 text-white/60 z-50"
 					href="https://leetcode.com/khan-tashif"
 					target="_blank"
+					onClick={(e) => handleSocialClick("leetcode", e)}
 					onMouseEnter={(e) => {
-						setShowLeetcodeStats(true);
-						setMousePos({ x: e.clientX, y: e.clientY });
+						if (!isMobile) {
+							setShowLeetcodeStats(true);
+							setMousePos({ x: e.clientX, y: e.clientY });
+						}
 					}}
 					onMouseLeave={() => setShowLeetcodeStats(false)}
 					onMouseMove={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
 				>
 					<SiLeetcode />
-				</a>
+				</Link>
 			</motion.div>
 			{/* Only show tooltips on non-mobile devices */}
-			{typeof window !== "undefined" && window.innerWidth > 768 && (
+			{!isMobile && (
 				<>
 					{showGithubStats && (
 						<GithubStatsTooltip x={mousePos.x} y={mousePos.y} />
@@ -157,6 +181,11 @@ function Hero({}: Props) {
 					)}
 				</>
 			)}
+			<MobileStats
+				isOpen={mobileStatsType !== null}
+				onClose={() => setMobileStatsType(null)}
+				type={mobileStatsType || "github"}
+			/>
 			<div>
 				<span className="text-orange-300">{text}</span>
 				<Cursor cursorColor="#F7ABBA" />{" "}
