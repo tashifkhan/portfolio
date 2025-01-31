@@ -49,10 +49,12 @@ export function TooltipStatsProvider({
 					throw new Error("Failed to fetch stats");
 				}
 
-				const [githubData, leetcodeData] = await Promise.all([
+				let [githubData, leetcodeData] = await Promise.all([
 					githubResponse.json(),
 					leetcodeResponse.json(),
 				]);
+
+				githubData.topLanguages = githubData.topLanguages.slice(0, 5);
 
 				setGithubStats(githubData);
 				setLeetcodeStats(leetcodeData);

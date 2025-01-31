@@ -58,10 +58,9 @@ export const fetchLanguageStats = async (
     const languageStats = Object.entries(languageTotals)
       .map(([name, bytes]) => ({
         name,
-        percentage: Math.round((bytes / totalBytes) * 100),
+        percentage: parseFloat(((bytes / totalBytes) * 100).toFixed(2))
       }))
-      .sort((a, b) => b.percentage - a.percentage)
-      .slice(0, 5); // Get top 5 languages
+      .sort((a, b) => b.percentage - a.percentage);
 
     return languageStats;
   } catch (error) {
