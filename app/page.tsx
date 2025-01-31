@@ -33,7 +33,7 @@ export default function Home() {
 			<section id="por" className="snap-none pb-28 sm:pb-0">
 				<ResponsibilitiesGrid />
 			</section>
-			<section id="contact" className="snap-none md:snap-center pb-24 sm:pb-0">
+			<section id="contact" className="snap-none pb-24 sm:pb-0">
 				<ContactSection />
 				<Footer />
 			</section>
