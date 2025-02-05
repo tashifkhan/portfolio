@@ -23,7 +23,7 @@ export const fetchLanguageStats = async (
 ): Promise<LanguageData[]> => {
   try {
     // Fetch user repositories
-    const reposResponse = await fetch(`https://api.github.com/users/${username}/repos`, {
+    const reposResponse = await fetch(`https://api.github.com/users/${username}/repos?type=all`, {
       headers: {
         Authorization: `Bearer ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}`,
       },

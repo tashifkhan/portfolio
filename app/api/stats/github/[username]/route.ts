@@ -9,7 +9,6 @@ export async function GET(
 ): Promise<NextResponse> {
    try {
       const parameters = await params
-      console.log(parameters)
       const username = parameters.username
       const url = new URL(request.url)
       const excludedLanguages = url.searchParams.get("exclude")?.split(",") || []
