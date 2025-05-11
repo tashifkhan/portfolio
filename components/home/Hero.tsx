@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { BsArrowRight, BsLinkedin } from "react-icons/bs";
@@ -9,31 +9,31 @@ import { HiDownload } from "react-icons/hi";
 import { SiLeetcode } from "react-icons/si";
 import { FaGithubSquare } from "react-icons/fa";
 import { Cursor, useTypewriter } from "react-simple-typewriter";
-import { useState } from "react";
 import GithubStatsTooltip from "./GithubStatsTooltip";
 import LeetcodeStatsTooltip from "./LeetcodeStatsTooltip";
 import LinkedInStatsTooltip from "./LinkedInStatsTooltip";
 import { MobileStats } from "./MobileStats";
-
 import BgCircles from "@/components/home/BgCircles";
 
-type Props = {};
+type SocialType = "github" | "leetcode" | "linkedin" | null;
 
-function Hero({}: Props) {
+function Hero() {
 	const [showGithubStats, setShowGithubStats] = useState(false);
 	const [showLeetcodeStats, setShowLeetcodeStats] = useState(false);
 	const [showLinkedInStats, setShowLinkedInStats] = useState(false);
 	const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-	const [mobileStatsType, setMobileStatsType] = useState<
-		"github" | "leetcode" | "linkedin" | null
-	>(null);
-	const isMobile = typeof window !== "undefined" && window.innerWidth <= 768;
+	const [mobileStatsType, setMobileStatsType] = useState<SocialType>(null);
+	const [isMobile, setIsMobile] = useState(false);
 
-	const handleSocialClick = (
-		type: "github" | "leetcode" | "linkedin",
-		e: React.MouseEvent
-	) => {
-		if (isMobile) {
+	useEffect(() => {
+		const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+		checkMobile();
+		window.addEventListener("resize", checkMobile);
+		return () => window.removeEventListener("resize", checkMobile);
+	}, []);
+
+	const handleSocialClick = (type: SocialType, e: React.MouseEvent) => {
+		if (isMobile && type) {
 			e.preventDefault();
 			setMobileStatsType(type);
 		}
@@ -52,122 +52,125 @@ function Hero({}: Props) {
 		typeSpeed: 100,
 		delaySpeed: 2000,
 	});
-	return (
-		<div className="h-screen flex flex-col space-y-6 items-center justify-center text-center overflow-hidden">
-			<BgCircles />
-			<motion.div
-				initial={{ opacity: 0, scale: 0 }}
-				animate={{ opacity: 1, scale: 1 }}
-				transition={{
-					type: "tween",
-					duration: 0.2,
-				}}
-			>
-				<Image
-					src="/bg01.jpeg"
-					alt="Ricardo portrait"
-					width="192"
-					height="192"
-					quality="95"
-					priority={true}
-					className="h-24 w-24 rounded-full object-cover border-[0.35rem] border-white shadow-xl"
-				/>
-			</motion.div>{" "}
-			<motion.div
-				initial={{ opacity: 0, scale: 0 }}
-				animate={{ opacity: 1, scale: 1 }}
-				transition={{
-					type: "tween",
-					duration: 0.2,
-				}}
-				className="text-3xl font-bold"
-			>
-				Tashif Ahmad Khan
-			</motion.div>{" "}
-			<motion.div
-				className="flex flex-col sm:flex-row items-center justify-center gap-2 px-4 text-lg font-medium"
-				initial={{ opacity: 0, y: 100 }}
-				animate={{ opacity: 1, y: 0 }}
-				transition={{
-					delay: 0.1,
-				}}
-			>
-				<Link
-					href="#contact"
-					className="group bg-orange-400 text-white px-7 py-3 flex items-center gap-2 rounded-full outline-none bg-opacity-80 focus:scale-110 hover:scale-110 hover:bg-orange-600 active:scale-105 transition z-50"
-				>
-					Contact me here{" "}
-					<BsArrowRight className="opacity-70 group-hover:translate-x-1 transition" />
-				</Link>
 
-				<Link
-					className="group px-7 py-3 flex items-center gap-2 rounded-full outline-none focus:scale-110 hover:scale-110 active:scale-105 transition cursor-pointer borderBlack bg-white/10 z-50"
-					href="/Resume.pdf"
-					target="_blank"
-					// download
-				>
-					Resume{" "}
-					<HiDownload className="opacity-60 group-hover:translate-y-1 transition" />
-				</Link>
-			</motion.div>
+	const container = {
+		hidden: { opacity: 0 },
+		show: {
+			opacity: 1,
+			transition: {
+				staggerChildren: 0.1,
+				delayChildren: 0.3,
+			},
+		},
+	};
+
+	const item = {
+		hidden: { y: 20, opacity: 0 },
+		show: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 100 } },
+	};
+
+	return (
+		<div className="h-screen flex flex-col items-center justify-center text-center overflow-hidden relative">
+			<BgCircles />
+
 			<motion.div
-				className="flex flex-row items-center justify-center gap-2 px-4 text-lg font-medium"
-				initial={{ opacity: 0, y: 100 }}
-				animate={{ opacity: 1, y: 0 }}
-				transition={{
-					delay: 0.1,
-				}}
+				className="z-10 flex flex-col items-center space-y-8 px-4"
+				variants={container}
+				initial="hidden"
+				animate="show"
 			>
-				<Link
-					className="p-4 hover:text-gray-950 flex items-center gap-2 rounded-full focus:scale-[1.15] hover:scale-[1.15] active:scale-105 transition cursor-pointer borderBlack bg-white/10 text-white/60 z-50"
-					href="https://www.linkedin.com/in/tashif-ahmad-khan-982304244/"
-					target="_blank"
-					onClick={(e) => handleSocialClick("linkedin", e)}
-					onMouseEnter={(e) => {
-						if (!isMobile) {
-							setShowLinkedInStats(true);
-							setMousePos({ x: e.clientX, y: e.clientY });
-						}
-					}}
-					onMouseLeave={() => setShowLinkedInStats(false)}
-					onMouseMove={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
+				{/* Profile Image */}
+				<motion.div variants={item} className="relative">
+					<div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-orange-400 to-pink-500 opacity-75 blur-sm animate-pulse"></div>
+					<Image
+						src="/bg01.jpeg"
+						alt="Tashif Ahmad Khan"
+						width="192"
+						height="192"
+						quality="95"
+						priority={true}
+						className="h-32 w-32 rounded-full object-cover border-[0.35rem] border-white/90 shadow-xl relative"
+					/>
+				</motion.div>
+
+				{/* Name */}
+				<motion.h1
+					variants={item}
+					className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-orange-300"
 				>
-					<BsLinkedin />
-				</Link>
-				<Link
-					className="p-4 hover:text-gray-950 flex items-center gap-2 rounded-full focus:scale-[1.15] hover:scale-[1.15] active:scale-105 transition cursor-pointer borderBlack bg-white/10 text-white/60 z-50"
-					href="https://github.com/tashifkhan"
-					target="_blank"
-					onClick={(e) => handleSocialClick("github", e)}
-					onMouseEnter={(e) => {
-						if (!isMobile) {
-							setShowGithubStats(true);
-							setMousePos({ x: e.clientX, y: e.clientY });
-						}
-					}}
-					onMouseLeave={() => setShowGithubStats(false)}
-					onMouseMove={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
+					Tashif Ahmad Khan
+				</motion.h1>
+
+				{/* Typewriter text */}
+				<motion.div
+					variants={item}
+					className="text-xl md:text-2xl font-medium text-white/80"
 				>
-					<FaGithubSquare />
-				</Link>
-				<Link
-					className="p-4 hover:text-gray-950 flex items-center gap-2 rounded-full focus:scale-[1.15] hover:scale-[1.15] active:scale-105 transition cursor-pointer borderBlack bg-white/10 text-white/60 z-50"
-					href="https://leetcode.com/khan-tashif"
-					target="_blank"
-					onClick={(e) => handleSocialClick("leetcode", e)}
-					onMouseEnter={(e) => {
-						if (!isMobile) {
-							setShowLeetcodeStats(true);
-							setMousePos({ x: e.clientX, y: e.clientY });
-						}
-					}}
-					onMouseLeave={() => setShowLeetcodeStats(false)}
-					onMouseMove={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
+					<span className="text-orange-300">{text}</span>
+					<Cursor cursorColor="#F7ABBA" />
+				</motion.div>
+
+				{/* Action buttons */}
+				<motion.div
+					variants={item}
+					className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-md"
 				>
-					<SiLeetcode />
-				</Link>
+					<Link
+						href="#contact"
+						className="group bg-gradient-to-r from-orange-400 to-orange-500 text-white px-7 py-3 flex items-center gap-2 rounded-full outline-none focus:scale-110 hover:scale-110 hover:from-orange-500 hover:to-orange-600 active:scale-105 transition w-full sm:w-auto justify-center sm:justify-start shadow-lg shadow-orange-500/20"
+					>
+						Contact me here{" "}
+						<BsArrowRight className="opacity-70 group-hover:translate-x-1 transition" />
+					</Link>
+
+					<Link
+						className="group px-7 py-3 flex items-center gap-2 rounded-full outline-none focus:scale-110 hover:scale-110 active:scale-105 transition cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/10 w-full sm:w-auto justify-center sm:justify-start"
+						href="/Resume.pdf"
+						target="_blank"
+					>
+						Resume{" "}
+						<HiDownload className="opacity-60 group-hover:translate-y-1 transition" />
+					</Link>
+				</motion.div>
+
+				{/* Social links */}
+				<motion.div
+					variants={item}
+					className="flex items-center justify-center gap-5 px-4 text-xl"
+				>
+					<SocialLink
+						icon={<BsLinkedin className="text-2xl" />}
+						href="https://www.linkedin.com/in/tashif-ahmad-khan-982304244/"
+						type="linkedin"
+						onShowStats={setShowLinkedInStats}
+						onMousePosChange={setMousePos}
+						onSocialClick={handleSocialClick}
+						isMobile={isMobile}
+					/>
+
+					<SocialLink
+						icon={<FaGithubSquare className="text-2xl" />}
+						href="https://github.com/tashifkhan"
+						type="github"
+						onShowStats={setShowGithubStats}
+						onMousePosChange={setMousePos}
+						onSocialClick={handleSocialClick}
+						isMobile={isMobile}
+					/>
+
+					<SocialLink
+						icon={<SiLeetcode className="text-2xl" />}
+						href="https://leetcode.com/khan-tashif"
+						type="leetcode"
+						onShowStats={setShowLeetcodeStats}
+						onMousePosChange={setMousePos}
+						onSocialClick={handleSocialClick}
+						isMobile={isMobile}
+					/>
+				</motion.div>
 			</motion.div>
-			{/* Only show tooltips on non-mobile devices */}
+
+			{/* Stats tooltips for desktop */}
 			{!isMobile && (
 				<>
 					{showGithubStats && (
@@ -181,16 +184,53 @@ function Hero({}: Props) {
 					)}
 				</>
 			)}
+
+			{/* Mobile stats modal */}
 			<MobileStats
 				isOpen={mobileStatsType !== null}
 				onClose={() => setMobileStatsType(null)}
 				type={mobileStatsType || "github"}
 			/>
-			<div>
-				<span className="text-orange-300">{text}</span>
-				<Cursor cursorColor="#F7ABBA" />{" "}
-			</div>
 		</div>
+	);
+}
+
+interface SocialLinkProps {
+	icon: React.ReactNode;
+	href: string;
+	type: "github" | "leetcode" | "linkedin";
+	onShowStats: (show: boolean) => void;
+	onMousePosChange: (pos: { x: number; y: number }) => void;
+	onSocialClick: (type: SocialType, e: React.MouseEvent) => void;
+	isMobile: boolean;
+}
+
+function SocialLink({
+	icon,
+	href,
+	type,
+	onShowStats,
+	onMousePosChange,
+	onSocialClick,
+	isMobile,
+}: SocialLinkProps) {
+	return (
+		<Link
+			className="p-4 flex items-center justify-center rounded-full focus:scale-[1.15] hover:scale-[1.15] active:scale-105 transition cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/10 text-white/80 hover:text-white shadow-lg"
+			href={href}
+			target="_blank"
+			onClick={(e) => onSocialClick(type, e)}
+			onMouseEnter={(e) => {
+				if (!isMobile) {
+					onShowStats(true);
+					onMousePosChange({ x: e.clientX, y: e.clientY });
+				}
+			}}
+			onMouseLeave={() => onShowStats(false)}
+			onMouseMove={(e) => onMousePosChange({ x: e.clientX, y: e.clientY })}
+		>
+			{icon}
+		</Link>
 	);
 }
 
