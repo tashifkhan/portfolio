@@ -1,5 +1,5 @@
 import json
-from typing import Dict, Any, List
+from typing import List, Optional
 from pydantic import BaseModel
 import requests
 import base64
@@ -7,11 +7,11 @@ import base64
 
 class Response(BaseModel):
     title: str
-    description: str
-    live_website_url: str
-    languages: List[str]
+    description: Optional[str] = None
+    live_website_url: Optional[str] = None
+    languages: Optional[List[str]] = []
     num_commits: int
-    readme: str
+    readme: Optional[str] = None
 
 
 def get_projects(github_username: str) -> List[Response]:
