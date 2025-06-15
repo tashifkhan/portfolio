@@ -12,6 +12,9 @@ class Response(BaseModel):
     languages: Optional[List[str]] = []
     num_commits: int
     readme: Optional[str] = None
+    status: Optional[str] = (
+        None  # "c" = completed, "w" = work in progress, "p" = planned
+    )
 
 
 def get_projects(github_username: str) -> List[Response]:
