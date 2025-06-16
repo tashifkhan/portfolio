@@ -19,3 +19,17 @@ body {
 	-ms-overflow-style: none; /* IE and Edge */
 	scrollbar-width: none; /* Firefox */
 }
+
+/* Custom utilities for modern design */
+@layer utilities {
+	.bg-grid-white {
+		background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='%23ffffff'%3e%3cpath d='m0 .5h32m-32 10h32m-32 10h32m-32 10h32'/%3e%3cpath d='m.5 0v32m10-32v32m10-32v32m10-32v32'/%3e%3c/svg%3e");
+	}
+	
+	.line-clamp-2 {
+		overflow: hidden;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+	}
+}

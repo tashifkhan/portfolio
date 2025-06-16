@@ -854,15 +854,15 @@ function ReorderProjectsForm({
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
-					projects: reorderedProjects.map((project, index) => ({
-						_id: project._id,
-						position: index + 1,
-					})),
+					projectIds: reorderedProjects.map((project) => project._id),
 				}),
 			});
 
 			if (response.ok) {
 				onSuccess();
+			} else {
+				const errorData = await response.json();
+				console.error("Error reordering projects:", errorData);
 			}
 		} catch (error) {
 			console.error("Error reordering projects:", error);
