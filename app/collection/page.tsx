@@ -391,19 +391,37 @@ function SearchableTable() {
 											<TableCell className="py-6">
 												<div className="flex items-center gap-3">
 													{project.githubLink && (
-														<div className="text-white/70 group-hover:text-orange-400 transition-colors z-">
-															<GithubIcon className="w-5 h-5" />
-														</div>
+														<Link
+															href={project.githubLink}
+															target="_blank"
+															className="z-10"
+														>
+															<div className="text-white/70 group-hover:text-orange-400 transition-colors">
+																<GithubIcon className="w-5 h-5" />
+															</div>
+														</Link>
 													)}
 													{project.playStoreLink && (
-														<div className="text-white/70 group-hover:text-orange-400 transition-colors">
-															<IoLogoGooglePlaystore className="w-5 h-5" />
-														</div>
+														<Link
+															href={project.playStoreLink}
+															target="_blank"
+															className="z-10"
+														>
+															<div className="text-white/70 group-hover:text-orange-400 transition-colors">
+																<IoLogoGooglePlaystore className="w-5 h-5" />
+															</div>
+														</Link>
 													)}
 													{project.liveLink && (
-														<div className="text-white/70 group-hover:text-orange-400 transition-colors">
-															<ExternalLink className="w-5 h-5" />
-														</div>
+														<Link
+															href={project.liveLink}
+															target="_blank"
+															className="z-10"
+														>
+															<div className="text-white/70 group-hover:text-orange-400 transition-colors">
+																<ExternalLink className="w-5 h-5" />
+															</div>
+														</Link>
 													)}
 												</div>
 											</TableCell>
