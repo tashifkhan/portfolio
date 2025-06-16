@@ -515,21 +515,22 @@ function AddProjectForm({ onSuccess }: { onSuccess: () => void }) {
 				<label className="block text-sm font-medium text-gray-300 mb-2">
 					Project Status *
 				</label>
-				<Select
+				<select
 					value={formData.status}
-					onValueChange={(value: Project["status"]) =>
-						setFormData((prev) => ({ ...prev, status: value }))
+					onChange={(e) =>
+						setFormData((prev) => ({
+							...prev,
+							status: e.target.value as Project["status"],
+						}))
 					}
+					className="w-full bg-white/5 text-gray-300 border border-orange-500/20 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+					required
 				>
-					<SelectTrigger className="bg-white/5 text-gray-300 border-orange-500/20">
-						<SelectValue placeholder="Select project status" />
-					</SelectTrigger>
-					<SelectContent>
-						<SelectItem value="Planned">Planned</SelectItem>
-						<SelectItem value="In Progress">In Progress</SelectItem>
-						<SelectItem value="Completed">Completed</SelectItem>
-					</SelectContent>
-				</Select>
+					<option value="">Select project status</option>
+					<option value="Planned">Planned</option>
+					<option value="In Progress">In Progress</option>
+					<option value="Completed">Completed</option>
+				</select>
 			</div>
 
 			<div className="space-y-4">
@@ -712,22 +713,22 @@ function EditProjectsForm({
 						<label className="block text-sm font-medium text-gray-300 mb-2">
 							Project Status *
 						</label>
-						<Select
+						<select
 							value={formData.status}
-							onValueChange={(value) =>
-								setFormData({ ...formData, status: value as Project["status"] })
+							onChange={(e) =>
+								setFormData({
+									...formData,
+									status: e.target.value as Project["status"],
+								})
 							}
+							className="w-full bg-white/5 text-gray-300 border border-orange-500/20 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+							required
 						>
-							<SelectTrigger className="bg-white/5 text-gray-300 border-orange-500/20">
-								<SelectValue />
-							</SelectTrigger>
-							<SelectContent>
-								<SelectItem value="Planned">Planned</SelectItem>
-								<SelectItem value="In Progress">In Progress</SelectItem>
-								<SelectItem value="Completed">Completed</SelectItem>
-								<SelectItem value="On Hold">On Hold</SelectItem>
-							</SelectContent>
-						</Select>
+							<option value="">Select project status</option>
+							<option value="Planned">Planned</option>
+							<option value="In Progress">In Progress</option>
+							<option value="Completed">Completed</option>
+						</select>
 					</div>
 
 					<div className="flex gap-2">
