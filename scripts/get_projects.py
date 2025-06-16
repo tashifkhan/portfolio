@@ -31,16 +31,24 @@ def get_projects(github_username: str) -> List[Response]:
         if "readme" in project and project["readme"] is not None:
             try:
                 project["readme"] = base64.b64decode(project["readme"]).decode("utf-8")
-
             except Exception:
                 project["readme"] = ""
 
-    ress = json.dumps(
-        projects,
-        indent=2,
-    )
+    # Convert to Response objects
+    response_objects = []
+    for project in projects:
+        response_obj = Response(
+            title=project.get("title", "Unknown Project"),
+            description=project.get("description"),
+            live_website_url=project.get("live_website_url"),
+            languages=project.get("languages", []),
+            num_commits=project.get("num_commits", 0),
+            readme=project.get("readme"),
+            status=project.get("status"),
+        )
+        response_objects.append(response_obj)
 
-    print(ress)
+    return response_objects
 
 
 if __name__ == "__main__":
