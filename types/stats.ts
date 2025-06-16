@@ -1,6 +1,7 @@
 export interface GitHubStats {
    topLanguages: { name: string; percentage: number }[]
    totalCommits: number
+   currentStreak: number
    longestStreak: number
 }
 
