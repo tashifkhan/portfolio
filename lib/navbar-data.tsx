@@ -1,10 +1,12 @@
 import React from "react";
-import { HiHome } from "react-icons/hi";
-import { BsProjector } from "react-icons/bs";
-import { GiSkills } from "react-icons/gi";
-import { LuGraduationCap } from "react-icons/lu";
-import { GoTrophy } from "react-icons/go";
-import { MdOutlineContactMail } from "react-icons/md";
+import {
+	TbHome2,
+	TbBrandCodepen,
+	TbBulb,
+	TbSchool,
+	TbAward,
+	TbMail,
+} from "react-icons/tb";
 
 interface Link {
 	name: string;
@@ -16,31 +18,31 @@ export const links: Link[] = [
 	{
 		name: "Home",
 		hash: "/#hero",
-		icon: <HiHome />,
+		icon: <TbHome2 />,
 	},
 	{
 		name: "Projects",
 		hash: "/#projects",
-		icon: <BsProjector />,
+		icon: <TbBrandCodepen />,
 	},
 	{
 		name: "Skills",
 		hash: "/#skills",
-		icon: <GiSkills />,
+		icon: <TbBulb />,
 	},
 	{
 		name: "Education",
 		hash: "/#education",
-		icon: <LuGraduationCap />,
+		icon: <TbSchool />,
 	},
 	{
 		name: "Recognistions",
 		hash: "/#por",
-		icon: <GoTrophy />,
+		icon: <TbAward />,
 	},
 	{
 		name: "Contact",
 		hash: "/#contact",
-		icon: <MdOutlineContactMail />,
+		icon: <TbMail />,
 	},
 ];
