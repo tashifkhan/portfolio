@@ -45,7 +45,7 @@ export default function GithubStatsTooltip({ x, y }: { x: number; y: number }) {
 									animate={{ opacity: 1 }}
 									className="text-xl font-bold text-orange-300"
 								>
-									{stats.longestStreak} days
+									{stats.longestStreak} <span className="text-xs">days</span>
 								</motion.span>
 							</div>
 							<div className="bg-gray-800/30 p-3 rounded-lg">
@@ -57,7 +57,7 @@ export default function GithubStatsTooltip({ x, y }: { x: number; y: number }) {
 									animate={{ opacity: 1 }}
 									className="text-xl font-bold text-orange-300"
 								>
-									{stats.currentStreak} days
+									{stats.currentStreak} <span className="text-xs">days</span>
 								</motion.span>
 							</div>
 						</div>

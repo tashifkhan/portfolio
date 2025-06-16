@@ -218,7 +218,7 @@ const GitHubContent = () => {
 				))}
 			</div>
 
-			<div className="grid grid-cols-2 gap-4 pt-2">
+			<div className="grid grid-cols-3 gap-4 pt-2">
 				<div className="bg-gray-800/30 p-3 rounded-lg">
 					<h3 className="text-gray-400 text-xs uppercase tracking-wider mb-1">
 						Total Commits
@@ -240,7 +240,19 @@ const GitHubContent = () => {
 						animate={{ opacity: 1 }}
 						className="text-xl font-bold text-orange-300"
 					>
-						{stats.longestStreak} days
+						{stats.longestStreak} <span className="text-xs">days</span>
+					</motion.span>
+				</div>
+				<div className="bg-gray-800/30 p-3 rounded-lg">
+					<h3 className="text-gray-400 text-xs uppercase tracking-wider mb-1">
+						Current Streak
+					</h3>
+					<motion.span
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						className="text-xl font-bold text-orange-300"
+					>
+						{stats.currentStreak} <span className="text-xs">days</span>
 					</motion.span>
 				</div>
 			</div>
