@@ -329,19 +329,49 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
 			'<li class="text-white/80 mb-2 ml-6 list-decimal">$2</li>'
 		);
 
-		// Handle bullet lists (support -, *, •, and + bullets)
+		// Handle todo items first (before regular bullet lists)
+		// Unchecked todo items - [ ]
 		html = html.replace(
-			/^[\-\*\•\+]\s+(.*$)/gm,
+			/^-\s+\[\s*\]\s+(.*$)/gm,
+			'<li class="flex items-center text-white/80 mb-2 ml-2 list-none"><span class="mr-3 text-gray-400 text-lg">☐</span>$1</li>'
+		);
+
+		// Checked todo items - [x] or - [X]
+		html = html.replace(
+			/^-\s+\[x\]\s+(.*$)/gim,
+			'<li class="flex items-center text-white/80 mb-2 ml-2 list-none"><span class="mr-3 text-orange-400 text-lg">☑</span>$1</li>'
+		);
+
+		// Handle nested todo items with indentation
+		html = html.replace(
+			/^(\s{2,})-\s+\[\s*\]\s+(.*$)/gm,
+			'<li class="flex items-center text-white/80 mb-2 ml-6 list-none"><span class="mr-3 text-gray-400 text-lg">☐</span>$2</li>'
+		);
+
+		html = html.replace(
+			/^(\s{2,})-\s+\[x\]\s+(.*$)/gim,
+			'<li class="flex items-center text-white/80 mb-2 ml-6 list-none"><span class="mr-3 text-orange-400 text-lg">☑</span>$2</li>'
+		);
+
+		// Handle bullet lists (support -, *, •, and + bullets) - but not todo items
+		html = html.replace(
+			/^[\-\*\•\+]\s+(?!\[[\sx]\])(.*$)/gm,
 			'<li class="text-white/80 mb-1 ml-6 list-disc">$1</li>'
 		);
 
 		// Also handle nested bullet points with indentation
 		html = html.replace(
-			/^(\s{2,})[\-\*\•\+]\s+(.*$)/gm,
+			/^(\s{2,})[\-\*\•\+]\s+(?!\[[\sx]\])(.*$)/gm,
 			'<li class="text-white/80 mb-1 ml-8 list-disc">$2</li>'
 		);
 
 		// Wrap consecutive list items in ul/ol tags
+		// Handle todo lists (checked and unchecked)
+		html = html.replace(
+			/(<li class="flex items-center[^"]*list-none[^"]*">.*?<\/li>(\s*<li class="flex items-center[^"]*list-none[^"]*">.*?<\/li>)*)/g,
+			'<ul class="my-3 space-y-1 pl-2">$1</ul>'
+		);
+
 		// Handle unordered lists (including nested ones)
 		html = html.replace(
 			/(<li class="[^"]*list-disc[^"]*">.*?<\/li>(\s*<li class="[^"]*list-disc[^"]*">.*?<\/li>)*)/g,
