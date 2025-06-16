@@ -238,9 +238,8 @@ function SearchableTable() {
 								<div
 									key={`mobile-project-${project.position || index}`}
 									onClick={() => handleProjectClick(project)}
-									className="p-6 bg-gradient-to-br from-gray-900/80 to-gray-800/60 backdrop-blur-xl 
-										border border-white/10 rounded-xl cursor-pointer transform transition-all duration-300 
-										hover:scale-105 hover:bg-gradient-to-br hover:from-orange-500/10 hover:to-gray-800/80 
+									className="p-6 bg-gradient-to-br fbackdrop-blur-lg bg-white/10 dark:bg-gray-900/30   rounded-2xl shadow-xl border border-white/20 cursor-pointer transform transition-all duration-300 
+										hover:scale-105 hover:bg-gradient-to-br hover:from-orange-500/10 
 										hover:border-orange-500/30 hover:shadow-xl hover:shadow-orange-500/20"
 								>
 									<div className="space-y-4">
