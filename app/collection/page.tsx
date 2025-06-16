@@ -391,7 +391,7 @@ function SearchableTable() {
 											<TableCell className="py-6">
 												<div className="flex items-center gap-3">
 													{project.githubLink && (
-														<div className="text-white/70 group-hover:text-orange-400 transition-colors">
+														<div className="text-white/70 group-hover:text-orange-400 transition-colors z-">
 															<GithubIcon className="w-5 h-5" />
 														</div>
 													)}
@@ -474,7 +474,7 @@ const StatusLegend = () => {
 // Main page component
 export default function CollectionPage() {
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden">
+		<div className="min-h-screen relative overflow-hidden">
 			{/* Background Effects */}
 			<div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-orange-500/10 via-transparent to-transparent" />
 			<div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:50px_50px]" />
@@ -485,11 +485,11 @@ export default function CollectionPage() {
 				<header className="relative flex flex-col items-center gap-8 pt-20 md:pt-24">
 					{/* Animated Background Glow */}
 					<div className="absolute inset-0 -z-10">
-						<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-orange-500/20 via-orange-400/10 to-transparent rounded-full blur-3xl animate-pulse" />
-						<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-orange-400/30 to-orange-600/20 rounded-full blur-2xl animate-pulse delay-1000" />
+						<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-orange-700/20 via-orange-800/10 to-transparent rounded-full blur-3xl animate-pulse" />
+						<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-orange-800/30 to-orange-900/20 rounded-full blur-2xl animate-pulse delay-1000" />
 					</div>
 
-					<div className="text-center space-y-4">
+					<div className="text-center space-y-4 mt-7">
 						<h1 className="font-bold text-5xl md:text-6xl lg:text-7xl tracking-tight">
 							<span className="bg-gradient-to-r from-orange-400 via-orange-300 to-orange-200 bg-clip-text text-transparent">
 								Project
@@ -507,7 +507,7 @@ export default function CollectionPage() {
 					</div>
 
 					<div className="relative w-full max-w-2xl group">
-						<div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 via-orange-400/10 to-transparent rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300" />
+						<div className="absolute inset-0 bg-gradient-to-r from-orange-700/20 via-orange-800/10 to-transparent rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300" />
 						<div className="relative">
 							<Suspense
 								fallback={
