@@ -315,20 +315,29 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
 			'<li class="text-white/80 mb-2 ml-6 list-decimal">$2</li>'
 		);
 
-		// Handle bullet lists
+		// Handle bullet lists (support -, *, •, and + bullets)
 		html = html.replace(
-			/^[\-\*]\s+(.*$)/gm,
+			/^[\-\*\•\+]\s+(.*$)/gm,
 			'<li class="text-white/80 mb-1 ml-6 list-disc">$1</li>'
 		);
 
-		// Wrap consecutive list items in ul/ol tags (using compatible regex)
+		// Also handle nested bullet points with indentation
+		html = html.replace(
+			/^(\s{2,})[\-\*\•\+]\s+(.*$)/gm,
+			'<li class="text-white/80 mb-1 ml-8 list-disc">$2</li>'
+		);
+
+		// Wrap consecutive list items in ul/ol tags
+		// Handle unordered lists (including nested ones)
 		html = html.replace(
 			/(<li class="[^"]*list-disc[^"]*">.*?<\/li>(\s*<li class="[^"]*list-disc[^"]*">.*?<\/li>)*)/g,
-			'<ul class="my-3 space-y-1">$1</ul>'
+			'<ul class="my-3 space-y-1 list-disc pl-6">$1</ul>'
 		);
+
+		// Handle ordered lists
 		html = html.replace(
 			/(<li class="[^"]*list-decimal[^"]*">.*?<\/li>(\s*<li class="[^"]*list-decimal[^"]*">.*?<\/li>)*)/g,
-			'<ol class="my-3 space-y-1">$1</ol>'
+			'<ol class="my-3 space-y-1 list-decimal pl-6">$1</ol>'
 		);
 
 		// Handle tables
