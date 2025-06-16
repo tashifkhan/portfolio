@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { getContributionGraphs } from "@/utils/github"
 import { fetchLanguageStats } from "@/utils/languageStats"
 import { calculateTotalCommits, calculateLongestStreak } from "@/utils/githubStats"
+import { calculateCurrentStreak } from "@/utils/githubStats"
 
 export async function GET(
    request: Request,
@@ -32,7 +33,8 @@ export async function GET(
       const stats = {
          topLanguages: languageStats,
          totalCommits: calculateTotalCommits(contributionData),
-         longestStreak: calculateLongestStreak(contributionData)
+         longestStreak: calculateLongestStreak(contributionData),
+         currentStreak: calculateCurrentStreak(contributionData)
       }
 
       return NextResponse.json(stats)
