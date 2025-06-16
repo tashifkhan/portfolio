@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { links } from "../../lib/navbar-data";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LoginForm } from "../admin/LoginForm";
+import { HiMenuAlt3, HiX } from "react-icons/hi";
 
 function Header() {
 	const pathname = usePathname();
@@ -13,6 +14,7 @@ function Header() {
 	const [isScrolled, setIsScrolled] = useState(false);
 	const [showLoginModal, setShowLoginModal] = useState(false);
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
+	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
 	useEffect(() => {
 		// Check authentication status
@@ -79,71 +81,75 @@ function Header() {
 
 	return (
 		<header className="z-[999] relative">
-			{/* Desktop navbar */}
+			{/* Modern Desktop navbar */}
 			<motion.div
-				className={`fixed top-0 left-0 right-0 hidden sm:block ${
-					isScrolled ? "py-2" : "py-4"
+				className={`fixed top-0 left-0 right-0 hidden lg:block ${
+					isScrolled ? "py-3" : "py-6"
 				} transition-all duration-300`}
 				initial={{ y: -100, opacity: 0 }}
 				animate={{ y: 0, opacity: 1 }}
 				transition={{ type: "spring", stiffness: 200, damping: 20 }}
 			>
-				<div className="max-w-6xl mx-auto px-4">
+				<div className="max-w-7xl mx-auto px-6">
 					<div
 						className={`
-                  mx-auto bg-gradient-to-r from-gray-950/70 to-gray-950/40
-                  backdrop-blur-md rounded-full border border-white/5
-                  shadow-lg shadow-black/20 transition-all duration-300
-                  ${isScrolled ? "py-2 px-6" : "py-3 px-8"}
+                  mx-auto bg-black/20 backdrop-blur-xl rounded-2xl border border-white/10
+                  shadow-2xl shadow-black/30 transition-all duration-300
+                  ${isScrolled ? "py-3 px-8" : "py-4 px-10"}
                `}
 					>
 						<nav className="flex justify-between items-center">
-							<ul className="flex items-center justify-center gap-1">
+							<div className="flex items-center space-x-8">
 								{links.map((link) => {
 									const isActive = activeSection === link.hash;
 
 									return (
-										<motion.li key={link.hash} className="relative">
+										<motion.div key={link.hash} className="relative">
 											<Link
 												href={link.hash || "#"}
 												className={`
-                                       relative px-4 py-2 rounded-full font-medium text-sm
-                                       transition-all duration-300 hover:text-orange-300
+                                       relative flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-sm
+                                       transition-all duration-300 hover:bg-white/5 hover:scale-105
                                        ${
 																					isActive
-																						? "text-orange-400"
-																						: "text-gray-300"
+																						? "text-orange-400 bg-orange-500/10"
+																						: "text-gray-300 hover:text-white"
 																				}
                                     `}
 											>
+												<span className="text-lg">{link.icon}</span>
 												{link.name}
 
 												{isActive && (
-													<motion.span
-														className="absolute inset-0 bg-white/5 rounded-full -z-10"
+													<motion.div
+														className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-orange-400/20 rounded-xl border border-orange-500/30"
 														layoutId="desktopNavIndicator"
-														transition={{ type: "spring", bounce: 0.2 }}
+														transition={{
+															type: "spring",
+															bounce: 0.2,
+															duration: 0.6,
+														}}
 													/>
 												)}
 											</Link>
-										</motion.li>
+										</motion.div>
 									);
 								})}
-							</ul>
+							</div>
 
-							{/* Auth Button */}
-							<div className="ml-4">
+							{/* Enhanced Auth Button */}
+							<div className="flex items-center gap-3">
 								{isAuthenticated ? (
-									<div className="flex items-center gap-2">
+									<div className="flex items-center gap-3">
 										<Link
 											href="/update"
-											className="px-4 py-2 text-sm bg-orange-500 hover:bg-orange-600 text-white rounded-full transition-colors"
+											className="px-5 py-2.5 text-sm bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-xl font-medium transition-all duration-300 shadow-lg hover:shadow-orange-500/25 hover:scale-105"
 										>
 											Update
 										</Link>
 										<button
 											onClick={handleLogout}
-											className="px-4 py-2 text-sm text-gray-300 hover:text-orange-300 transition-colors"
+											className="px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 rounded-xl transition-all duration-300"
 										>
 											Logout
 										</button>
@@ -151,7 +157,7 @@ function Header() {
 								) : (
 									<button
 										onClick={() => setShowLoginModal(true)}
-										className="px-4 py-2 text-sm text-gray-300 hover:text-orange-300 transition-colors"
+										className="px-5 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 rounded-xl transition-all duration-300 border border-white/10 hover:border-white/20"
 									>
 										Admin
 									</button>
@@ -162,17 +168,154 @@ function Header() {
 				</div>
 			</motion.div>
 
-			{/* Mobile navbar */}
+			{/* Mobile Header Bar */}
 			<motion.div
-				className="fixed bottom-0 left-0 right-0 sm:hidden"
+				className="fixed top-0 left-0 right-0 lg:hidden z-50 bg-black/90 backdrop-blur-xl border-b border-white/10"
+				initial={{ y: -100, opacity: 0 }}
+				animate={{ y: 0, opacity: 1 }}
+				transition={{ type: "spring", stiffness: 200, damping: 20 }}
+			>
+				<div className="flex items-center justify-between px-4 py-3">
+					<div className="flex items-center gap-2">
+						<div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
+							<span className="text-white font-bold text-sm">T</span>
+						</div>
+						<span className="text-white font-semibold">Portfolio</span>
+					</div>
+
+					<button
+						onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+						className="p-2 text-white hover:text-orange-400 transition-colors"
+					>
+						{isMobileMenuOpen ? <HiX size={24} /> : <HiMenuAlt3 size={24} />}
+					</button>
+				</div>
+			</motion.div>
+
+			{/* Mobile Slide-out Menu */}
+			<AnimatePresence>
+				{isMobileMenuOpen && (
+					<>
+						{/* Backdrop */}
+						<motion.div
+							className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+							initial={{ opacity: 0 }}
+							animate={{ opacity: 1 }}
+							exit={{ opacity: 0 }}
+							onClick={() => setIsMobileMenuOpen(false)}
+						/>
+
+						{/* Menu */}
+						<motion.div
+							className="fixed top-0 right-0 h-full w-80 max-w-[80vw] bg-black/95 backdrop-blur-xl border-l border-white/10 z-50 lg:hidden"
+							initial={{ x: "100%" }}
+							animate={{ x: 0 }}
+							exit={{ x: "100%" }}
+							transition={{ type: "spring", stiffness: 300, damping: 30 }}
+						>
+							<div className="flex flex-col h-full">
+								{/* Menu Header */}
+								<div className="flex items-center justify-between p-6 border-b border-white/10">
+									<h2 className="text-xl font-semibold text-white">Menu</h2>
+									<button
+										onClick={() => setIsMobileMenuOpen(false)}
+										className="p-2 text-gray-400 hover:text-white transition-colors"
+									>
+										<HiX size={20} />
+									</button>
+								</div>
+
+								{/* Menu Items */}
+								<nav className="flex-1 px-6 py-8">
+									<ul className="space-y-4">
+										{links.map((link, index) => {
+											const isActive = activeSection === link.hash;
+
+											return (
+												<motion.li
+													key={link.hash}
+													initial={{ opacity: 0, x: 20 }}
+													animate={{ opacity: 1, x: 0 }}
+													transition={{ delay: index * 0.1 }}
+												>
+													<Link
+														href={link.hash || "#"}
+														onClick={() => setIsMobileMenuOpen(false)}
+														className={`
+                                             flex items-center gap-4 p-4 rounded-xl transition-all duration-300
+                                             ${
+																								isActive
+																									? "text-orange-400 bg-orange-500/10 border border-orange-500/30"
+																									: "text-gray-300 hover:text-white hover:bg-white/5"
+																							}
+                                          `}
+													>
+														<span className="text-xl">{link.icon}</span>
+														<span className="font-medium">{link.name}</span>
+														{isActive && (
+															<motion.div
+																className="ml-auto w-2 h-2 bg-orange-500 rounded-full"
+																layoutId="mobileMenuIndicator"
+																transition={{ type: "spring", bounce: 0.2 }}
+															/>
+														)}
+													</Link>
+												</motion.li>
+											);
+										})}
+									</ul>
+								</nav>
+
+								{/* Auth Section */}
+								<div className="p-6 border-t border-white/10">
+									{isAuthenticated ? (
+										<div className="space-y-3">
+											<Link
+												href="/update"
+												onClick={() => setIsMobileMenuOpen(false)}
+												className="block w-full px-4 py-3 text-center bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl font-medium transition-all duration-300"
+											>
+												Update Portfolio
+											</Link>
+											<button
+												onClick={() => {
+													handleLogout();
+													setIsMobileMenuOpen(false);
+												}}
+												className="block w-full px-4 py-3 text-center text-gray-300 hover:text-white border border-white/10 hover:border-white/20 rounded-xl transition-all duration-300"
+											>
+												Logout
+											</button>
+										</div>
+									) : (
+										<button
+											onClick={() => {
+												setIsMobileMenuOpen(false);
+												setShowLoginModal(true);
+											}}
+											className="block w-full px-4 py-3 text-center text-gray-300 hover:text-white border border-white/10 hover:border-white/20 rounded-xl transition-all duration-300"
+										>
+											Admin Login
+										</button>
+									)}
+								</div>
+							</div>
+						</motion.div>
+					</>
+				)}
+			</AnimatePresence>
+
+			{/* Modern Mobile Bottom Navigation */}
+			<motion.div
+				className="fixed bottom-0 left-0 right-0 lg:hidden z-30"
 				initial={{ y: 100, opacity: 0 }}
 				animate={{ y: 0, opacity: 1 }}
 				transition={{ type: "spring", stiffness: 200, damping: 20 }}
 			>
-				<div className="bg-gradient-to-t from-black to-gray-900/95 backdrop-blur-md border-t border-white/10 px-2 pb-2 pt-3">
-					<nav>
+				<div className="mx-4 mb-4 bg-black/90 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl shadow-black/50">
+					<nav className="px-2 py-3">
 						<ul className="flex items-center justify-between">
-							{links.map((link) => {
+							{links.slice(0, 5).map((link) => {
 								const isActive = activeSection === link.hash;
 
 								return (
@@ -180,42 +323,38 @@ function Header() {
 										<Link
 											href={link.hash || "#"}
 											className={`
-                                    flex flex-col items-center gap-1 py-1 px-2
-                                    transition-all duration-200
+                                    flex flex-col items-center gap-1 py-2 px-2 rounded-xl
+                                    transition-all duration-300 relative
                                     ${
 																			isActive
-																				? "text-orange-400"
-																				: "text-gray-400"
+																				? "text-orange-400 bg-orange-500/10"
+																				: "text-gray-400 hover:text-white hover:bg-white/5"
 																		}
                                  `}
 										>
-											<div
-												className={`
-                                    text-lg relative
-                                    ${
-																			isActive
-																				? "text-orange-400"
-																				: "text-gray-400"
-																		}
-                                 `}
+											<motion.div
+												className="relative"
+												whileTap={{ scale: 0.95 }}
 											>
-												{link.icon}
+												<span className="text-xl">{link.icon}</span>
 
 												{isActive && (
 													<motion.div
-														className="absolute -top-2 -right-2 w-2 h-2 bg-orange-500 rounded-full"
-														layoutId="mobileNavDot"
+														className="absolute -top-1 -right-1 w-2 h-2 bg-orange-500 rounded-full"
+														layoutId="mobileBottomNavDot"
 														transition={{ type: "spring", bounce: 0.2 }}
 													/>
 												)}
-											</div>
+											</motion.div>
 
-											<span className="text-xs font-medium">{link.name}</span>
+											<span className="text-xs font-medium truncate max-w-[3rem]">
+												{link.name}
+											</span>
 
 											{isActive && (
 												<motion.div
-													className="absolute bottom-0 h-0.5 w-12 bg-gradient-to-r from-orange-600 to-orange-400 rounded-full"
-													layoutId="mobileNavLine"
+													className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-gradient-to-r from-orange-600 to-orange-400 rounded-full"
+													layoutId="mobileBottomNavLine"
 													transition={{ type: "spring", bounce: 0.2 }}
 												/>
 											)}
@@ -223,27 +362,53 @@ function Header() {
 									</motion.li>
 								);
 							})}
+
+							{/* More button for remaining items */}
+							{links.length > 5 && (
+								<motion.li className="flex-1">
+									<button
+										onClick={() => setIsMobileMenuOpen(true)}
+										className="flex flex-col items-center gap-1 py-2 px-2 rounded-xl text-gray-400 hover:text-white hover:bg-white/5 transition-all duration-300"
+									>
+										<HiMenuAlt3 className="text-xl" />
+										<span className="text-xs font-medium">More</span>
+									</button>
+								</motion.li>
+							)}
 						</ul>
 					</nav>
 				</div>
 			</motion.div>
 
-			{/* Login Modal */}
-			{showLoginModal && (
-				<div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
-					<div className="max-w-md w-full">
-						<div className="mb-4 flex justify-end">
-							<button
-								onClick={() => setShowLoginModal(false)}
-								className="text-white hover:text-orange-300 text-2xl"
-							>
-								×
-							</button>
-						</div>
-						<LoginForm onSuccess={handleLoginSuccess} />
-					</div>
-				</div>
-			)}
+			{/* Enhanced Login Modal */}
+			<AnimatePresence>
+				{showLoginModal && (
+					<motion.div
+						className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-4"
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						exit={{ opacity: 0 }}
+					>
+						<motion.div
+							className="max-w-md w-full"
+							initial={{ scale: 0.9, opacity: 0 }}
+							animate={{ scale: 1, opacity: 1 }}
+							exit={{ scale: 0.9, opacity: 0 }}
+							transition={{ type: "spring", stiffness: 300, damping: 30 }}
+						>
+							<div className="mb-4 flex justify-end">
+								<button
+									onClick={() => setShowLoginModal(false)}
+									className="text-white hover:text-orange-300 p-2 hover:bg-white/10 rounded-full transition-all duration-300"
+								>
+									<HiX size={24} />
+								</button>
+							</div>
+							<LoginForm onSuccess={handleLoginSuccess} />
+						</motion.div>
+					</motion.div>
+				)}
+			</AnimatePresence>
 		</header>
 	);
 }
