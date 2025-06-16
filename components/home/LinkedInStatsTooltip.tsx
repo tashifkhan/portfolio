@@ -4,14 +4,9 @@ import { motion } from "framer-motion";
 
 const skills = [
 	{
-		title: "Pre-Final Year",
+		title: "Final Year",
 		detail: "Student",
 		icon: "🎓",
-	},
-	{
-		title: "App Development",
-		detail: "React Native",
-		icon: "📱",
 	},
 	{
 		title: "Web Development",
