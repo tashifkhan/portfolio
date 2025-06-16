@@ -17,7 +17,7 @@ function Header() {
 	useEffect(() => {
 		// Check authentication status
 		checkAuthStatus();
-		
+
 		const handleScrollForStyling = () => {
 			setIsScrolled(window.scrollY > 50);
 		};
@@ -55,7 +55,7 @@ function Header() {
 
 	const checkAuthStatus = async () => {
 		try {
-			const response = await fetch('/api/auth/check');
+			const response = await fetch("/api/auth/check");
 			const data = await response.json();
 			setIsAuthenticated(data.authenticated);
 		} catch (error) {
@@ -70,10 +70,10 @@ function Header() {
 
 	const handleLogout = async () => {
 		try {
-			await fetch('/api/auth/logout', { method: 'POST' });
+			await fetch("/api/auth/logout", { method: "POST" });
 			setIsAuthenticated(false);
 		} catch (error) {
-			console.error('Logout error:', error);
+			console.error("Logout error:", error);
 		}
 	};
 
@@ -130,7 +130,7 @@ function Header() {
 									);
 								})}
 							</ul>
-							
+
 							{/* Auth Button */}
 							<div className="ml-4">
 								{isAuthenticated ? (
@@ -227,7 +227,7 @@ function Header() {
 					</nav>
 				</div>
 			</motion.div>
-			
+
 			{/* Login Modal */}
 			{showLoginModal && (
 				<div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
