@@ -7,6 +7,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LoginForm } from "../admin/LoginForm";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
+import Image from "next/image";
+import logo from "@/app/icon.png";
 
 function Header() {
 	const pathname = usePathname();
@@ -177,8 +179,15 @@ function Header() {
 			>
 				<div className="flex items-center justify-between px-4 py-3">
 					<div className="flex items-center gap-2">
-						<div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
-							<span className="text-white font-bold text-sm">T</span>
+						<div className="w-8 h-8  rounded-lg flex items-center justify-center">
+							{/* <span className="text-white font-bold text-sm"></span> */}
+							<Image
+								src={logo}
+								alt="Logo"
+								width={20}
+								height={20}
+								className="rounded-lg"
+							/>
 						</div>
 						<span className="text-white font-semibold">Portfolio</span>
 					</div>
