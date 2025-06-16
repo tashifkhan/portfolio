@@ -605,6 +605,7 @@ function EditProjectsForm({
 	const [editingProject, setEditingProject] = useState<Project | null>(null);
 	const [formData, setFormData] = useState<Project | null>(null);
 	const [loading, setLoading] = useState(false);
+	const [techInput, setTechInput] = useState("");
 
 	const handleEditClick = (project: Project) => {
 		setEditingProject(project);
@@ -637,6 +638,30 @@ function EditProjectsForm({
 	const handleCancel = () => {
 		setEditingProject(null);
 		setFormData(null);
+		setTechInput("");
+	};
+
+	const addTechnology = () => {
+		if (
+			techInput.trim() &&
+			formData &&
+			!formData.technologies.includes(techInput.trim())
+		) {
+			setFormData({
+				...formData,
+				technologies: [...formData.technologies, techInput.trim()],
+			});
+			setTechInput("");
+		}
+	};
+
+	const removeTechnology = (tech: string) => {
+		if (formData) {
+			setFormData({
+				...formData,
+				technologies: formData.technologies.filter((t) => t !== tech),
+			});
+		}
 	};
 
 	if (editingProject && formData) {
@@ -656,18 +681,37 @@ function EditProjectsForm({
 				</div>
 
 				<div className="space-y-4">
-					<div>
-						<label className="block text-sm font-medium text-gray-300 mb-2">
-							Project Title *
-						</label>
-						<Input
-							placeholder="Enter project title"
-							value={formData.title}
-							onChange={(e) =>
-								setFormData({ ...formData, title: e.target.value })
-							}
-							className="bg-white/5 text-gray-300 border-orange-500/20"
-						/>
+					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+						<div>
+							<label className="block text-sm font-medium text-gray-300 mb-2">
+								Project Title *
+							</label>
+							<Input
+								placeholder="Enter project title"
+								value={formData.title}
+								onChange={(e) =>
+									setFormData({ ...formData, title: e.target.value })
+								}
+								className="bg-white/5 text-gray-300 border-orange-500/20"
+							/>
+						</div>
+						<div>
+							<label className="block text-sm font-medium text-gray-300 mb-2">
+								Position/Order *
+							</label>
+							<Input
+								type="number"
+								placeholder="Enter position number"
+								value={formData.position}
+								onChange={(e) =>
+									setFormData({
+										...formData,
+										position: parseInt(e.target.value),
+									})
+								}
+								className="bg-white/5 text-gray-300 border-orange-500/20"
+							/>
+						</div>
 					</div>
 					<div>
 						<label className="block text-sm font-medium text-gray-300 mb-2">
@@ -682,6 +726,46 @@ function EditProjectsForm({
 							className="bg-white/5 text-gray-300 border-orange-500/20"
 							rows={3}
 						/>
+					</div>
+					<div>
+						<label className="block text-sm font-medium text-gray-300 mb-2">
+							Technologies
+						</label>
+						<div className="flex gap-2 mb-2">
+							<Input
+								placeholder="Add Technology (e.g., React, Node.js)"
+								value={techInput}
+								onChange={(e) => setTechInput(e.target.value)}
+								onKeyPress={(e) =>
+									e.key === "Enter" && (e.preventDefault(), addTechnology())
+								}
+								className="bg-white/5 text-gray-300 border-orange-500/20"
+							/>
+							<Button
+								type="button"
+								onClick={addTechnology}
+								className="bg-orange-500 hover:bg-orange-600"
+							>
+								Add
+							</Button>
+						</div>
+						<div className="flex flex-wrap gap-2 mb-4">
+							{formData.technologies.map((tech) => (
+								<span
+									key={tech}
+									className="bg-orange-500/20 text-orange-300 px-3 py-1 rounded-full text-sm flex items-center gap-2"
+								>
+									{tech}
+									<button
+										type="button"
+										onClick={() => removeTechnology(tech)}
+										className="hover:text-red-400"
+									>
+										×
+									</button>
+								</span>
+							))}
+						</div>
 					</div>
 					<div>
 						<label className="block text-sm font-medium text-gray-300 mb-2">
@@ -705,6 +789,19 @@ function EditProjectsForm({
 							value={formData.liveLink || ""}
 							onChange={(e) =>
 								setFormData({ ...formData, liveLink: e.target.value })
+							}
+							className="bg-white/5 text-gray-300 border-orange-500/20"
+						/>
+					</div>
+					<div>
+						<label className="block text-sm font-medium text-gray-300 mb-2">
+							Play Store Link
+						</label>
+						<Input
+							placeholder="https://play.google.com/store/apps/..."
+							value={formData.playstoreLink || ""}
+							onChange={(e) =>
+								setFormData({ ...formData, playstoreLink: e.target.value })
 							}
 							className="bg-white/5 text-gray-300 border-orange-500/20"
 						/>
