@@ -900,6 +900,7 @@ function ReorderProjectsForm({
 }) {
 	const [reorderedProjects, setReorderedProjects] = useState<Project[]>([]);
 	const [loading, setLoading] = useState(false);
+	const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
 	useEffect(() => {
 		setReorderedProjects([...projects].sort((a, b) => a.position - b.position));
@@ -916,6 +917,33 @@ function ReorderProjectsForm({
 			];
 			setReorderedProjects(newProjects);
 		}
+	};
+
+	const handleDragStart = (e: React.DragEvent, index: number) => {
+		setDraggedIndex(index);
+		e.dataTransfer.effectAllowed = "move";
+		e.dataTransfer.setData("text/html", e.currentTarget.outerHTML);
+	};
+
+	const handleDragOver = (e: React.DragEvent) => {
+		e.preventDefault();
+		e.dataTransfer.dropEffect = "move";
+	};
+
+	const handleDrop = (e: React.DragEvent, dropIndex: number) => {
+		e.preventDefault();
+		if (draggedIndex === null) return;
+
+		const newProjects = [...reorderedProjects];
+		const [draggedProject] = newProjects.splice(draggedIndex, 1);
+		newProjects.splice(dropIndex, 0, draggedProject);
+
+		setReorderedProjects(newProjects);
+		setDraggedIndex(null);
+	};
+
+	const handleDragEnd = () => {
+		setDraggedIndex(null);
 	};
 
 	const handleSave = async () => {
@@ -948,11 +976,28 @@ function ReorderProjectsForm({
 			{reorderedProjects.map((project, index) => (
 				<div
 					key={project._id}
-					className="bg-white/5 p-4 rounded border border-orange-500/20 flex items-center justify-between"
+					draggable
+					onDragStart={(e) => handleDragStart(e, index)}
+					onDragOver={handleDragOver}
+					onDrop={(e) => handleDrop(e, index)}
+					onDragEnd={handleDragEnd}
+					className={`bg-white/5 p-4 rounded border border-orange-500/20 flex items-center justify-between cursor-move transition-all ${
+						draggedIndex === index
+							? "opacity-50 scale-95"
+							: "hover:bg-white/10 hover:border-orange-400/30"
+					}`}
 				>
-					<div>
-						<h4 className="text-orange-300 font-medium">{project.title}</h4>
-						<p className="text-gray-400 text-sm">Position: {index + 1}</p>
+					<div className="flex items-center space-x-3">
+						<div className="flex flex-col space-y-1">
+							<div className="w-1 h-1 bg-gray-400 rounded-full"></div>
+							<div className="w-1 h-1 bg-gray-400 rounded-full"></div>
+							<div className="w-1 h-1 bg-gray-400 rounded-full"></div>
+							<div className="w-1 h-1 bg-gray-400 rounded-full"></div>
+						</div>
+						<div>
+							<h4 className="text-orange-300 font-medium">{project.title}</h4>
+							<p className="text-gray-400 text-sm">Position: {index + 1}</p>
+						</div>
 					</div>
 					<div className="flex gap-2">
 						<Button
@@ -998,6 +1043,7 @@ function ReorderNotableProjectsForm({
 		[]
 	);
 	const [loading, setLoading] = useState(false);
+	const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
 	useEffect(() => {
 		setReorderedProjects([...projects]);
@@ -1014,6 +1060,33 @@ function ReorderNotableProjectsForm({
 			];
 			setReorderedProjects(newProjects);
 		}
+	};
+
+	const handleDragStart = (e: React.DragEvent, index: number) => {
+		setDraggedIndex(index);
+		e.dataTransfer.effectAllowed = "move";
+		e.dataTransfer.setData("text/html", e.currentTarget.outerHTML);
+	};
+
+	const handleDragOver = (e: React.DragEvent) => {
+		e.preventDefault();
+		e.dataTransfer.dropEffect = "move";
+	};
+
+	const handleDrop = (e: React.DragEvent, dropIndex: number) => {
+		e.preventDefault();
+		if (draggedIndex === null) return;
+
+		const newProjects = [...reorderedProjects];
+		const [draggedProject] = newProjects.splice(draggedIndex, 1);
+		newProjects.splice(dropIndex, 0, draggedProject);
+
+		setReorderedProjects(newProjects);
+		setDraggedIndex(null);
+	};
+
+	const handleDragEnd = () => {
+		setDraggedIndex(null);
 	};
 
 	const handleSave = async () => {
@@ -1048,11 +1121,28 @@ function ReorderNotableProjectsForm({
 			{reorderedProjects.map((project, index) => (
 				<div
 					key={project._id}
-					className="bg-white/5 p-4 rounded border border-orange-500/20 flex items-center justify-between"
+					draggable
+					onDragStart={(e) => handleDragStart(e, index)}
+					onDragOver={handleDragOver}
+					onDrop={(e) => handleDrop(e, index)}
+					onDragEnd={handleDragEnd}
+					className={`bg-white/5 p-4 rounded border border-orange-500/20 flex items-center justify-between cursor-move transition-all ${
+						draggedIndex === index
+							? "opacity-50 scale-95"
+							: "hover:bg-white/10 hover:border-orange-400/30"
+					}`}
 				>
-					<div>
-						<h4 className="text-orange-300 font-medium">{project.title}</h4>
-						<p className="text-gray-400 text-sm">Position: {index + 1}</p>
+					<div className="flex items-center space-x-3">
+						<div className="flex flex-col space-y-1">
+							<div className="w-1 h-1 bg-gray-400 rounded-full"></div>
+							<div className="w-1 h-1 bg-gray-400 rounded-full"></div>
+							<div className="w-1 h-1 bg-gray-400 rounded-full"></div>
+							<div className="w-1 h-1 bg-gray-400 rounded-full"></div>
+						</div>
+						<div>
+							<h4 className="text-orange-300 font-medium">{project.title}</h4>
+							<p className="text-gray-400 text-sm">Position: {index + 1}</p>
+						</div>
 					</div>
 					<div className="flex gap-2">
 						<Button
