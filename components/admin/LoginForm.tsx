@@ -45,7 +45,7 @@ export function LoginForm({ onSuccess }: { onSuccess?: () => void } = {}) {
 	};
 
 	return (
-		<div className="relative backdrop-blur-lg bg-white/10 dark:bg-gray-800/30 rounded-2xl p-6 shadow-xl border border-none">
+		<div className="relative backdrop-blur-lg bg-white/10 dark:bg-gray-800/30 rounded-2xl p-6 shadow-xl border border-white/20">
 			<div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-amber-600/20 dark:from-orange-800/5 dark:to-amber-900/20 rounded-2xl -z-10" />
 			<form onSubmit={handleSubmit} className="space-y-4">
 				<h2 className="text-2xl font-bold text-white mb-6 font-mono text-center">
@@ -56,7 +56,7 @@ export function LoginForm({ onSuccess }: { onSuccess?: () => void } = {}) {
 					value={email}
 					onChange={(e) => setEmail(e.target.value)}
 					placeholder="Email"
-					className="bg-white/5 text-gray-400 border-none transition-colors"
+					className="bg-white/5 text-gray-300 border-white/10 backdrop-blur-sm transition-colors placeholder:text-gray-400"
 				/>
 				<div className="relative">
 					<Input
@@ -64,7 +64,7 @@ export function LoginForm({ onSuccess }: { onSuccess?: () => void } = {}) {
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}
 						placeholder="Password"
-						className="bg-white/5 text-gray-400 border-orange-500/5 transition-colors"
+						className="bg-white/5 text-gray-300 border-white/10 backdrop-blur-sm transition-colors placeholder:text-gray-400"
 					/>
 					<button
 						type="button"
@@ -76,13 +76,13 @@ export function LoginForm({ onSuccess }: { onSuccess?: () => void } = {}) {
 				</div>
 				{error && (
 					<div className="flex justify-center">
-						<p className="text-orange-400/50 text-sm">{error}</p>
+						<p className="text-orange-400/70 text-sm">{error}</p>
 					</div>
 				)}
 				<Button
 					type="submit"
 					disabled={isLoading}
-					className="w-full bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 transition-colors text-white"
+					className="w-full bg-gradient-to-r from-orange-500/80 to-amber-600/80 hover:from-orange-600/90 hover:to-amber-700/90 transition-colors text-white backdrop-blur-sm border border-white/10"
 				>
 					{isLoading ? "Logging in..." : "Login"}
 				</Button>

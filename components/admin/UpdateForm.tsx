@@ -11,17 +11,13 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+
 import {
 	Project,
 	Education,
 	Skill,
 	NotableProject,
 	Responsibility,
-	ProgrammingLanguage,
-	Framework,
-	BaseSkill,
-	SoftSkill,
 } from "@/types/content";
 
 type ActionType =
@@ -118,7 +114,7 @@ export default function UpdateForm() {
 
 	if (!selectedAction) {
 		return (
-			<div className="relative backdrop-blur-lg bg-white/10 dark:bg-gray-800/30 rounded-2xl p-8 shadow-xl border border-none">
+			<div className="relative backdrop-blur-lg bg-white/10 dark:bg-gray-800/30 rounded-2xl p-8 shadow-xl border border-white/20">
 				<h2 className="text-2xl font-mono mb-6 text-center bg-gradient-to-r from-orange-300 to-gray-300 via-amber-500 bg-clip-text text-transparent">
 					Portfolio Management
 				</h2>
@@ -126,81 +122,66 @@ export default function UpdateForm() {
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 					{[
 						{
-							icon: "🎯",
 							label: "Add Skills",
 							action: "addSkills" as ActionType,
 						},
 						{
-							icon: "🎓",
 							label: "Update Education",
 							action: "updateEducation" as ActionType,
 						},
 						{
-							icon: "📝",
 							label: "Edit Responsibilities",
 							action: "editResponsibilities" as ActionType,
 						},
 						{
-							icon: "🌐",
 							label: "Update Socials",
 							action: "updateSocials" as ActionType,
 						},
 						{
-							icon: "🚀",
 							label: "Edit Projects",
 							action: "editProjects" as ActionType,
 						},
 						{
-							icon: "💡",
 							label: "Add Projects",
 							action: "addProjects" as ActionType,
 						},
 						{
-							icon: "🗑️",
 							label: "Delete Projects",
 							action: "deleteProjects" as ActionType,
 						},
 						{
-							icon: "↕️",
 							label: "Reorder Projects",
 							action: "reorderProjects" as ActionType,
 						},
 						{
-							icon: "⭐",
 							label: "Add Notable Projects",
 							action: "addNotableProjects" as ActionType,
 						},
 						{
-							icon: "✨",
 							label: "Update Notable Projects",
 							action: "updateNotableProjects" as ActionType,
 						},
 						{
-							icon: "❌",
 							label: "Delete Notable Projects",
 							action: "deleteNotableProjects" as ActionType,
 						},
 						{
-							icon: "📊",
 							label: "Reorder Notable Projects",
 							action: "reorderNotableProjects" as ActionType,
 						},
-					].map(({ icon, label, action }) => (
+					].map(({ label, action }) => (
 						<Button
 							key={action}
 							variant="ghost"
 							onClick={() => setSelectedAction(action)}
-							className="relative group h-24 overflow-hidden transition-all hover:bg-white/10"
+							className="relative group h-16 overflow-hidden transition-all hover:bg-white/10 backdrop-blur-sm border border-white/10 rounded-xl"
 						>
-							<div className="flex flex-col items-center space-y-2">
-								<span className="text-2xl group-hover:scale-110 transition-transform">
-									{icon}
-								</span>
-								<span className="font-medium text-sm text-gray-200 group-hover:text-white transition-colors">
+							<div className="flex items-center justify-center w-full">
+								<span className="font-medium text-sm text-gray-200 group-hover:text-white transition-colors text-center">
 									{label}
 								</span>
 							</div>
-							<div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-amber-600/20 opacity-0 group-hover:opacity-100 transition-opacity -z-10" />
+							<div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-amber-600/10 opacity-0 group-hover:opacity-100 transition-opacity -z-10" />
 						</Button>
 					))}
 				</div>
@@ -211,12 +192,12 @@ export default function UpdateForm() {
 	}
 
 	return (
-		<div className="relative backdrop-blur-lg bg-gray-800/30 rounded-2xl p-6 shadow-xl border border-none">
+		<div className="relative backdrop-blur-lg bg-white/10 dark:bg-gray-800/30 rounded-2xl p-6 shadow-xl border border-white/20">
 			<div className="flex items-center justify-between mb-6">
 				<Button
 					variant="ghost"
 					onClick={() => setSelectedAction(null)}
-					className="text-slate-400 hover:text-white"
+					className="text-slate-400 hover:text-white backdrop-blur-sm"
 				>
 					← Back to menu
 				</Button>
@@ -271,6 +252,15 @@ export default function UpdateForm() {
 							}}
 						/>
 					)}
+					{selectedAction === "reorderProjects" && (
+						<ReorderProjectsForm
+							projects={projects}
+							onSuccess={() => {
+								showMessage("success", "Projects reordered successfully!");
+								fetchData();
+							}}
+						/>
+					)}
 					{selectedAction === "addNotableProjects" && (
 						<AddNotableProjectForm
 							onSuccess={() => {
@@ -297,6 +287,18 @@ export default function UpdateForm() {
 							}}
 						/>
 					)}
+					{selectedAction === "reorderNotableProjects" && (
+						<ReorderNotableProjectsForm
+							projects={notableProjects}
+							onSuccess={() => {
+								showMessage(
+									"success",
+									"Notable projects reordered successfully!"
+								);
+								fetchData();
+							}}
+						/>
+					)}
 					{selectedAction === "updateEducation" && (
 						<EditEducationForm
 							education={education}
@@ -311,6 +313,14 @@ export default function UpdateForm() {
 							responsibilities={responsibilities}
 							onSuccess={() => {
 								showMessage("success", "Responsibility updated successfully!");
+								fetchData();
+							}}
+						/>
+					)}
+					{selectedAction === "updateSocials" && (
+						<UpdateSocialsForm
+							onSuccess={() => {
+								showMessage("success", "Socials updated successfully!");
 								fetchData();
 							}}
 						/>
@@ -535,6 +545,131 @@ function EditProjectsForm({
 	projects: Project[];
 	onSuccess: () => void;
 }) {
+	const [editingProject, setEditingProject] = useState<Project | null>(null);
+	const [formData, setFormData] = useState<Project | null>(null);
+	const [loading, setLoading] = useState(false);
+
+	const handleEditClick = (project: Project) => {
+		setEditingProject(project);
+		setFormData({ ...project });
+	};
+
+	const handleSave = async () => {
+		if (!formData || !formData._id) return;
+
+		setLoading(true);
+		try {
+			const response = await fetch("/api/projects", {
+				method: "PUT",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(formData),
+			});
+
+			if (response.ok) {
+				onSuccess();
+				setEditingProject(null);
+				setFormData(null);
+			}
+		} catch (error) {
+			console.error("Error updating project:", error);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const handleCancel = () => {
+		setEditingProject(null);
+		setFormData(null);
+	};
+
+	if (editingProject && formData) {
+		return (
+			<div className="space-y-4">
+				<div className="flex items-center justify-between">
+					<h3 className="text-orange-300 font-medium">
+						Editing: {editingProject.title}
+					</h3>
+					<Button
+						variant="ghost"
+						onClick={handleCancel}
+						className="text-gray-400 hover:text-white"
+					>
+						Cancel
+					</Button>
+				</div>
+
+				<div className="space-y-4">
+					<Input
+						placeholder="Project Title"
+						value={formData.title}
+						onChange={(e) =>
+							setFormData({ ...formData, title: e.target.value })
+						}
+						className="bg-white/5 text-gray-300 border-orange-500/20"
+					/>
+					<Textarea
+						placeholder="Description"
+						value={formData.description}
+						onChange={(e) =>
+							setFormData({ ...formData, description: e.target.value })
+						}
+						className="bg-white/5 text-gray-300 border-orange-500/20"
+						rows={3}
+					/>
+					<Input
+						placeholder="GitHub Link"
+						value={formData.githubLink || ""}
+						onChange={(e) =>
+							setFormData({ ...formData, githubLink: e.target.value })
+						}
+						className="bg-white/5 text-gray-300 border-orange-500/20"
+					/>
+					<Input
+						placeholder="Live Link"
+						value={formData.liveLink || ""}
+						onChange={(e) =>
+							setFormData({ ...formData, liveLink: e.target.value })
+						}
+						className="bg-white/5 text-gray-300 border-orange-500/20"
+					/>
+					<Select
+						value={formData.status}
+						onValueChange={(value) =>
+							setFormData({ ...formData, status: value as Project["status"] })
+						}
+					>
+						<SelectTrigger className="bg-white/5 text-gray-300 border-orange-500/20">
+							<SelectValue />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectItem value="Planned">Planned</SelectItem>
+							<SelectItem value="In Progress">In Progress</SelectItem>
+							<SelectItem value="Completed">Completed</SelectItem>
+							<SelectItem value="On Hold">On Hold</SelectItem>
+						</SelectContent>
+					</Select>
+
+					<div className="flex gap-2">
+						<Button
+							onClick={handleSave}
+							disabled={loading}
+							className="bg-orange-500 hover:bg-orange-600"
+						>
+							{loading ? "Saving..." : "Save Changes"}
+						</Button>
+						<Button
+							variant="ghost"
+							onClick={handleCancel}
+							className="text-gray-400 hover:text-white"
+						>
+							Cancel
+						</Button>
+					</div>
+				</div>
+			</div>
+		);
+	}
+
 	return (
 		<div className="space-y-4">
 			<p className="text-gray-300">Select a project to edit:</p>
@@ -545,9 +680,14 @@ function EditProjectsForm({
 				>
 					<h4 className="text-orange-300 font-medium">{project.title}</h4>
 					<p className="text-gray-400 text-sm">{project.description}</p>
-					<Button className="mt-2 bg-orange-500 hover:bg-orange-600 text-sm">
-						Edit Project
-					</Button>
+					<div className="flex gap-2 mt-2">
+						<Button
+							onClick={() => handleEditClick(project)}
+							className="bg-orange-500 hover:bg-orange-600 text-sm"
+						>
+							Edit Project
+						</Button>
+					</div>
 				</div>
 			))}
 		</div>
@@ -569,7 +709,7 @@ function DeleteProjectsForm({
 			const response = await fetch("/api/projects", {
 				method: "DELETE",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ id }),
+				body: JSON.stringify({ _id: id }),
 			});
 
 			if (response.ok) {
@@ -668,4 +808,309 @@ function EditResponsibilitiesForm({
 
 function AddSkillForm({ onSuccess }: { onSuccess: () => void }) {
 	return <div className="text-gray-300">Add Skill form coming soon...</div>;
+}
+
+function ReorderProjectsForm({
+	projects,
+	onSuccess,
+}: {
+	projects: Project[];
+	onSuccess: () => void;
+}) {
+	const [reorderedProjects, setReorderedProjects] = useState<Project[]>([]);
+	const [loading, setLoading] = useState(false);
+
+	useEffect(() => {
+		setReorderedProjects([...projects].sort((a, b) => a.position - b.position));
+	}, [projects]);
+
+	const moveProject = (index: number, direction: "up" | "down") => {
+		const newProjects = [...reorderedProjects];
+		const targetIndex = direction === "up" ? index - 1 : index + 1;
+
+		if (targetIndex >= 0 && targetIndex < newProjects.length) {
+			[newProjects[index], newProjects[targetIndex]] = [
+				newProjects[targetIndex],
+				newProjects[index],
+			];
+			setReorderedProjects(newProjects);
+		}
+	};
+
+	const handleSave = async () => {
+		setLoading(true);
+		try {
+			const response = await fetch("/api/projects/reorder", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					projects: reorderedProjects.map((project, index) => ({
+						_id: project._id,
+						position: index + 1,
+					})),
+				}),
+			});
+
+			if (response.ok) {
+				onSuccess();
+			}
+		} catch (error) {
+			console.error("Error reordering projects:", error);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	return (
+		<div className="space-y-4">
+			<p className="text-gray-300">Drag or use buttons to reorder projects:</p>
+			{reorderedProjects.map((project, index) => (
+				<div
+					key={project._id}
+					className="bg-white/5 p-4 rounded border border-orange-500/20 flex items-center justify-between"
+				>
+					<div>
+						<h4 className="text-orange-300 font-medium">{project.title}</h4>
+						<p className="text-gray-400 text-sm">Position: {index + 1}</p>
+					</div>
+					<div className="flex gap-2">
+						<Button
+							onClick={() => moveProject(index, "up")}
+							disabled={index === 0}
+							variant="ghost"
+							size="sm"
+							className="text-gray-400 hover:text-white"
+						>
+							↑
+						</Button>
+						<Button
+							onClick={() => moveProject(index, "down")}
+							disabled={index === reorderedProjects.length - 1}
+							variant="ghost"
+							size="sm"
+							className="text-gray-400 hover:text-white"
+						>
+							↓
+						</Button>
+					</div>
+				</div>
+			))}
+			<Button
+				onClick={handleSave}
+				disabled={loading}
+				className="w-full bg-orange-500 hover:bg-orange-600"
+			>
+				{loading ? "Saving Order..." : "Save New Order"}
+			</Button>
+		</div>
+	);
+}
+
+function ReorderNotableProjectsForm({
+	projects,
+	onSuccess,
+}: {
+	projects: NotableProject[];
+	onSuccess: () => void;
+}) {
+	const [reorderedProjects, setReorderedProjects] = useState<NotableProject[]>(
+		[]
+	);
+	const [loading, setLoading] = useState(false);
+
+	useEffect(() => {
+		setReorderedProjects([...projects]);
+	}, [projects]);
+
+	const moveProject = (index: number, direction: "up" | "down") => {
+		const newProjects = [...reorderedProjects];
+		const targetIndex = direction === "up" ? index - 1 : index + 1;
+
+		if (targetIndex >= 0 && targetIndex < newProjects.length) {
+			[newProjects[index], newProjects[targetIndex]] = [
+				newProjects[targetIndex],
+				newProjects[index],
+			];
+			setReorderedProjects(newProjects);
+		}
+	};
+
+	const handleSave = async () => {
+		setLoading(true);
+		try {
+			const response = await fetch("/api/notable-projects/reorder", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					projects: reorderedProjects.map((project, index) => ({
+						_id: project._id,
+						position: index + 1,
+					})),
+				}),
+			});
+
+			if (response.ok) {
+				onSuccess();
+			}
+		} catch (error) {
+			console.error("Error reordering notable projects:", error);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	return (
+		<div className="space-y-4">
+			<p className="text-gray-300">
+				Drag or use buttons to reorder notable projects:
+			</p>
+			{reorderedProjects.map((project, index) => (
+				<div
+					key={project._id}
+					className="bg-white/5 p-4 rounded border border-orange-500/20 flex items-center justify-between"
+				>
+					<div>
+						<h4 className="text-orange-300 font-medium">{project.title}</h4>
+						<p className="text-gray-400 text-sm">Position: {index + 1}</p>
+					</div>
+					<div className="flex gap-2">
+						<Button
+							onClick={() => moveProject(index, "up")}
+							disabled={index === 0}
+							variant="ghost"
+							size="sm"
+							className="text-gray-400 hover:text-white"
+						>
+							↑
+						</Button>
+						<Button
+							onClick={() => moveProject(index, "down")}
+							disabled={index === reorderedProjects.length - 1}
+							variant="ghost"
+							size="sm"
+							className="text-gray-400 hover:text-white"
+						>
+							↓
+						</Button>
+					</div>
+				</div>
+			))}
+			<Button
+				onClick={handleSave}
+				disabled={loading}
+				className="w-full bg-orange-500 hover:bg-orange-600"
+			>
+				{loading ? "Saving Order..." : "Save New Order"}
+			</Button>
+		</div>
+	);
+}
+
+function UpdateSocialsForm({ onSuccess }: { onSuccess: () => void }) {
+	const [socialLinks, setSocialLinks] = useState({
+		github: "",
+		linkedin: "",
+		twitter: "",
+		email: "",
+		website: "",
+	});
+	const [loading, setLoading] = useState(false);
+
+	useEffect(() => {
+		// Fetch current social links
+		fetchSocialLinks();
+	}, []);
+
+	const fetchSocialLinks = async () => {
+		try {
+			const response = await fetch("/api/socials");
+			if (response.ok) {
+				const data = await response.json();
+				setSocialLinks(data);
+			}
+		} catch (error) {
+			console.error("Error fetching social links:", error);
+		}
+	};
+
+	const handleSubmit = async (e: React.FormEvent) => {
+		e.preventDefault();
+		setLoading(true);
+
+		try {
+			const response = await fetch("/api/socials", {
+				method: "PUT",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(socialLinks),
+			});
+
+			if (response.ok) {
+				onSuccess();
+			}
+		} catch (error) {
+			console.error("Error updating social links:", error);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	return (
+		<form onSubmit={handleSubmit} className="space-y-4">
+			<p className="text-gray-300">Update your social media links:</p>
+
+			<Input
+				placeholder="GitHub URL"
+				value={socialLinks.github}
+				onChange={(e) =>
+					setSocialLinks((prev) => ({ ...prev, github: e.target.value }))
+				}
+				className="bg-white/5 text-gray-300 border-orange-500/20"
+			/>
+
+			<Input
+				placeholder="LinkedIn URL"
+				value={socialLinks.linkedin}
+				onChange={(e) =>
+					setSocialLinks((prev) => ({ ...prev, linkedin: e.target.value }))
+				}
+				className="bg-white/5 text-gray-300 border-orange-500/20"
+			/>
+
+			<Input
+				placeholder="Twitter URL"
+				value={socialLinks.twitter}
+				onChange={(e) =>
+					setSocialLinks((prev) => ({ ...prev, twitter: e.target.value }))
+				}
+				className="bg-white/5 text-gray-300 border-orange-500/20"
+			/>
+
+			<Input
+				placeholder="Email"
+				type="email"
+				value={socialLinks.email}
+				onChange={(e) =>
+					setSocialLinks((prev) => ({ ...prev, email: e.target.value }))
+				}
+				className="bg-white/5 text-gray-300 border-orange-500/20"
+			/>
+
+			<Input
+				placeholder="Website URL"
+				value={socialLinks.website}
+				onChange={(e) =>
+					setSocialLinks((prev) => ({ ...prev, website: e.target.value }))
+				}
+				className="bg-white/5 text-gray-300 border-orange-500/20"
+			/>
+
+			<Button
+				type="submit"
+				disabled={loading}
+				className="w-full bg-orange-500 hover:bg-orange-600"
+			>
+				{loading ? "Updating..." : "Update Social Links"}
+			</Button>
+		</form>
+	);
 }
