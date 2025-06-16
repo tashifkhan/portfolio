@@ -18,6 +18,7 @@ import {
 	Skill,
 	NotableProject,
 	Responsibility,
+	Socials,
 } from "@/types/content";
 
 type ActionType =
@@ -43,6 +44,7 @@ export default function UpdateForm() {
 		[]
 	);
 	const [skills, setSkills] = useState<Skill[]>([]);
+	const [socials, setSocials] = useState<Socials | null>(null);
 	const [loading, setLoading] = useState(false);
 	const [message, setMessage] = useState<{
 		type: "success" | "error";
@@ -98,6 +100,14 @@ export default function UpdateForm() {
 				if (response.ok) {
 					const data = await response.json();
 					setSkills(data);
+				}
+			}
+
+			if (selectedAction.includes("Socials")) {
+				const response = await fetch("/api/socials");
+				if (response.ok) {
+					const data = await response.json();
+					setSocials(data);
 				}
 			}
 		} catch (error) {
@@ -1007,29 +1017,37 @@ function ReorderNotableProjectsForm({
 }
 
 function UpdateSocialsForm({ onSuccess }: { onSuccess: () => void }) {
-	const [socialLinks, setSocialLinks] = useState({
-		github: "",
-		linkedin: "",
-		twitter: "",
-		email: "",
-		website: "",
+	const [socialData, setSocialData] = useState({
+		InstaID: "",
+		LeetCodeID: "",
+		GithubID: "",
+		LinkedInID: "",
+		TwitterID: "",
+		ResumeLink: "",
 	});
 	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		// Fetch current social links
-		fetchSocialLinks();
+		fetchSocialData();
 	}, []);
 
-	const fetchSocialLinks = async () => {
+	const fetchSocialData = async () => {
 		try {
 			const response = await fetch("/api/socials");
 			if (response.ok) {
 				const data = await response.json();
-				setSocialLinks(data);
+				setSocialData({
+					InstaID: data.InstaID || "",
+					LeetCodeID: data.LeetCodeID || "",
+					GithubID: data.GithubID || "",
+					LinkedInID: data.LinkedInID || "",
+					TwitterID: data.TwitterID || "",
+					ResumeLink: data.ResumeLink || "",
+				});
 			}
 		} catch (error) {
-			console.error("Error fetching social links:", error);
+			console.error("Error fetching social data:", error);
 		}
 	};
 
@@ -1041,14 +1059,14 @@ function UpdateSocialsForm({ onSuccess }: { onSuccess: () => void }) {
 			const response = await fetch("/api/socials", {
 				method: "PUT",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(socialLinks),
+				body: JSON.stringify(socialData),
 			});
 
 			if (response.ok) {
 				onSuccess();
 			}
 		} catch (error) {
-			console.error("Error updating social links:", error);
+			console.error("Error updating social data:", error);
 		} finally {
 			setLoading(false);
 		}
@@ -1056,50 +1074,58 @@ function UpdateSocialsForm({ onSuccess }: { onSuccess: () => void }) {
 
 	return (
 		<form onSubmit={handleSubmit} className="space-y-4">
-			<p className="text-gray-300">Update your social media links:</p>
+			<p className="text-gray-300">Update your social media information:</p>
 
 			<Input
-				placeholder="GitHub URL"
-				value={socialLinks.github}
+				placeholder="Instagram Username (e.g., khan_tashif)"
+				value={socialData.InstaID}
 				onChange={(e) =>
-					setSocialLinks((prev) => ({ ...prev, github: e.target.value }))
+					setSocialData((prev) => ({ ...prev, InstaID: e.target.value }))
 				}
 				className="bg-white/5 text-gray-300 border-orange-500/20"
 			/>
 
 			<Input
-				placeholder="LinkedIn URL"
-				value={socialLinks.linkedin}
+				placeholder="LeetCode Username (e.g., tashif-khan)"
+				value={socialData.LeetCodeID}
 				onChange={(e) =>
-					setSocialLinks((prev) => ({ ...prev, linkedin: e.target.value }))
+					setSocialData((prev) => ({ ...prev, LeetCodeID: e.target.value }))
 				}
 				className="bg-white/5 text-gray-300 border-orange-500/20"
 			/>
 
 			<Input
-				placeholder="Twitter URL"
-				value={socialLinks.twitter}
+				placeholder="GitHub Username (e.g., tashifkhan)"
+				value={socialData.GithubID}
 				onChange={(e) =>
-					setSocialLinks((prev) => ({ ...prev, twitter: e.target.value }))
+					setSocialData((prev) => ({ ...prev, GithubID: e.target.value }))
 				}
 				className="bg-white/5 text-gray-300 border-orange-500/20"
 			/>
 
 			<Input
-				placeholder="Email"
-				type="email"
-				value={socialLinks.email}
+				placeholder="LinkedIn ID (e.g., tashif-ahmad-khan-982304244)"
+				value={socialData.LinkedInID}
 				onChange={(e) =>
-					setSocialLinks((prev) => ({ ...prev, email: e.target.value }))
+					setSocialData((prev) => ({ ...prev, LinkedInID: e.target.value }))
 				}
 				className="bg-white/5 text-gray-300 border-orange-500/20"
 			/>
 
 			<Input
-				placeholder="Website URL"
-				value={socialLinks.website}
+				placeholder="Twitter Username (e.g., tashifkhan_)"
+				value={socialData.TwitterID}
 				onChange={(e) =>
-					setSocialLinks((prev) => ({ ...prev, website: e.target.value }))
+					setSocialData((prev) => ({ ...prev, TwitterID: e.target.value }))
+				}
+				className="bg-white/5 text-gray-300 border-orange-500/20"
+			/>
+
+			<Input
+				placeholder="Resume Link (full URL)"
+				value={socialData.ResumeLink}
+				onChange={(e) =>
+					setSocialData((prev) => ({ ...prev, ResumeLink: e.target.value }))
 				}
 				className="bg-white/5 text-gray-300 border-orange-500/20"
 			/>

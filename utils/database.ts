@@ -9,7 +9,8 @@ import {
   ProgrammingLanguage,
   Framework,
   BaseSkill,
-  SoftSkill
+  SoftSkill,
+  Socials
 } from '@/types/content'
 
 const DB_NAME = 'Portfolio'
@@ -235,5 +236,37 @@ export class DatabaseService {
   // Soft Skills
   static async getSoftSkills(): Promise<SoftSkill[]> {
     return await this.getSkillsByType('softSkill') as SoftSkill[]
+  }
+
+  // Socials operations
+  static async getSocials(): Promise<Socials | null> {
+    const collection = await this.getCollection('Socials')
+    const result = await collection.findOne({})
+    if (!result) return null
+    return {
+      ...result,
+      _id: result._id.toString()
+    } as Socials
+  }
+
+  static async updateSocials(updates: Partial<Socials>): Promise<boolean> {
+    const collection = await this.getCollection('Socials')
+    const result = await collection.updateOne(
+      {}, // Update the first (and only) document
+      { $set: { ...updates, updatedAt: new Date() } },
+      { upsert: true } // Create if doesn't exist
+    )
+    return result.modifiedCount > 0 || result.upsertedCount > 0
+  }
+
+  static async createSocials(socials: Omit<Socials, '_id'>): Promise<Socials> {
+    const collection = await this.getCollection('Socials')
+    const newSocials = {
+      ...socials,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }
+    const result = await collection.insertOne(newSocials)
+    return { ...newSocials, _id: result.insertedId.toString() }
   }
 }

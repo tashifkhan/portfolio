@@ -14,6 +14,7 @@ import LeetcodeStatsTooltip from "./LeetcodeStatsTooltip";
 import LinkedInStatsTooltip from "./LinkedInStatsTooltip";
 import { MobileStats } from "./MobileStats";
 import BgCircles from "@/components/home/BgCircles";
+import { Socials } from "@/types/content";
 
 type SocialType = "github" | "leetcode" | "linkedin" | null;
 
@@ -24,6 +25,23 @@ function Hero() {
 	const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 	const [mobileStatsType, setMobileStatsType] = useState<SocialType>(null);
 	const [isMobile, setIsMobile] = useState(false);
+	const [socials, setSocials] = useState<Socials | null>(null);
+
+	useEffect(() => {
+		const fetchSocials = async () => {
+			try {
+				const response = await fetch("/api/socials");
+				if (response.ok) {
+					const data = await response.json();
+					setSocials(data);
+				}
+			} catch (error) {
+				console.error("Failed to fetch socials:", error);
+			}
+		};
+
+		fetchSocials();
+	}, []);
 
 	useEffect(() => {
 		const checkMobile = () => setIsMobile(window.innerWidth <= 768);
@@ -125,7 +143,7 @@ function Hero() {
 
 					<Link
 						className="group px-7 py-3 flex items-center gap-2 rounded-full outline-none focus:scale-110 hover:scale-110 active:scale-105 transition cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/10 w-full sm:w-auto justify-center sm:justify-start"
-						href="/Resume.pdf"
+						href={socials?.ResumeLink || "/Resume.pdf"}
 						target="_blank"
 					>
 						Resume{" "}
@@ -140,7 +158,11 @@ function Hero() {
 				>
 					<SocialLink
 						icon={<BsLinkedin className="text-2xl" />}
-						href="https://www.linkedin.com/in/tashif-ahmad-khan-982304244/"
+						href={
+							socials
+								? `https://www.linkedin.com/in/${socials.LinkedInID}/`
+								: "https://www.linkedin.com/in/tashif-ahmad-khan-982304244/"
+						}
 						type="linkedin"
 						onShowStats={setShowLinkedInStats}
 						onMousePosChange={setMousePos}
@@ -150,7 +172,11 @@ function Hero() {
 
 					<SocialLink
 						icon={<FaGithubSquare className="text-2xl" />}
-						href="https://github.com/tashifkhan"
+						href={
+							socials
+								? `https://github.com/${socials.GithubID}`
+								: "https://github.com/tashifkhan"
+						}
 						type="github"
 						onShowStats={setShowGithubStats}
 						onMousePosChange={setMousePos}
@@ -160,7 +186,11 @@ function Hero() {
 
 					<SocialLink
 						icon={<SiLeetcode className="text-2xl" />}
-						href="https://leetcode.com/khan-tashif"
+						href={
+							socials
+								? `https://leetcode.com/${socials.LeetCodeID}`
+								: "https://leetcode.com/khan-tashif"
+						}
 						type="leetcode"
 						onShowStats={setShowLeetcodeStats}
 						onMousePosChange={setMousePos}

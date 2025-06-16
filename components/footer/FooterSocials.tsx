@@ -1,33 +1,67 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Github, Linkedin, Instagram } from "lucide-react";
+import { Github, Linkedin, Instagram, Twitter, FileText } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { Socials } from "@/types/content";
 
 const MotionLink = motion(Link);
 
-const socials = [
-	{
-		name: "GitHub",
-		icon: Github,
-		href: "https://github.com/tashifkhan",
-	},
-	{
-		name: "LinkedIn",
-		icon: Linkedin,
-		href: "https://www.linkedin.com/in/tashif-ahmad-khan-982304244/",
-	},
-	{
-		name: "InstaGram",
-		icon: Instagram,
-		href: "https://www.instagram.com/khan_tashif?igsh=MTVnOThleHFzb3M4aQ==",
-	},
-];
-
 export function FooterSocials() {
+	const [socials, setSocials] = useState<Socials | null>(null);
+
+	useEffect(() => {
+		const fetchSocials = async () => {
+			try {
+				const response = await fetch("/api/socials");
+				if (response.ok) {
+					const data = await response.json();
+					setSocials(data);
+				}
+			} catch (error) {
+				console.error("Failed to fetch socials:", error);
+			}
+		};
+
+		fetchSocials();
+	}, []);
+
+	if (!socials) {
+		return null; // or a loading skeleton
+	}
+
+	const socialLinks = [
+		{
+			name: "GitHub",
+			icon: Github,
+			href: `https://github.com/${socials.GithubID}`,
+		},
+		{
+			name: "LinkedIn",
+			icon: Linkedin,
+			href: `https://www.linkedin.com/in/${socials.LinkedInID}/`,
+		},
+		{
+			name: "Instagram",
+			icon: Instagram,
+			href: `https://www.instagram.com/${socials.InstaID}/`,
+		},
+		{
+			name: "Twitter",
+			icon: Twitter,
+			href: `https://twitter.com/${socials.TwitterID}`,
+		},
+		{
+			name: "Resume",
+			icon: FileText,
+			href: socials.ResumeLink,
+		},
+	];
+
 	return (
 		<div className="flex gap-4">
-			{socials.map((social, index) => (
+			{socialLinks.map((social, index) => (
 				<MotionLink
 					key={social.name}
 					href={social.href}

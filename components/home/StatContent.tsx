@@ -3,10 +3,30 @@
 import { motion } from "framer-motion";
 import { useTooltipStats } from "@/context/TooltipStatsContext";
 import { ExternalLinkButton } from "./ExternalLinkButton";
+import { useEffect, useState } from "react";
+import { Socials } from "@/types/content";
 
 type ContentType = "github" | "leetcode" | "linkedin";
 
 const LinkedInContent = () => {
+	const [socials, setSocials] = useState<Socials | null>(null);
+
+	useEffect(() => {
+		const fetchSocials = async () => {
+			try {
+				const response = await fetch("/api/socials");
+				if (response.ok) {
+					const data = await response.json();
+					setSocials(data);
+				}
+			} catch (error) {
+				console.error("Failed to fetch socials:", error);
+			}
+		};
+
+		fetchSocials();
+	}, []);
+
 	const skills = [
 		{ title: "Pre-Final Year", detail: "Student", icon: "🎓" },
 		{ title: "App Development", detail: "React Native", icon: "📱" },
@@ -37,7 +57,11 @@ const LinkedInContent = () => {
 				))}
 			</div>
 			<ExternalLinkButton
-				href="https://www.linkedin.com/in/tashif-ahmad-khan-982304244/"
+				href={
+					socials
+						? `https://www.linkedin.com/in/${socials.LinkedInID}/`
+						: "https://www.linkedin.com/in/tashif-ahmad-khan-982304244/"
+				}
 				label="View LinkedIn Profile"
 			/>
 		</div>

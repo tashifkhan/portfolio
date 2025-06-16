@@ -74,3 +74,14 @@ export type SoftSkill = BaseSkill & {
 
 export type Skill = ProgrammingLanguage | Framework | Tool | SoftSkill
 export type CollageData = Education | Responsibility
+export type Socials = {
+    _id?: string
+    InstaID: string
+    LeetCodeID: string
+    GithubID: string
+    LinkedInID: string
+    TwitterID: string
+    ResumeLink: string
+    createdAt?: Date
+    updatedAt?: Date
+}
