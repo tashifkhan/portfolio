@@ -1,6 +1,6 @@
 export type Project = {
     _id?: string
-    location: number
+    position: number  // Changed from location to match existing hooks
     title: string
     description: string
     technologies: string[]

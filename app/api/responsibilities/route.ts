@@ -1,16 +1,16 @@
 import { NextResponse } from 'next/server'
 import { DatabaseService } from '@/utils/database'
 import { isAuthenticated } from '@/utils/auth'
-import { Education } from '@/types/content'
+import { Responsibility } from '@/types/content'
 
 export async function GET() {
   try {
-    const education = await DatabaseService.getEducation()
-    return NextResponse.json(education)
+    const responsibilities = await DatabaseService.getResponsibilities()
+    return NextResponse.json(responsibilities)
   } catch (error) {
     console.error('Database error:', error)
     return NextResponse.json(
-      { error: 'Failed to fetch education data' },
+      { error: 'Failed to fetch responsibilities data' },
       { status: 500 }
     )
   }
@@ -26,14 +26,14 @@ export async function POST(request: Request) {
       )
     }
 
-    const educationData: Omit<Education, '_id'> = await request.json()
-    const newEducation = await DatabaseService.createEducation(educationData)
+    const responsibilityData: Omit<Responsibility, '_id'> = await request.json()
+    const newResponsibility = await DatabaseService.createResponsibility(responsibilityData)
     
-    return NextResponse.json(newEducation, { status: 201 })
+    return NextResponse.json(newResponsibility, { status: 201 })
   } catch (error) {
-    console.error('Create education error:', error)
+    console.error('Create responsibility error:', error)
     return NextResponse.json(
-      { error: 'Failed to create education entry' },
+      { error: 'Failed to create responsibility' },
       { status: 500 }
     )
   }
@@ -49,29 +49,29 @@ export async function PUT(request: Request) {
       )
     }
 
-    const { id, ...updates }: { id: string } & Partial<Education> = await request.json()
+    const { id, ...updates }: { id: string } & Partial<Responsibility> = await request.json()
     
     if (!id) {
       return NextResponse.json(
-        { error: 'Education ID is required' },
+        { error: 'Responsibility ID is required' },
         { status: 400 }
       )
     }
 
-    const success = await DatabaseService.updateEducation(id, updates)
+    const success = await DatabaseService.updateResponsibility(id, updates)
     
     if (!success) {
       return NextResponse.json(
-        { error: 'Education entry not found or not updated' },
+        { error: 'Responsibility not found or not updated' },
         { status: 404 }
       )
     }
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Update education error:', error)
+    console.error('Update responsibility error:', error)
     return NextResponse.json(
-      { error: 'Failed to update education entry' },
+      { error: 'Failed to update responsibility' },
       { status: 500 }
     )
   }
@@ -91,25 +91,25 @@ export async function DELETE(request: Request) {
     
     if (!id) {
       return NextResponse.json(
-        { error: 'Education ID is required' },
+        { error: 'Responsibility ID is required' },
         { status: 400 }
       )
     }
 
-    const success = await DatabaseService.deleteEducation(id)
+    const success = await DatabaseService.deleteResponsibility(id)
     
     if (!success) {
       return NextResponse.json(
-        { error: 'Education entry not found or not deleted' },
+        { error: 'Responsibility not found or not deleted' },
         { status: 404 }
       )
     }
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Delete education error:', error)
+    console.error('Delete responsibility error:', error)
     return NextResponse.json(
-      { error: 'Failed to delete education entry' },
+      { error: 'Failed to delete responsibility' },
       { status: 500 }
     )
   }
