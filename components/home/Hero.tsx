@@ -63,7 +63,7 @@ function Hero() {
 			"UI/UX Designer",
 			"App Developer",
 			"Freelancer",
-			"Pre Final Year Student",
+			"Final Year Student",
 		],
 		loop: true,
 		deleteSpeed: 50,
