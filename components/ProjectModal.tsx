@@ -78,7 +78,13 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
 			}
 
 			const data = await response.json();
-			const readmeContent = atob(data.content);
+			// Properly decode base64 content with UTF-8 encoding
+			const binaryString = atob(data.content);
+			const bytes = new Uint8Array(binaryString.length);
+			for (let i = 0; i < binaryString.length; i++) {
+				bytes[i] = binaryString.charCodeAt(i);
+			}
+			const readmeContent = new TextDecoder("utf-8").decode(bytes);
 			setReadme(readmeContent);
 		} catch (error) {
 			console.error("Failed to fetch README:", error);
@@ -205,13 +211,21 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
 	};
 
 	const renderRegularMarkdown = (content: string) => {
-		console.log(
-			"renderRegularMarkdown called with content length:",
-			content.length
-		);
-		console.log("Content preview:", content.substring(0, 200));
-
-		let html = content;
+		// Clean up any encoding issues and normalize whitespace
+		let html = content
+			// Replace common encoding issues
+			.replace(/â/g, "")
+			.replace(/â€/g, '"')
+			.replace(/â€œ/g, '"')
+			.replace(/â€™/g, "'")
+			.replace(/â€¢/g, "•")
+			.replace(/â€"/g, "—")
+			.replace(/â€"/g, "–")
+			// Normalize whitespace
+			.replace(/\r\n/g, "\n")
+			.replace(/\r/g, "\n")
+			// Remove any remaining control characters except newlines and tabs
+			.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "");
 
 		// Get GitHub base URL for converting relative links
 		const getGithubBaseUrl = () => {
