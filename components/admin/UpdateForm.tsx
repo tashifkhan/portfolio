@@ -420,45 +420,63 @@ function AddProjectForm({ onSuccess }: { onSuccess: () => void }) {
 	return (
 		<form onSubmit={handleSubmit} className="space-y-4">
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-				<Input
-					placeholder="Project Title"
-					value={formData.title}
+				<div>
+					<label className="block text-sm font-medium text-gray-300 mb-2">
+						Project Title *
+					</label>
+					<Input
+						placeholder="Enter project title"
+						value={formData.title}
+						onChange={(e) =>
+							setFormData((prev) => ({ ...prev, title: e.target.value }))
+						}
+						className="bg-white/5 text-gray-300 border-orange-500/20"
+						required
+					/>
+				</div>
+				<div>
+					<label className="block text-sm font-medium text-gray-300 mb-2">
+						Position/Order *
+					</label>
+					<Input
+						type="number"
+						placeholder="Enter position number"
+						value={formData.position}
+						onChange={(e) =>
+							setFormData((prev) => ({
+								...prev,
+								position: parseInt(e.target.value),
+							}))
+						}
+						className="bg-white/5 text-gray-300 border-orange-500/20"
+						required
+					/>
+				</div>
+			</div>
+
+			<div>
+				<label className="block text-sm font-medium text-gray-300 mb-2">
+					Project Description *
+				</label>
+				<Textarea
+					placeholder="Enter detailed project description"
+					value={formData.description}
 					onChange={(e) =>
-						setFormData((prev) => ({ ...prev, title: e.target.value }))
+						setFormData((prev) => ({ ...prev, description: e.target.value }))
 					}
 					className="bg-white/5 text-gray-300 border-orange-500/20"
-					required
-				/>
-				<Input
-					type="number"
-					placeholder="Position/Order"
-					value={formData.position}
-					onChange={(e) =>
-						setFormData((prev) => ({
-							...prev,
-							position: parseInt(e.target.value),
-						}))
-					}
-					className="bg-white/5 text-gray-300 border-orange-500/20"
+					rows={4}
 					required
 				/>
 			</div>
 
-			<Textarea
-				placeholder="Project Description"
-				value={formData.description}
-				onChange={(e) =>
-					setFormData((prev) => ({ ...prev, description: e.target.value }))
-				}
-				className="bg-white/5 text-gray-300 border-orange-500/20"
-				rows={4}
-				required
-			/>
-
 			<div>
+				<label className="block text-sm font-medium text-gray-300 mb-2">
+					Technologies
+				</label>
 				<div className="flex gap-2 mb-2">
 					<Input
-						placeholder="Add Technology"
+						placeholder="Add Technology (e.g., React, Node.js)"
 						value={techInput}
 						onChange={(e) => setTechInput(e.target.value)}
 						onKeyPress={(e) =>
@@ -493,47 +511,75 @@ function AddProjectForm({ onSuccess }: { onSuccess: () => void }) {
 				</div>
 			</div>
 
-			<Select
-				value={formData.status}
-				onValueChange={(value: Project["status"]) =>
-					setFormData((prev) => ({ ...prev, status: value }))
-				}
-			>
-				<SelectTrigger className="bg-white/5 text-gray-300 border-orange-500/20">
-					<SelectValue placeholder="Select Status" />
-				</SelectTrigger>
-				<SelectContent>
-					<SelectItem value="Planned">Planned</SelectItem>
-					<SelectItem value="In Progress">In Progress</SelectItem>
-					<SelectItem value="Completed">Completed</SelectItem>
-				</SelectContent>
-			</Select>
+			<div>
+				<label className="block text-sm font-medium text-gray-300 mb-2">
+					Project Status *
+				</label>
+				<Select
+					value={formData.status}
+					onValueChange={(value: Project["status"]) =>
+						setFormData((prev) => ({ ...prev, status: value }))
+					}
+				>
+					<SelectTrigger className="bg-white/5 text-gray-300 border-orange-500/20">
+						<SelectValue placeholder="Select project status" />
+					</SelectTrigger>
+					<SelectContent>
+						<SelectItem value="Planned">Planned</SelectItem>
+						<SelectItem value="In Progress">In Progress</SelectItem>
+						<SelectItem value="Completed">Completed</SelectItem>
+					</SelectContent>
+				</Select>
+			</div>
 
-			<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-				<Input
-					placeholder="GitHub Link (optional)"
-					value={formData.githubLink}
-					onChange={(e) =>
-						setFormData((prev) => ({ ...prev, githubLink: e.target.value }))
-					}
-					className="bg-white/5 text-gray-300 border-orange-500/20"
-				/>
-				<Input
-					placeholder="Live Link (optional)"
-					value={formData.liveLink}
-					onChange={(e) =>
-						setFormData((prev) => ({ ...prev, liveLink: e.target.value }))
-					}
-					className="bg-white/5 text-gray-300 border-orange-500/20"
-				/>
-				<Input
-					placeholder="Play Store Link (optional)"
-					value={formData.playstoreLink}
-					onChange={(e) =>
-						setFormData((prev) => ({ ...prev, playstoreLink: e.target.value }))
-					}
-					className="bg-white/5 text-gray-300 border-orange-500/20"
-				/>
+			<div className="space-y-4">
+				<label className="block text-sm font-medium text-gray-300 mb-2">
+					Project Links (Optional)
+				</label>
+				<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+					<div>
+						<label className="block text-xs text-gray-400 mb-1">
+							GitHub Repository
+						</label>
+						<Input
+							placeholder="https://github.com/username/repo"
+							value={formData.githubLink}
+							onChange={(e) =>
+								setFormData((prev) => ({ ...prev, githubLink: e.target.value }))
+							}
+							className="bg-white/5 text-gray-300 border-orange-500/20"
+						/>
+					</div>
+					<div>
+						<label className="block text-xs text-gray-400 mb-1">
+							Live Demo
+						</label>
+						<Input
+							placeholder="https://yourproject.com"
+							value={formData.liveLink}
+							onChange={(e) =>
+								setFormData((prev) => ({ ...prev, liveLink: e.target.value }))
+							}
+							className="bg-white/5 text-gray-300 border-orange-500/20"
+						/>
+					</div>
+					<div>
+						<label className="block text-xs text-gray-400 mb-1">
+							Play Store
+						</label>
+						<Input
+							placeholder="https://play.google.com/store/apps/..."
+							value={formData.playstoreLink}
+							onChange={(e) =>
+								setFormData((prev) => ({
+									...prev,
+									playstoreLink: e.target.value,
+								}))
+							}
+							className="bg-white/5 text-gray-300 border-orange-500/20"
+						/>
+					</div>
+				</div>
 			</div>
 
 			<Button
@@ -609,55 +655,80 @@ function EditProjectsForm({
 				</div>
 
 				<div className="space-y-4">
-					<Input
-						placeholder="Project Title"
-						value={formData.title}
-						onChange={(e) =>
-							setFormData({ ...formData, title: e.target.value })
-						}
-						className="bg-white/5 text-gray-300 border-orange-500/20"
-					/>
-					<Textarea
-						placeholder="Description"
-						value={formData.description}
-						onChange={(e) =>
-							setFormData({ ...formData, description: e.target.value })
-						}
-						className="bg-white/5 text-gray-300 border-orange-500/20"
-						rows={3}
-					/>
-					<Input
-						placeholder="GitHub Link"
-						value={formData.githubLink || ""}
-						onChange={(e) =>
-							setFormData({ ...formData, githubLink: e.target.value })
-						}
-						className="bg-white/5 text-gray-300 border-orange-500/20"
-					/>
-					<Input
-						placeholder="Live Link"
-						value={formData.liveLink || ""}
-						onChange={(e) =>
-							setFormData({ ...formData, liveLink: e.target.value })
-						}
-						className="bg-white/5 text-gray-300 border-orange-500/20"
-					/>
-					<Select
-						value={formData.status}
-						onValueChange={(value) =>
-							setFormData({ ...formData, status: value as Project["status"] })
-						}
-					>
-						<SelectTrigger className="bg-white/5 text-gray-300 border-orange-500/20">
-							<SelectValue />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="Planned">Planned</SelectItem>
-							<SelectItem value="In Progress">In Progress</SelectItem>
-							<SelectItem value="Completed">Completed</SelectItem>
-							<SelectItem value="On Hold">On Hold</SelectItem>
-						</SelectContent>
-					</Select>
+					<div>
+						<label className="block text-sm font-medium text-gray-300 mb-2">
+							Project Title *
+						</label>
+						<Input
+							placeholder="Enter project title"
+							value={formData.title}
+							onChange={(e) =>
+								setFormData({ ...formData, title: e.target.value })
+							}
+							className="bg-white/5 text-gray-300 border-orange-500/20"
+						/>
+					</div>
+					<div>
+						<label className="block text-sm font-medium text-gray-300 mb-2">
+							Description *
+						</label>
+						<Textarea
+							placeholder="Enter project description"
+							value={formData.description}
+							onChange={(e) =>
+								setFormData({ ...formData, description: e.target.value })
+							}
+							className="bg-white/5 text-gray-300 border-orange-500/20"
+							rows={3}
+						/>
+					</div>
+					<div>
+						<label className="block text-sm font-medium text-gray-300 mb-2">
+							GitHub Link
+						</label>
+						<Input
+							placeholder="https://github.com/username/repo"
+							value={formData.githubLink || ""}
+							onChange={(e) =>
+								setFormData({ ...formData, githubLink: e.target.value })
+							}
+							className="bg-white/5 text-gray-300 border-orange-500/20"
+						/>
+					</div>
+					<div>
+						<label className="block text-sm font-medium text-gray-300 mb-2">
+							Live Demo Link
+						</label>
+						<Input
+							placeholder="https://yourproject.com"
+							value={formData.liveLink || ""}
+							onChange={(e) =>
+								setFormData({ ...formData, liveLink: e.target.value })
+							}
+							className="bg-white/5 text-gray-300 border-orange-500/20"
+						/>
+					</div>
+					<div>
+						<label className="block text-sm font-medium text-gray-300 mb-2">
+							Project Status *
+						</label>
+						<Select
+							value={formData.status}
+							onValueChange={(value) =>
+								setFormData({ ...formData, status: value as Project["status"] })
+							}
+						>
+							<SelectTrigger className="bg-white/5 text-gray-300 border-orange-500/20">
+								<SelectValue />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value="Planned">Planned</SelectItem>
+								<SelectItem value="In Progress">In Progress</SelectItem>
+								<SelectItem value="Completed">Completed</SelectItem>
+								<SelectItem value="On Hold">On Hold</SelectItem>
+							</SelectContent>
+						</Select>
+					</div>
 
 					<div className="flex gap-2">
 						<Button
@@ -1074,61 +1145,93 @@ function UpdateSocialsForm({ onSuccess }: { onSuccess: () => void }) {
 
 	return (
 		<form onSubmit={handleSubmit} className="space-y-4">
-			<p className="text-gray-300">Update your social media information:</p>
+			<p className="text-gray-300 mb-4">
+				Update your social media information:
+			</p>
 
-			<Input
-				placeholder="Instagram Username (e.g., khan_tashif)"
-				value={socialData.InstaID}
-				onChange={(e) =>
-					setSocialData((prev) => ({ ...prev, InstaID: e.target.value }))
-				}
-				className="bg-white/5 text-gray-300 border-orange-500/20"
-			/>
+			<div>
+				<label className="block text-sm font-medium text-gray-300 mb-2">
+					Instagram Username
+				</label>
+				<Input
+					placeholder="e.g., khan_tashif"
+					value={socialData.InstaID}
+					onChange={(e) =>
+						setSocialData((prev) => ({ ...prev, InstaID: e.target.value }))
+					}
+					className="bg-white/5 text-gray-300 border-orange-500/20"
+				/>
+			</div>
 
-			<Input
-				placeholder="LeetCode Username (e.g., tashif-khan)"
-				value={socialData.LeetCodeID}
-				onChange={(e) =>
-					setSocialData((prev) => ({ ...prev, LeetCodeID: e.target.value }))
-				}
-				className="bg-white/5 text-gray-300 border-orange-500/20"
-			/>
+			<div>
+				<label className="block text-sm font-medium text-gray-300 mb-2">
+					LeetCode Username
+				</label>
+				<Input
+					placeholder="e.g., tashif-khan"
+					value={socialData.LeetCodeID}
+					onChange={(e) =>
+						setSocialData((prev) => ({ ...prev, LeetCodeID: e.target.value }))
+					}
+					className="bg-white/5 text-gray-300 border-orange-500/20"
+				/>
+			</div>
 
-			<Input
-				placeholder="GitHub Username (e.g., tashifkhan)"
-				value={socialData.GithubID}
-				onChange={(e) =>
-					setSocialData((prev) => ({ ...prev, GithubID: e.target.value }))
-				}
-				className="bg-white/5 text-gray-300 border-orange-500/20"
-			/>
+			<div>
+				<label className="block text-sm font-medium text-gray-300 mb-2">
+					GitHub Username
+				</label>
+				<Input
+					placeholder="e.g., tashifkhan"
+					value={socialData.GithubID}
+					onChange={(e) =>
+						setSocialData((prev) => ({ ...prev, GithubID: e.target.value }))
+					}
+					className="bg-white/5 text-gray-300 border-orange-500/20"
+				/>
+			</div>
 
-			<Input
-				placeholder="LinkedIn ID (e.g., tashif-ahmad-khan-982304244)"
-				value={socialData.LinkedInID}
-				onChange={(e) =>
-					setSocialData((prev) => ({ ...prev, LinkedInID: e.target.value }))
-				}
-				className="bg-white/5 text-gray-300 border-orange-500/20"
-			/>
+			<div>
+				<label className="block text-sm font-medium text-gray-300 mb-2">
+					LinkedIn Profile ID
+				</label>
+				<Input
+					placeholder="e.g., tashif-ahmad-khan-982304244"
+					value={socialData.LinkedInID}
+					onChange={(e) =>
+						setSocialData((prev) => ({ ...prev, LinkedInID: e.target.value }))
+					}
+					className="bg-white/5 text-gray-300 border-orange-500/20"
+				/>
+			</div>
 
-			<Input
-				placeholder="Twitter Username (e.g., tashifkhan_)"
-				value={socialData.TwitterID}
-				onChange={(e) =>
-					setSocialData((prev) => ({ ...prev, TwitterID: e.target.value }))
-				}
-				className="bg-white/5 text-gray-300 border-orange-500/20"
-			/>
+			<div>
+				<label className="block text-sm font-medium text-gray-300 mb-2">
+					Twitter Username
+				</label>
+				<Input
+					placeholder="e.g., tashifkhan_"
+					value={socialData.TwitterID}
+					onChange={(e) =>
+						setSocialData((prev) => ({ ...prev, TwitterID: e.target.value }))
+					}
+					className="bg-white/5 text-gray-300 border-orange-500/20"
+				/>
+			</div>
 
-			<Input
-				placeholder="Resume Link (full URL)"
-				value={socialData.ResumeLink}
-				onChange={(e) =>
-					setSocialData((prev) => ({ ...prev, ResumeLink: e.target.value }))
-				}
-				className="bg-white/5 text-gray-300 border-orange-500/20"
-			/>
+			<div>
+				<label className="block text-sm font-medium text-gray-300 mb-2">
+					Resume Link
+				</label>
+				<Input
+					placeholder="https://yourwebsite.com/resume.pdf"
+					value={socialData.ResumeLink}
+					onChange={(e) =>
+						setSocialData((prev) => ({ ...prev, ResumeLink: e.target.value }))
+					}
+					className="bg-white/5 text-gray-300 border-orange-500/20"
+				/>
+			</div>
 
 			<Button
 				type="submit"
