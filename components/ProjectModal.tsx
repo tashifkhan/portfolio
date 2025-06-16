@@ -205,7 +205,51 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
 	};
 
 	const renderRegularMarkdown = (content: string) => {
+		console.log(
+			"renderRegularMarkdown called with content length:",
+			content.length
+		);
+		console.log("Content preview:", content.substring(0, 200));
+
 		let html = content;
+
+		// Get GitHub base URL for converting relative links
+		const getGithubBaseUrl = () => {
+			if (!project?.githubLink) return "";
+			const match = project.githubLink.match(/github\.com\/([^\/]+)\/([^\/]+)/);
+			if (!match) return "";
+			const [, owner, repo] = match;
+			// Remove .git suffix if present
+			const cleanRepo = repo.replace(/\.git$/, "");
+			return `https://raw.githubusercontent.com/${owner}/${cleanRepo}/main`;
+		};
+
+		const githubBaseUrl = getGithubBaseUrl();
+		console.log("GitHub base URL:", githubBaseUrl);
+
+		// Helper function to convert relative URLs to absolute GitHub URLs
+		const convertRelativeUrl = (url: string) => {
+			if (!githubBaseUrl) return url;
+			if (url.startsWith("http://") || url.startsWith("https://")) return url;
+
+			let convertedUrl = url;
+
+			// Handle different relative path formats
+			if (url.startsWith("./")) {
+				convertedUrl = `${githubBaseUrl}/${url.substring(2)}`;
+			} else if (url.startsWith("../")) {
+				// Handle parent directory references
+				convertedUrl = `${githubBaseUrl}/${url.replace(/^\.\.\//, "")}`;
+			} else if (url.startsWith("/")) {
+				// Handle absolute paths from root - remove leading slash
+				convertedUrl = `${githubBaseUrl}${url}`;
+			} else if (!url.includes("://") && !url.startsWith("#")) {
+				// Assume it's a relative path, but not an anchor link
+				convertedUrl = `${githubBaseUrl}/${url}`;
+			}
+
+			return convertedUrl;
+		};
 
 		// Handle inline code (before other replacements)
 		html = html.replace(
@@ -241,11 +285,29 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
 			'<em class="italic text-white/90">$1</em>'
 		);
 
-		// Handle links
+		// Handle images (before links to avoid conflicts)
+		// First handle markdown images ![alt](src)
+		html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (match, alt, src) => {
+			const fullSrc = convertRelativeUrl(src);
+
+			return `<img src="${fullSrc}" alt="${alt}" class="max-w-full h-auto rounded-lg border border-gray-700 my-4 mx-auto block" />`;
+		});
+
+		// Then handle HTML img tags <img src="...">
 		html = html.replace(
-			/\[([^\]]+)\]\(([^)]+)\)/g,
-			'<a href="$2" target="_blank" class="text-orange-400 hover:text-orange-300 underline transition-colors">$1</a>'
+			/<img([^>]*)\ssrc=["']([^"']+)["']([^>]*)>/g,
+			(match, beforeSrc, src, afterSrc) => {
+				const fullSrc = convertRelativeUrl(src);
+
+				return `<img${beforeSrc} src="${fullSrc}"${afterSrc} class="max-w-full h-auto rounded-lg border border-gray-700 my-4 mx-auto block" />`;
+			}
 		);
+
+		// Handle links
+		html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, text, url) => {
+			const fullUrl = convertRelativeUrl(url);
+			return `<a href="${fullUrl}" target="_blank" class="text-orange-400 hover:text-orange-300 underline transition-colors">${text}</a>`;
+		});
 
 		// Handle numbered lists
 		html = html.replace(
@@ -269,6 +331,50 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
 			'<ol class="my-3 space-y-1">$1</ol>'
 		);
 
+		// Handle tables
+		const tableRegex = /^(\|.*\|.*\n)((?:\|.*\|.*\n)*)/gm;
+		html = html.replace(tableRegex, (match, headerRow, bodyRows) => {
+			// Process header row
+			const headers = headerRow
+				.split("|")
+				.map((cell: string) => cell.trim())
+				.filter((cell: string) => cell)
+				.map(
+					(header: string) =>
+						`<th class="px-4 py-3 text-left text-sm font-medium text-white/90 border-b border-gray-600">${header}</th>`
+				)
+				.join("");
+
+			// Process body rows
+			const rows = bodyRows
+				.split("\n")
+				.filter(
+					(row: string) => row.trim() && !row.match(/^\s*\|[\s\-\|:]*\|\s*$/)
+				) // Skip separator rows
+				.map((row: string) => {
+					const cells = row
+						.split("|")
+						.map((cell: string) => cell.trim())
+						.filter((cell: string) => cell)
+						.map(
+							(cell: string) =>
+								`<td class="px-4 py-3 text-sm text-white/80 border-b border-gray-700/50">${cell}</td>`
+						)
+						.join("");
+					return `<tr class="hover:bg-gray-800/30 transition-colors">${cells}</tr>`;
+				})
+				.join("");
+
+			return `<div class="overflow-x-auto my-6">
+				<table class="min-w-full bg-gray-800/20 border border-gray-700 rounded-lg overflow-hidden">
+					<thead class="bg-gray-800/40">
+						<tr>${headers}</tr>
+					</thead>
+					<tbody>${rows}</tbody>
+				</table>
+			</div>`;
+		});
+
 		// Handle paragraphs
 		const paragraphs = html.split(/\n\s*\n/);
 		html = paragraphs
@@ -277,7 +383,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
 				if (!paragraph) return "";
 
 				// Don't wrap already formatted elements
-				if (paragraph.match(/^<(h[1-6]|pre|ul|ol|li)/)) {
+				if (paragraph.match(/^<(h[1-6]|pre|ul|ol|li|div|table)/)) {
 					return paragraph;
 				}
 
