@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaPython, FaJsSquare } from "react-icons/fa";
-import { SiCplusplus, SiTypescript } from "react-icons/si";
+import { SiCplusplus, SiGo, SiTypescript } from "react-icons/si";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface Language {
@@ -14,12 +14,14 @@ interface Language {
 
 const defaultLanguages: Language[] = [
 	{ name: "Python", icon: FaPython },
-	{ name: "C++", icon: SiCplusplus },
+	{ name: "Go", icon: SiGo },
 	{ name: "JavaScript", icon: FaJsSquare },
 	{ name: "TypeScript", icon: SiTypescript },
+	{ name: "C++", icon: SiCplusplus },
 ];
 const iconMap: Record<string, React.ElementType> = {
 	FaPython: FaPython,
+	SiGo: SiGo,
 	SiCplusplus: SiCplusplus,
 	FaJsSquare: FaJsSquare,
 	SiTypescript: SiTypescript,
