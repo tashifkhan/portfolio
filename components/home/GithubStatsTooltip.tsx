@@ -23,6 +23,45 @@ export default function GithubStatsTooltip({ x, y }: { x: number; y: number }) {
 			{stats ? (
 				<div className="space-y-4">
 					<div className="space-y-2">
+						<div className="grid grid-cols-3 gap-4 pt-2">
+							<div className="bg-gray-800/30 p-3 rounded-lg">
+								<h3 className="text-gray-400 text-xs uppercase tracking-wider mb-1">
+									Total Commits
+								</h3>
+								<motion.span
+									initial={{ opacity: 0 }}
+									animate={{ opacity: 1 }}
+									className="text-xl font-bold text-orange-300"
+								>
+									{stats.totalCommits.toLocaleString()}
+								</motion.span>
+							</div>
+							<div className="bg-gray-800/30 p-3 rounded-lg">
+								<h3 className="text-gray-400 text-xs uppercase tracking-wider mb-1">
+									Longest Streak
+								</h3>
+								<motion.span
+									initial={{ opacity: 0 }}
+									animate={{ opacity: 1 }}
+									className="text-xl font-bold text-orange-300"
+								>
+									{stats.longestStreak} days
+								</motion.span>
+							</div>
+							<div className="bg-gray-800/30 p-3 rounded-lg">
+								<h3 className="text-gray-400 text-xs uppercase tracking-wider mb-1">
+									Current Streak
+								</h3>
+								<motion.span
+									initial={{ opacity: 0 }}
+									animate={{ opacity: 1 }}
+									className="text-xl font-bold text-orange-300"
+								>
+									{stats.currentStreak} days
+								</motion.span>
+							</div>
+						</div>
+
 						<h3 className="text-gray-400 text-xs uppercase tracking-wider">
 							Top Languages
 						</h3>
@@ -43,45 +82,6 @@ export default function GithubStatsTooltip({ x, y }: { x: number; y: number }) {
 								</div>
 							</div>
 						))}
-					</div>
-
-					<div className="grid grid-cols-3 gap-4 pt-2">
-						<div className="bg-gray-800/30 p-3 rounded-lg">
-							<h3 className="text-gray-400 text-xs uppercase tracking-wider mb-1">
-								Total Commits
-							</h3>
-							<motion.span
-								initial={{ opacity: 0 }}
-								animate={{ opacity: 1 }}
-								className="text-xl font-bold text-orange-300"
-							>
-								{stats.totalCommits.toLocaleString()}
-							</motion.span>
-						</div>
-						<div className="bg-gray-800/30 p-3 rounded-lg">
-							<h3 className="text-gray-400 text-xs uppercase tracking-wider mb-1">
-								Longest Streak
-							</h3>
-							<motion.span
-								initial={{ opacity: 0 }}
-								animate={{ opacity: 1 }}
-								className="text-xl font-bold text-orange-300"
-							>
-								{stats.longestStreak} days
-							</motion.span>
-						</div>
-						<div className="bg-gray-800/30 p-3 rounded-lg">
-							<h3 className="text-gray-400 text-xs uppercase tracking-wider mb-1">
-								Current Streak
-							</h3>
-							<motion.span
-								initial={{ opacity: 0 }}
-								animate={{ opacity: 1 }}
-								className="text-xl font-bold text-orange-300"
-							>
-								{stats.currentStreak} days
-							</motion.span>
-						</div>
 					</div>
 				</div>
 			) : (

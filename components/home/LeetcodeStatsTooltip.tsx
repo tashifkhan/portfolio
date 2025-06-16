@@ -119,31 +119,6 @@ const LeetcodeStatsTooltip: React.FC<LeetcodeStatsTooltipProps> = ({
 					</motion.span>
 				</div>
 
-				<div className="space-y-2">
-					<h3 className="text-gray-400 text-xs uppercase tracking-wider">
-						Problem Difficulty
-					</h3>
-					{difficultyProgress.map((diff) => (
-						<div
-							key={diff.name}
-							className="relative w-full h-8 bg-gray-800/50 rounded-lg overflow-hidden"
-						>
-							<motion.div
-								initial={{ width: 0 }}
-								animate={{ width: `${diff.percentage}%` }}
-								transition={{ duration: 1, ease: "easeOut" }}
-								className="absolute h-full bg-gradient-to-r from-orange-300 to-orange-400"
-							/>
-							<div className="absolute inset-0 flex items-center justify-between px-3">
-								<span className="font-medium">{diff.name}</span>
-								<span className="font-bold">
-									{diff.solved}/{diff.total}
-								</span>
-							</div>
-						</div>
-					))}
-				</div>
-
 				<div className="grid grid-cols-2 gap-4 pt-2">
 					<div className="bg-gray-800/30 p-3 rounded-lg">
 						<h3 className="text-gray-400 text-xs uppercase tracking-wider mb-1">
@@ -169,6 +144,31 @@ const LeetcodeStatsTooltip: React.FC<LeetcodeStatsTooltipProps> = ({
 							{stats.acceptanceRate}%
 						</motion.span>
 					</div>
+				</div>
+
+				<div className="space-y-2">
+					<h3 className="text-gray-400 text-xs uppercase tracking-wider">
+						Problem Difficulty
+					</h3>
+					{difficultyProgress.map((diff) => (
+						<div
+							key={diff.name}
+							className="relative w-full h-8 bg-gray-800/50 rounded-lg overflow-hidden"
+						>
+							<motion.div
+								initial={{ width: 0 }}
+								animate={{ width: `${diff.percentage}%` }}
+								transition={{ duration: 1, ease: "easeOut" }}
+								className="absolute h-full bg-gradient-to-r from-orange-300 to-orange-400"
+							/>
+							<div className="absolute inset-0 flex items-center justify-between px-3">
+								<span className="font-medium">{diff.name}</span>
+								<span className="font-bold">
+									{diff.solved}/{diff.total}
+								</span>
+							</div>
+						</div>
+					))}
 				</div>
 			</div>
 		</motion.div>
