@@ -295,7 +295,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
 
 	return (
 		<Dialog open={isOpen} onOpenChange={onClose}>
-			<DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden bg-gray-900/95 backdrop-blur-xl border-white/10 text-white">
+			<DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden backdrop-blur-lg bg-white/10 dark:bg-gray-800/30 rounded-2xl p-8 shadow-xl border border-white/20 text-white">
 				<DialogHeader>
 					<DialogTitle className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-orange-200 bg-clip-text text-transparent">
 						{project.title.split("(")[0]}
