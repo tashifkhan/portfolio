@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react";
 
-export function LoginForm() {
+export function LoginForm({ onSuccess }: { onSuccess?: () => void } = {}) {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [showPassword, setShowPassword] = useState(false);
@@ -29,8 +29,11 @@ export function LoginForm() {
 			const data = await res.json();
 
 			if (res.ok) {
-				router.push("/update");
-				router.refresh();
+				onSuccess?.();
+				if (!onSuccess) {
+					router.push("/update");
+					router.refresh();
+				}
 			} else {
 				setError(data.error || "Invalid credentials");
 			}

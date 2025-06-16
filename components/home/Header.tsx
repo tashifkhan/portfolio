@@ -5,13 +5,19 @@ import { motion } from "framer-motion";
 import { links } from "../../lib/navbar-data";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { LoginForm } from "../admin/LoginForm";
 
 function Header() {
 	const pathname = usePathname();
 	const [activeSection, setActiveSection] = useState("");
 	const [isScrolled, setIsScrolled] = useState(false);
+	const [showLoginModal, setShowLoginModal] = useState(false);
+	const [isAuthenticated, setIsAuthenticated] = useState(false);
 
 	useEffect(() => {
+		// Check authentication status
+		checkAuthStatus();
+		
 		const handleScrollForStyling = () => {
 			setIsScrolled(window.scrollY > 50);
 		};
@@ -47,6 +53,30 @@ function Header() {
 		};
 	}, [pathname]);
 
+	const checkAuthStatus = async () => {
+		try {
+			const response = await fetch('/api/auth/check');
+			const data = await response.json();
+			setIsAuthenticated(data.authenticated);
+		} catch (error) {
+			setIsAuthenticated(false);
+		}
+	};
+
+	const handleLoginSuccess = () => {
+		setShowLoginModal(false);
+		setIsAuthenticated(true);
+	};
+
+	const handleLogout = async () => {
+		try {
+			await fetch('/api/auth/logout', { method: 'POST' });
+			setIsAuthenticated(false);
+		} catch (error) {
+			console.error('Logout error:', error);
+		}
+	};
+
 	return (
 		<header className="z-[999] relative">
 			{/* Desktop navbar */}
@@ -67,7 +97,7 @@ function Header() {
                   ${isScrolled ? "py-2 px-6" : "py-3 px-8"}
                `}
 					>
-						<nav className="flex justify-center">
+						<nav className="flex justify-between items-center">
 							<ul className="flex items-center justify-center gap-1">
 								{links.map((link) => {
 									const isActive = activeSection === link.hash;
@@ -100,6 +130,33 @@ function Header() {
 									);
 								})}
 							</ul>
+							
+							{/* Auth Button */}
+							<div className="ml-4">
+								{isAuthenticated ? (
+									<div className="flex items-center gap-2">
+										<Link
+											href="/update"
+											className="px-4 py-2 text-sm bg-orange-500 hover:bg-orange-600 text-white rounded-full transition-colors"
+										>
+											Update
+										</Link>
+										<button
+											onClick={handleLogout}
+											className="px-4 py-2 text-sm text-gray-300 hover:text-orange-300 transition-colors"
+										>
+											Logout
+										</button>
+									</div>
+								) : (
+									<button
+										onClick={() => setShowLoginModal(true)}
+										className="px-4 py-2 text-sm text-gray-300 hover:text-orange-300 transition-colors"
+									>
+										Admin
+									</button>
+								)}
+							</div>
 						</nav>
 					</div>
 				</div>
@@ -170,6 +227,23 @@ function Header() {
 					</nav>
 				</div>
 			</motion.div>
+			
+			{/* Login Modal */}
+			{showLoginModal && (
+				<div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
+					<div className="max-w-md w-full">
+						<div className="mb-4 flex justify-end">
+							<button
+								onClick={() => setShowLoginModal(false)}
+								className="text-white hover:text-orange-300 text-2xl"
+							>
+								×
+							</button>
+						</div>
+						<LoginForm onSuccess={handleLoginSuccess} />
+					</div>
+				</div>
+			)}
 		</header>
 	);
 }
