@@ -10,5 +10,5 @@ export default function UpdateLayout({
 }: {
 	children: React.ReactNode;
 }) {
-	return <section className="container mx-auto px-4 py-8">{children}</section>;
+	return <section className="container mx-auto px-4 pt-24 lg:pt-32 pb-8">{children}</section>;
 }
