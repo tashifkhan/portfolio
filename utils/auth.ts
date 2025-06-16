@@ -1,13 +1,12 @@
-import jwt from "jsonwebtoken"
 import { cookies } from "next/headers"
+import { createAuthToken, verifyToken as verifyJWT } from "./jwt-edge"
 
-const JWT_SECRET = process.env.JWT_SECRET || ""
 const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL
 const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD
 
 export async function authenticateUser(email: string, password: string) {
    if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-      const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: "30d" })
+      const token = await createAuthToken(email)
       return token
    }
    return null
@@ -20,8 +19,8 @@ export async function isAuthenticated() {
    if (!token) return false
 
    try {
-      jwt.verify(token.value, JWT_SECRET)
-      return true
+      const payload = await verifyJWT(token.value)
+      return !!payload
    } catch (error) {
       return false
    }
@@ -29,7 +28,7 @@ export async function isAuthenticated() {
 
 export async function verifyToken(token: string) {
    try {
-      return jwt.verify(token, JWT_SECRET)
+      return await verifyJWT(token)
    } catch (error) {
       return null
    }
@@ -42,5 +41,18 @@ export async function logout() {
 
 export async function checkAuth() {
    return await isAuthenticated()
+}
+
+export async function getTokenPayload() {
+   const cookieStore = cookies()
+   const token = (await cookieStore).get("auth_token")
+   
+   if (!token) return null
+   
+   try {
+      return await verifyToken(token.value)
+   } catch (error) {
+      return null
+   }
 }
 
