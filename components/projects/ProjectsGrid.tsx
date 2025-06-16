@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ProjectCard } from "./ProjectCard";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 
 const PROJECTS_PER_PAGE = 6;
 
@@ -34,7 +34,7 @@ export function ProjectsGrid() {
 		setVisibleCount((prev) => prev + PROJECTS_PER_PAGE);
 	};
 
-	const gridVariants = {
+	const gridVariants: Variants = {
 		hidden: {
 			opacity: 0,
 		},
@@ -47,7 +47,7 @@ export function ProjectsGrid() {
 		},
 	};
 
-	const projectVariants = {
+	const projectVariants: Variants = {
 		hidden: {
 			opacity: 0,
 			y: 20,
@@ -57,7 +57,6 @@ export function ProjectsGrid() {
 			y: 0,
 			transition: {
 				duration: 0.5,
-				ease: "easeOut",
 			},
 		},
 	};
