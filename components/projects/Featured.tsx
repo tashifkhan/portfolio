@@ -18,13 +18,28 @@ interface ProjectFrontmatter {
 	cta: string;
 }
 
+interface Project {
+	position: number;
+	title: string;
+	description: string;
+	technologies: string[];
+	githubLink?: string;
+	playStoreLink?: string;
+	liveLink?: string;
+	status: string;
+	imageLink?: string;
+}
+
 const Featured: React.FC = () => {
-	const [featuredProjects, setFeaturedProjects] = React.useState<any[]>([]);
-	const [selectedProject, setSelectedProject] = React.useState<any>(null);
+	const [featuredProjects, setFeaturedProjects] = React.useState<Project[]>([]);
+	const [selectedProject, setSelectedProject] = React.useState<Project | null>(
+		null
+	);
 	const [isModalOpen, setIsModalOpen] = React.useState(false);
 
-	const handleProjectClick = (project: any) => {
-		setSelectedProject(project);
+	const handleProjectClick = (project: Project) => {
+		// Set status as Completed before opening modal
+		setSelectedProject({ ...project, status: "Completed" });
 		setIsModalOpen(true);
 	};
 
@@ -36,7 +51,12 @@ const Featured: React.FC = () => {
 	useEffect(() => {
 		const fetchProjects = async () => {
 			const projects = await getFeaturedProjects();
-			setFeaturedProjects(projects);
+			// Set status as Completed for all featured projects
+			const projectsWithStatus = projects.map((project: Project) => ({
+				...project,
+				status: "Completed",
+			}));
+			setFeaturedProjects(projectsWithStatus);
 		};
 		fetchProjects();
 	}, []);
@@ -77,7 +97,7 @@ const Featured: React.FC = () => {
 								title={project.title}
 								description={project.description}
 								image={{
-									src: project.imageLink,
+									src: project.imageLink || "",
 									alt: `${project.title} preview`,
 									width: 1920,
 									height: 1080,

@@ -454,12 +454,12 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
 
 	return (
 		<Dialog open={isOpen} onOpenChange={onClose}>
-			<DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden backdrop-blur-lg bg-white/10 dark:bg-gray-800/30 rounded-2xl p-8 shadow-xl border border-white/20 text-white">
+			<DialogContent className="max-w-4xl w-[95vw] max-h-[90vh] overflow-hidden backdrop-blur-lg bg-white/10 dark:bg-gray-800/30 rounded-2xl p-4 sm:p-8 shadow-xl border border-white/20 text-white">
 				<DialogHeader>
-					<DialogTitle className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-orange-200 bg-clip-text text-transparent">
+					<DialogTitle className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-orange-400 to-orange-200 bg-clip-text text-transparent">
 						{project.title.split("(")[0]}
 						{project.title.includes("(") && (
-							<span className="ml-2 px-3 py-1 text-sm text-orange-200 bg-orange-500/20 rounded-full border border-orange-500/30">
+							<span className="ml-2 px-2 sm:px-3 py-1 text-xs sm:text-sm text-orange-200 bg-orange-500/20 rounded-full border border-orange-500/30">
 								{project.title.split("(")[1].replace(")", "")}
 							</span>
 						)}
@@ -470,51 +470,53 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
 					<TabsList className="grid w-full grid-cols-3 bg-gray-800/50 border border-gray-700">
 						<TabsTrigger
 							value="overview"
-							className="data-[state=active]:bg-orange-500/20 data-[state=active]:text-orange-200"
+							className="data-[state=active]:bg-orange-500/20 data-[state=active]:text-orange-200 text-xs sm:text-sm"
 						>
-							<Info className="w-4 h-4 mr-2" />
+							<Info className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
 							Overview
 						</TabsTrigger>
 						<TabsTrigger
 							value="tech"
-							className="data-[state=active]:bg-orange-500/20 data-[state=active]:text-orange-200"
+							className="data-[state=active]:bg-orange-500/20 data-[state=active]:text-orange-200 text-xs sm:text-sm"
 						>
-							<Code className="w-4 h-4 mr-2" />
+							<Code className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
 							Tech Stack
 						</TabsTrigger>
 						<TabsTrigger
 							value="readme"
-							className="data-[state=active]:bg-orange-500/20 data-[state=active]:text-orange-200"
+							className="data-[state=active]:bg-orange-500/20 data-[state=active]:text-orange-200 text-xs sm:text-sm"
 							disabled={!project.githubLink}
 						>
-							<FileText className="w-4 h-4 mr-2" />
+							<FileText className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
 							README
 						</TabsTrigger>
 					</TabsList>
 
-					<div className="mt-6 overflow-y-auto max-h-[60vh]">
-						<TabsContent value="overview" className="space-y-6">
+					<div className="mt-4 sm:mt-6 overflow-y-auto max-h-[60vh] px-1">
+						<TabsContent value="overview" className="space-y-4 sm:space-y-6">
 							{/* Status and Links */}
-							<div className="flex flex-wrap items-center gap-4 p-4 bg-gray-800/30 rounded-lg border border-gray-700">
+							<div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center gap-3 p-3 sm:p-4 bg-gray-800/30 rounded-lg border border-gray-700">
 								<div
-									className={`flex items-center gap-2 px-3 py-2 rounded-full border ${getStatusColor(
+									className={`flex items-center gap-2 px-2 sm:px-3 py-1 sm:py-2 rounded-full border ${getStatusColor(
 										project.status
 									)}`}
 								>
 									{renderStatusIcon(project.status)}
-									<span className="font-medium">{project.status}</span>
+									<span className="font-medium text-sm sm:text-base">
+										{project.status}
+									</span>
 								</div>
 
-								<div className="flex items-center gap-3">
+								<div className="flex flex-wrap items-center gap-2 sm:gap-3">
 									{project.githubLink && (
 										<Button
 											variant="outline"
 											size="sm"
 											asChild
-											className="border-gray-600 hover:border-orange-500/50 hover:bg-orange-500/10"
+											className="border-gray-600 hover:border-orange-500/50 hover:bg-orange-500/10 text-xs sm:text-sm"
 										>
 											<Link href={project.githubLink} target="_blank">
-												<GithubIcon className="w-4 h-4 mr-2" />
+												<GithubIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
 												GitHub
 											</Link>
 										</Button>
@@ -524,10 +526,10 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
 											variant="outline"
 											size="sm"
 											asChild
-											className="border-gray-600 hover:border-orange-500/50 hover:bg-orange-500/10"
+											className="border-gray-600 hover:border-orange-500/50 hover:bg-orange-500/10 text-xs sm:text-sm"
 										>
 											<Link href={project.liveLink} target="_blank">
-												<ExternalLink className="w-4 h-4 mr-2" />
+												<ExternalLink className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
 												Live Demo
 											</Link>
 										</Button>
@@ -537,10 +539,10 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
 											variant="outline"
 											size="sm"
 											asChild
-											className="border-gray-600 hover:border-orange-500/50 hover:bg-orange-500/10"
+											className="border-gray-600 hover:border-orange-500/50 hover:bg-orange-500/10 text-xs sm:text-sm"
 										>
 											<Link href={project.playStoreLink} target="_blank">
-												<IoLogoGooglePlaystore className="w-4 h-4 mr-2" />
+												<IoLogoGooglePlaystore className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
 												Play Store
 											</Link>
 										</Button>
@@ -549,29 +551,29 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
 							</div>
 
 							{/* Description */}
-							<div className="space-y-4">
-								<h3 className="text-lg font-semibold text-white/90">
+							<div className="space-y-3 sm:space-y-4">
+								<h3 className="text-base sm:text-lg font-semibold text-white/90">
 									About this project
 								</h3>
-								<p className="text-white/70 leading-relaxed text-base bg-gray-800/20 p-4 rounded-lg border border-gray-700/50">
+								<p className="text-white/70 leading-relaxed text-sm sm:text-base bg-gray-800/20 p-3 sm:p-4 rounded-lg border border-gray-700/50">
 									{project.description}
 								</p>
 							</div>
 						</TabsContent>
 
-						<TabsContent value="tech" className="space-y-6">
+						<TabsContent value="tech" className="space-y-4 sm:space-y-6">
 							<div>
-								<h3 className="text-lg font-semibold text-white/90 mb-4">
+								<h3 className="text-base sm:text-lg font-semibold text-white/90 mb-3 sm:mb-4">
 									Technologies Used
 								</h3>
-								<div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+								<div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
 									{project.technologies.map((tech, index) => (
 										<Badge
 											key={index}
 											variant="outline"
-											className="p-3 text-center justify-center bg-gradient-to-r from-orange-500/10 to-orange-500/5 
+											className="p-2 sm:p-3 text-center justify-center bg-gradient-to-r from-orange-500/10 to-orange-500/5 
                         border-orange-500/30 text-orange-200 hover:bg-orange-500/20 hover:border-orange-500/50
-                        transition-all duration-300 transform hover:scale-105"
+                        transition-all duration-300 transform hover:scale-105 text-xs sm:text-sm"
 										>
 											{tech}
 										</Badge>
@@ -582,23 +584,29 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
 
 						<TabsContent value="readme" className="space-y-4">
 							{isLoadingReadme ? (
-								<div className="flex items-center justify-center py-12">
+								<div className="flex items-center justify-center py-8 sm:py-12">
 									<Loader size="lg" />
-									<span className="ml-2 text-white/70">Loading README...</span>
+									<span className="ml-2 text-white/70 text-sm sm:text-base">
+										Loading README...
+									</span>
 								</div>
 							) : readmeError ? (
-								<div className="text-center py-12">
-									<FileText className="w-12 h-12 text-gray-500 mx-auto mb-4" />
-									<p className="text-gray-400">{readmeError}</p>
+								<div className="text-center py-8 sm:py-12">
+									<FileText className="w-8 h-8 sm:w-12 sm:h-12 text-gray-500 mx-auto mb-3 sm:mb-4" />
+									<p className="text-gray-400 text-sm sm:text-base">
+										{readmeError}
+									</p>
 								</div>
 							) : readme ? (
-								<div className="bg-gray-800/20 p-6 rounded-lg border border-gray-700/50">
+								<div className="bg-gray-800/20 p-3 sm:p-6 rounded-lg border border-gray-700/50">
 									{renderMarkdown(readme)}
 								</div>
 							) : (
-								<div className="text-center py-12">
-									<FileText className="w-12 h-12 text-gray-500 mx-auto mb-4" />
-									<p className="text-gray-400">No README available</p>
+								<div className="text-center py-8 sm:py-12">
+									<FileText className="w-8 h-8 sm:w-12 sm:h-12 text-gray-500 mx-auto mb-3 sm:mb-4" />
+									<p className="text-gray-400 text-sm sm:text-base">
+										No README available
+									</p>
 								</div>
 							)}
 						</TabsContent>
