@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { ProjectCard } from "./ProjectCard";
 import { Button } from "@/components/ui/button";
 import { motion, Variants } from "framer-motion";
+import ProjectModal from "@/components/ProjectModal";
 
 const PROJECTS_PER_PAGE = 6;
 
@@ -13,15 +14,26 @@ export function ProjectsGrid() {
 	const [projects, setProjects] = useState<Project[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [visibleCount, setVisibleCount] = useState(PROJECTS_PER_PAGE);
+	const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+	const [isModalOpen, setIsModalOpen] = useState(false);
+
+	const handleProjectClick = (project: Project) => {
+		setSelectedProject(project);
+		setIsModalOpen(true);
+	};
+
+	const handleCloseModal = () => {
+		setIsModalOpen(false);
+		setSelectedProject(null);
+	};
 
 	useEffect(() => {
 		async function fetchProjects() {
 			try {
 				const response = await fetch("/api/projects");
 				const data = await response.json();
-				const completedProjects = data
-					.slice(3)
-					.filter((project: Project) => project.status === "Completed");
+				const completedProjects = data.slice(3);
+				// .filter((project: Project) => project.status === "Completed");
 				setProjects(completedProjects);
 			} catch (error) {
 				console.error("Failed to fetch projects:", error);
@@ -92,6 +104,8 @@ export function ProjectsGrid() {
 					<motion.div
 						key={project.position ?? index}
 						variants={projectVariants}
+						onClick={() => handleProjectClick(project)}
+						className="cursor-pointer"
 					>
 						<ProjectCard {...project} />
 					</motion.div>
@@ -126,6 +140,12 @@ export function ProjectsGrid() {
 					</Button>
 				</motion.div>
 			)}
+
+			<ProjectModal
+				project={selectedProject}
+				isOpen={isModalOpen}
+				onClose={handleCloseModal}
+			/>
 		</section>
 	);
 }
