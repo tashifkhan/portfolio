@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
-import { Github, Database, Box } from "lucide-react";
+import { Github, Database, Box, Settings } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -16,6 +16,7 @@ const iconMap: Record<string, React.ElementType> = {
 	Github,
 	Database,
 	Box,
+	Settings,
 };
 
 const defaultTools = [
@@ -75,7 +76,8 @@ export function ToolsGrid() {
 			<h3 className="text-xl font-bold">Tools & Technologies</h3>
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 				{tools.map((tool, index) => {
-					const Icon = iconMap[tool.icon];
+					// Use fallback icon if the specified icon doesn't exist
+					const Icon = iconMap[tool.icon] || iconMap.Settings;
 					return (
 						<motion.div
 							key={tool.name}

@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { FaPython, FaJsSquare } from "react-icons/fa";
+import { FaPython, FaJsSquare, FaCode } from "react-icons/fa";
 import { SiCplusplus, SiGo, SiTypescript } from "react-icons/si";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -25,6 +25,7 @@ const iconMap: Record<string, React.ElementType> = {
 	SiCplusplus: SiCplusplus,
 	FaJsSquare: FaJsSquare,
 	SiTypescript: SiTypescript,
+	FaCode: FaCode,
 };
 
 const getLanguages = async () => {
@@ -37,7 +38,7 @@ const getLanguages = async () => {
 	return (
 		data[0]?.languages.map((lang: { name: string; icon: string }) => ({
 			name: lang.name,
-			icon: iconMap[lang.icon],
+			icon: iconMap[lang.icon] || iconMap.FaCode,
 		})) || defaultLanguages
 	);
 };

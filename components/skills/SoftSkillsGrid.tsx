@@ -9,6 +9,7 @@ import {
 	LineChart,
 	Palette,
 	Pencil,
+	User, 
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -26,6 +27,7 @@ const iconMap: Record<string, React.ElementType> = {
 	LineChart,
 	Palette,
 	Pencil,
+	User, 
 };
 
 const defaultSoftSkills = [
@@ -97,7 +99,8 @@ export function SoftSkillsGrid() {
 			<h3 className="text-xl font-semibold">Soft Skills & Other Avocations</h3>
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 				{softSkills.map((skill, index) => {
-					const Icon = iconMap[skill.icon];
+					// Use fallback icon if the specified icon doesn't exist
+					const Icon = iconMap[skill.icon] || iconMap.User;
 					return (
 						<motion.div
 							key={skill.name}
