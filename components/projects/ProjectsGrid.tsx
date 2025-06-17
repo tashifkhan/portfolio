@@ -19,7 +19,10 @@ export function ProjectsGrid() {
 			try {
 				const response = await fetch("/api/projects");
 				const data = await response.json();
-				setProjects(data.slice(3));
+				const completedProjects = data
+					.slice(3)
+					.filter((project: Project) => project.status === "Completed");
+				setProjects(completedProjects);
 			} catch (error) {
 				console.error("Failed to fetch projects:", error);
 			} finally {
