@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 // import Image from "next/image";
 import { getFeaturedProjects } from "@/hooks/get-project-data";
+import ProjectModal from "@/components/ProjectModal";
 
 interface ProjectFrontmatter {
 	external: string;
@@ -19,6 +20,19 @@ interface ProjectFrontmatter {
 
 const Featured: React.FC = () => {
 	const [featuredProjects, setFeaturedProjects] = React.useState<any[]>([]);
+	const [selectedProject, setSelectedProject] = React.useState<any>(null);
+	const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+	const handleProjectClick = (project: any) => {
+		setSelectedProject(project);
+		setIsModalOpen(true);
+	};
+
+	const handleCloseModal = () => {
+		setIsModalOpen(false);
+		setSelectedProject(null);
+	};
+
 	useEffect(() => {
 		const fetchProjects = async () => {
 			const projects = await getFeaturedProjects();
@@ -56,7 +70,8 @@ const Featured: React.FC = () => {
 							whileInView={{ opacity: 1, y: 0 }}
 							transition={{ duration: 0.8, delay: index * 0.2 }}
 							viewport={{ once: true }}
-							className="md:pb-28"
+							className="md:pb-28 cursor-pointer"
+							onClick={() => handleProjectClick(project)}
 						>
 							<FeaturedProject
 								title={project.title}
@@ -76,6 +91,12 @@ const Featured: React.FC = () => {
 					))}
 				</div>
 			</div>
+
+			<ProjectModal
+				project={selectedProject}
+				isOpen={isModalOpen}
+				onClose={handleCloseModal}
+			/>
 		</section>
 	);
 };
