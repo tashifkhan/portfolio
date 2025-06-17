@@ -11,7 +11,26 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
 	title: "<khan/ tashif> | Portfolio",
-	description: "This is breif showcase of my skills and projects",
+	description: "This is brief showcase of my skills and projects",
+	manifest: "/manifest.json",
+	themeColor: "#f97316",
+	appleWebApp: {
+		capable: true,
+		statusBarStyle: "default",
+		title: "Tashif's Portfolio",
+	},
+	viewport: {
+		width: "device-width",
+		initialScale: 1,
+		maximumScale: 1,
+	},
+	icons: {
+		icon: [
+			{ url: "/icon-192x192.png", sizes: "192x192", type: "image/png" },
+			{ url: "/icon-512x512.png", sizes: "512x512", type: "image/png" },
+		],
+		apple: [{ url: "/icon-192x192.png", sizes: "192x192", type: "image/png" }],
+	},
 };
 
 export default function RootLayout({
