@@ -20,6 +20,7 @@ import {
 	Responsibility,
 	Socials,
 } from "@/types/content";
+import { usePyodide } from "@/hooks/usePyodide";
 
 type ActionType =
 	| "addSkills"
@@ -33,7 +34,8 @@ type ActionType =
 	| "addNotableProjects"
 	| "updateNotableProjects"
 	| "deleteNotableProjects"
-	| "reorderNotableProjects";
+	| "reorderNotableProjects"
+	| "autoAddProjects";
 
 export default function UpdateForm() {
 	const [selectedAction, setSelectedAction] = useState<ActionType | null>(null);
@@ -178,6 +180,10 @@ export default function UpdateForm() {
 						{
 							label: "Reorder Notable Projects",
 							action: "reorderNotableProjects" as ActionType,
+						},
+						{
+							label: "Auto Add Projects",
+							action: "autoAddProjects" as ActionType,
 						},
 					].map(({ label, action }) => (
 						<Button
@@ -339,6 +345,14 @@ export default function UpdateForm() {
 						<AddSkillForm
 							onSuccess={() => {
 								showMessage("success", "Skill added successfully!");
+								fetchData();
+							}}
+						/>
+					)}
+					{selectedAction === "autoAddProjects" && (
+						<AutoAddProjectsForm
+							onSuccess={() => {
+								showMessage("success", "Projects auto-added successfully!");
 								fetchData();
 							}}
 						/>
@@ -1429,5 +1443,441 @@ function UpdateSocialsForm({ onSuccess }: { onSuccess: () => void }) {
 				{loading ? "Updating..." : "Update Social Links"}
 			</Button>
 		</form>
+	);
+}
+
+// Python Script Form Components
+function AutoAddProjectsForm({ onSuccess }: { onSuccess: () => void }) {
+	const [formData, setFormData] = useState({
+		username: "tashifkhan",
+		numProjects: 5,
+	});
+	const [loading, setLoading] = useState(false);
+	const [result, setResult] = useState<any[]>([]);
+	const { pyodide, loading: pyodideLoading, error } = usePyodide();
+
+	const handleSubmit = async (e: React.FormEvent) => {
+		e.preventDefault();
+		if (!pyodide) {
+			console.log("❌ Pyodide not loaded yet");
+			return;
+		}
+
+		console.log("🚀 Starting Auto Add Projects process...");
+		console.log("📝 Form data:", formData);
+
+		setLoading(true);
+		try {
+			// Set data in Python globals
+			console.log("🔧 Setting Python globals...");
+			pyodide.globals.set("github_username", formData.username);
+			pyodide.globals.set("num_projects", formData.numProjects);
+			console.log("✅ Python globals set:", {
+				username: formData.username,
+				numProjects: formData.numProjects,
+			});
+
+			const pythonCode = `
+import json
+from pyodide.http import pyfetch
+from typing import List, Optional
+
+print("🐍 Python script started")
+print(f"📊 Username: {github_username}")
+print(f"📊 Number of projects: {num_projects}")
+
+class Response:
+    def __init__(self, title, description=None, live_website_url=None, languages=None, num_commits=0, readme=None, status=None):
+        self.title = title
+        self.description = description
+        self.live_website_url = live_website_url
+        self.languages = languages or []
+        self.num_commits = num_commits
+        self.readme = readme
+        self.status = status
+
+async def get_projects(github_username):
+    print(f"🌐 Fetching projects for user: {github_username}")
+    url = f"https://github-stats.tashif.codes/{github_username}/repos"
+    print(f"🔗 URL: {url}")
+    
+    try:
+        res = await pyfetch(url)
+        print(f"📡 Response status: {res.status}")
+        
+        if res.status != 200:
+            print(f"❌ HTTP Error: {res.status}")
+            raise Exception(f"Failed to fetch projects for {github_username}. Status code: {res.status}")
+        
+        projects = await res.json()
+        print(f"📦 Raw projects data: {projects}")
+        print(f"📊 Number of projects fetched: {len(projects)}")
+        
+        response_objects = []
+        for i, project in enumerate(projects):
+            print(f"🔍 Processing project {i+1}: {project.get('title', 'Unknown')}")
+            response_obj = Response(
+                title=project.get("title", "Unknown Project"),
+                description=project.get("description"),
+                live_website_url=project.get("live_website_url"),
+                languages=project.get("languages", []),
+                num_commits=project.get("num_commits", 0),
+                readme=project.get("readme"),
+                status=project.get("status")
+            )
+            response_objects.append(response_obj)
+            print(f"✅ Project {i+1} processed: {response_obj.title}")
+        
+        print(f"🎯 Total projects processed: {len(response_objects)}")
+        return response_objects
+        
+    except Exception as e:
+        print(f"💥 Error in get_projects: {e}")
+        raise e
+
+def gen_desc(title, languages, readme):
+    """Generate description using rule-based approach (similar to main.py logic)"""
+    print(f"📝 Generating description for: {title}")
+    
+    # Start with basic description
+    description = f"A {title} project"
+    
+    # Add languages if available
+    if languages and len(languages) > 0:
+        lang_list = languages[:3]  # Take first 3 languages
+        description += f" built with {', '.join(lang_list)}"
+    
+    # Try to extract meaningful description from README
+    if readme:
+        lines = readme.split('\\n')
+        for line in lines:
+            line = line.strip()
+            # Skip headers, empty lines, and very short lines
+            if (line and 
+                not line.startswith('#') and 
+                not line.startswith('---') and
+                not line.startswith('[') and
+                len(line) > 30 and 
+                len(line) < 200):
+                # Check if it looks like a meaningful description
+                if any(keyword in line.lower() for keyword in ['is a', 'provides', 'features', 'platform', 'application', 'tool', 'system']):
+                    description = line
+                    break
+    
+    print(f"📄 Generated description: {description}")
+    return description
+
+def gen_project_status(title, live_url, num_commits, readme):
+    """Analyze project status using rule-based approach (similar to main.py logic)"""
+    print(f"🏷️ Analyzing status for: {title}")
+    
+    title_lower = title.lower()
+    readme_lower = readme.lower() if readme else ""
+    
+    # Check for completion indicators
+    completion_indicators = [
+        'complete', 'finished', 'stable', 'production', 'deployed',
+        'live demo', 'live site', 'working demo', 'final version'
+    ]
+    
+    # Check for WIP indicators
+    wip_indicators = [
+        'todo', 'in progress', 'under development', 'coming soon',
+        'work in progress', 'development', 'beta', 'alpha'
+    ]
+    
+    # Check for planning indicators
+    planning_indicators = [
+        'planned', 'concept', 'idea', 'proposal', 'design',
+        'coming soon', 'future', 'roadmap'
+    ]
+    
+    # Rule-based status determination
+    if live_url and num_commits > 50:
+        status = "Completed"
+    elif any(indicator in readme_lower for indicator in completion_indicators):
+        status = "Completed"
+    elif any(indicator in readme_lower for indicator in wip_indicators):
+        status = "In Progress"
+    elif any(indicator in readme_lower for indicator in planning_indicators):
+        status = "Planned"
+    elif num_commits > 20:
+        status = "In Progress"
+    elif num_commits > 5:
+        status = "In Progress"
+    else:
+        status = "Planned"
+    
+    print(f"🏷️ Status determined: {status} (commits: {num_commits}, live_url: {bool(live_url)})")
+    return status
+
+def gen_tech_stack(languages, readme):
+    """Extract tech stack using rule-based approach (similar to main.py logic)"""
+    print(f"🔧 Extracting tech stack from languages: {languages}")
+    
+    readme_lower = readme.lower() if readme else ""
+    
+    # Comprehensive tech keywords (from original tech_extractor.py)
+    tech_keywords = [
+        # Programming Languages
+        "python", "javascript", "typescript", "java", "c++", "c#", "go", "rust", "php", "ruby", "swift", "kotlin",
+        
+        # Frontend Frameworks
+        "react", "next.js", "vue", "angular", "svelte", "nuxt", "gatsby", "ember",
+        
+        # Backend Frameworks
+        "node.js", "express", "fastapi", "django", "flask", "spring", "laravel", "rails", "asp.net",
+        
+        # Databases
+        "postgresql", "mongodb", "mysql", "redis", "sqlite", "elasticsearch", "cassandra", "dynamodb",
+        
+        # Cloud & Deployment
+        "docker", "kubernetes", "aws", "azure", "gcp", "vercel", "netlify", "heroku", "digitalocean",
+        
+        # CSS Frameworks
+        "tailwind", "bootstrap", "material-ui", "chakra", "styled-components", "sass", "less",
+        
+        # Libraries & Tools
+        "pandas", "numpy", "scikit-learn", "tensorflow", "pytorch", "chart.js", "d3.js", "lodash",
+        
+        # Version Control & DevOps
+        "git", "github", "gitlab", "jenkins", "github actions", "gitlab ci", "travis ci",
+        
+        # Other Tools
+        "webpack", "vite", "babel", "eslint", "prettier", "jest", "cypress", "storybook"
+    ]
+    
+    found_tech = []
+    for tech in tech_keywords:
+        if tech in readme_lower:
+            found_tech.append(tech)
+    
+    # Combine languages and found technologies
+    all_tech = list(set(languages + found_tech))
+    
+    # Remove duplicates (case-insensitive)
+    seen = set()
+    unique_tech = []
+    for tech in all_tech:
+        if tech.lower() not in seen:
+            unique_tech.append(tech)
+            seen.add(tech.lower())
+    
+    print(f"🔧 Tech stack extracted: {unique_tech}")
+    return unique_tech
+
+def process_projects(projects_data):
+    print(f"⚙️ Processing {len(projects_data)} projects...")
+    processed_projects = []
+    for i, project in enumerate(projects_data):
+        print(f"🔄 Processing project {i+1}: {project.get('title', 'Unknown')}")
+        
+        # Generate description if missing
+        if not project.get("description"):
+            project["description"] = gen_desc(project.get("title", ""), project.get("languages", []), project.get("readme", ""))
+        
+        # Generate status if missing
+        if not project.get("status"):
+            project["status"] = gen_project_status(
+                project.get("title", ""),
+                project.get("live_website_url", ""),
+                project.get("num_commits", 0),
+                project.get("readme", "")
+            )
+        
+        # Generate tech stack
+        project["technologies"] = gen_tech_stack(project.get("languages", []), project.get("readme", ""))
+        
+        # Create final project object
+        project_json = {
+            "position": i,
+            "title": project.get("title", ""),
+            "description": project.get("description", ""),
+            "technologies": project.get("technologies", []),
+            "status": project.get("status", "In Progress"),
+            "githubLink": f"https://github.com/{github_username}/{project.get('title', '')}",
+            "liveLink": project.get("live_website_url", ""),
+        }
+        processed_projects.append(project_json)
+        print(f"✅ Project {i+1} finalized: {project_json}")
+    
+    print(f"🎉 All projects processed! Total: {len(processed_projects)}")
+    return processed_projects
+
+print("🚀 Starting project fetch...")
+# Fetch and process projects
+projects = await get_projects(github_username)
+print(f"📦 Projects fetched: {len(projects)}")
+
+projects_data = [{
+    "title": p.title,
+    "description": p.description,
+    "live_website_url": p.live_website_url,
+    "languages": p.languages,
+    "num_commits": p.num_commits,
+    "readme": p.readme,
+    "status": p.status
+} for p in projects]
+
+print(f"📊 Projects data prepared: {len(projects_data)}")
+
+# Limit to requested number
+projects_data = projects_data[:num_projects]
+print(f"📏 Limited to {num_projects} projects")
+
+# Process all projects
+result = process_projects(projects_data)
+
+# Ensure we return a list
+if not isinstance(result, list):
+    print("⚠️ Result is not a list, converting...")
+    result = []
+
+print(f"🎯 Final result: {len(result)} projects")
+print("📋 Result preview:", result[:2] if result else "No projects")
+
+result
+`;
+			console.log("🐍 Running Python code...");
+			const processed = await pyodide.runPythonAsync(pythonCode);
+			console.log("✅ Python execution completed");
+			console.log("📦 Raw Python result:", processed);
+
+			const projectsArray = Array.isArray(processed) ? processed : [];
+			console.log("🔧 Processed array:", projectsArray);
+			setResult(projectsArray);
+
+			// Add projects to database
+			if (projectsArray.length > 0) {
+				console.log("💾 Adding projects to database...");
+				const addPromises = projectsArray.map((project, index) => {
+					console.log(`📤 Adding project ${index + 1}:`, project);
+					return fetch("/api/projects", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify(project),
+					});
+				});
+
+				const responses = await Promise.all(addPromises);
+				console.log("📡 Database responses:", responses);
+
+				const failed = responses.filter((r) => !r.ok);
+				if (failed.length > 0) {
+					console.error("❌ Some projects failed to add:", failed);
+				} else {
+					console.log("✅ All projects added successfully!");
+				}
+			} else {
+				console.log("⚠️ No projects to add to database");
+			}
+
+			console.log("🎉 Auto Add Projects process completed successfully!");
+			onSuccess();
+		} catch (error) {
+			console.error("💥 Error auto-adding projects:", error);
+			console.error("🔍 Error details:", {
+				name: (error as Error).name,
+				message: (error as Error).message,
+				stack: (error as Error).stack,
+			});
+			setResult([]);
+		} finally {
+			console.log("🏁 Process finished, setting loading to false");
+			setLoading(false);
+		}
+	};
+
+	return (
+		<div className="space-y-4">
+			<form onSubmit={handleSubmit} className="space-y-4">
+				<div>
+					<label className="block text-sm font-medium text-gray-300 mb-2">
+						GitHub Username
+					</label>
+					<Input
+						placeholder="Enter GitHub username"
+						value={formData.username}
+						onChange={(e) =>
+							setFormData((prev) => ({ ...prev, username: e.target.value }))
+						}
+						className="bg-white/5 text-gray-300 border-orange-500/20"
+						required
+					/>
+				</div>
+				<div>
+					<label className="block text-sm font-medium text-gray-300 mb-2">
+						Number of Projects to Add
+					</label>
+					<Input
+						type="number"
+						placeholder="Enter number of projects"
+						value={formData.numProjects}
+						onChange={(e) =>
+							setFormData((prev) => ({
+								...prev,
+								numProjects: parseInt(e.target.value) || 5,
+							}))
+						}
+						className="bg-white/5 text-gray-300 border-orange-500/20"
+						min="1"
+						max="20"
+						required
+					/>
+				</div>
+				<Button
+					type="submit"
+					disabled={loading || pyodideLoading || !pyodide}
+					className="w-full bg-orange-500 hover:bg-orange-600"
+				>
+					{loading || pyodideLoading
+						? "Processing and Adding Projects..."
+						: "Auto Add Projects"}
+				</Button>
+			</form>
+			{error && <div className="text-red-500">{error}</div>}
+			{result && result.length > 0 && (
+				<div className="mt-6">
+					<h4 className="text-orange-300 font-medium mb-3">
+						Processed and Added Projects ({result.length})
+					</h4>
+					<div className="space-y-2 max-h-60 overflow-y-auto">
+						{result.map((project, index) => (
+							<div
+								key={index}
+								className="bg-white/5 p-3 rounded border border-orange-500/20"
+							>
+								<h5 className="text-white font-medium">{project.title}</h5>
+								<p className="text-gray-400 text-sm">
+									{project.description || "No description"}
+								</p>
+								<div className="flex items-center gap-4 mt-2">
+									<span className="text-xs text-gray-500">
+										Position: {project.position}
+									</span>
+									<span className="text-xs text-gray-500">
+										Status: {project.status}
+									</span>
+								</div>
+								<div className="flex flex-wrap gap-1 mt-2">
+									{project.technologies
+										?.slice(0, 3)
+										.map((tech: string, i: number) => (
+											<span
+												key={i}
+												className="bg-orange-500/20 text-orange-300 px-2 py-1 rounded text-xs"
+											>
+												{tech}
+											</span>
+										))}
+								</div>
+							</div>
+						))}
+					</div>
+				</div>
+			)}
+		</div>
 	);
 }
