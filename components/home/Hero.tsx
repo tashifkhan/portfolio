@@ -58,13 +58,15 @@ function Hero() {
 	};
 
 	const [text] = useTypewriter({
-		words: [
-			"Web Developer",
-			"UI/UX Designer",
-			"App Developer",
-			"Freelancer",
-			"Final Year Student",
-		],
+		words: process.env.DESCRIPTION_WORDS
+			? process.env.DESCRIPTION_WORDS.split(",")
+			: [
+					"Web Developer",
+					"UI/UX Designer",
+					"App Developer",
+					"Freelancer",
+					"Final Year Student",
+			  ],
 		loop: true,
 		deleteSpeed: 50,
 		typeSpeed: 100,
@@ -109,7 +111,7 @@ function Hero() {
 					<div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-orange-400 to-pink-500 opacity-75 blur-sm animate-pulse"></div>
 					<Image
 						src="/bg01.jpeg"
-						alt="Tashif Ahmad Khan"
+						alt="Profile Picture"
 						width="192"
 						height="192"
 						quality="95"
@@ -123,7 +125,7 @@ function Hero() {
 					variants={item}
 					className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-orange-300"
 				>
-					Tashif Ahmad Khan
+					{process.env.PUBLIC_NAME || "Tashif Ahmad Khan"}
 				</motion.h1>
 
 				{/* Typewriter text */}
