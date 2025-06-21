@@ -1,6 +1,6 @@
 # Portfolio Management System
 
-This isn't just a mere portfolio website - it's a **comprehensive portfolio management system** with full CRUD operations, authentication, and database integration. Built with modern web technologies including TypeScript, React, Next.js, Shadcn UI, Radix UI, and Tailwind CSS, this system allows you to dynamically manage all portfolio content without making manual code changes.
+This isn't just a mere portfolio website - it's a **portfolio management system** with full CRUD operations, authentication, and database integration. Built with modern web technologies including TypeScript, React, Next.js, Shadcn UI, Radix UI, and Tailwind CSS, this system allows you to dynamically manage all portfolio content without making manual code changes.
 
 **Live Demo**: [<khan/ tashif> | Portfolio](https://portfolio.tashif.codes/)
 
@@ -299,7 +299,13 @@ bun run lint     # Run ESLint
 
 ## Environment Setup
 
-Create a `.env.local` file in the root directory with the following variables:
+Create a `.env` file in the root directory with the following variables. You can copy from `.env.example` and update the values:
+
+```bash
+cp .env.example .env
+```
+
+### Required Environment Variables
 
 ```env
 # Admin Credentials (for content management)
@@ -312,9 +318,53 @@ MONGODB_URI=your-mongodb-connection-string
 # Authentication
 JWT_SECRET=your-jwt-secret-key
 
+# GitHub API (Optional - for enhanced GitHub stats)
+NEXT_PUBLIC_GITHUB_TOKEN=your-github-personal-access-token
+
 # Environment
 NODE_ENV=development
+
+# Hero Section Customization (Optional)
+PUBLIC_NAME=Your Name
+DESCRIPTION_WORDS=Web Developer,UI/UX Designer,App Developer,Freelancer,Student
 ```
+
+### Environment Variables Explained
+
+#### Required Variables
+
+- **`PUBLIC_NAME`**: Your name to display in the hero section (in the hero section)
+- **`DESCRIPTION_WORDS`**: Comma-separated list of words/phrases for the typewriter effect (in the hero section)
+- **`NEXT_PUBLIC_ADMIN_EMAIL`**: Email address for admin login to the content management system
+- **`NEXT_PUBLIC_ADMIN_PASSWORD`**: Password for admin authentication (use a strong password)
+- **`MONGODB_URI`**: MongoDB connection string for database operations
+- **`JWT_SECRET`**: Secret key for JWT token generation and validation (use a strong, random string)
+- **`NODE_ENV`**: Environment mode (`development`, `production`, or `test`)
+
+#### Optional Variables
+
+- **`NEXT_PUBLIC_GITHUB_TOKEN`**: GitHub Personal Access Token for enhanced API rate limits when fetching GitHub stats
+  - **How to get**: Go to GitHub Settings → Developer settings → Personal access tokens → Generate new token
+  - **Permissions needed**: `public_repo` (for public repository access)
+  - **Note**: Without this token, GitHub stats will still work but with lower rate limits
+
+### Setting Up MongoDB
+
+1. **Create a MongoDB Atlas account** (free tier available)
+2. **Create a new cluster**
+3. **Get your connection string**:
+   - Click "Connect" on your cluster
+   - Choose "Connect your application"
+   - Copy the connection string
+   - Replace `<password>` with your database user password
+   - Replace `<dbname>` with your preferred database name
+
+### Security Notes
+
+- **Never commit `.env.local` to version control**
+- **Use strong passwords and secrets**
+- **Regularly rotate your JWT secret in production**
+- **Consider using environment-specific values for different deployments**
 
 ### Database Collections
 
