@@ -253,7 +253,7 @@ function SearchableTable() {
 														</span>
 													)}
 												</h3>
-												<p className="text-sm text-white/70 leading-relaxed">
+												<p className="text-sm text-white/70 leading-relaxed line-clamp-3">
 													{project.description}
 												</p>
 											</div>
