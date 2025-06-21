@@ -120,3 +120,42 @@ export const getContributionGraphs = async (
   
   return await executeContributionGraphRequests(user, years);
 };
+
+// New function to fetch repository stats
+export interface RepositoryStats {
+  stars: number;
+}
+
+export const getRepositoryStats = async (githubUrl: string): Promise<RepositoryStats | null> => {
+  try {
+    // Extract owner and repo from GitHub URL
+    const match = githubUrl.match(/github\.com\/([^\/]+)\/([^\/]+)/);
+    if (!match) {
+      throw new Error("Invalid GitHub URL");
+    }
+
+    const [, owner, repo] = match;
+    const cleanRepo = repo.replace(/\.git$/, ""); // Remove .git suffix if present
+    
+    // Fetch repository data from GitHub API
+    const response = await fetch(`https://api.github.com/repos/${owner}/${cleanRepo}`, {
+      headers: {
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}`,
+        'Accept': 'application/vnd.github.v3+json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`GitHub API error: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    
+    return {
+      stars: data.stargazers_count || 0,
+    };
+  } catch (error) {
+    console.error("Failed to fetch repository stats:", error);
+    return null;
+  }
+};

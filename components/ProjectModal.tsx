@@ -20,11 +20,14 @@ import {
 	FileText,
 	Code,
 	Info,
+	Star,
+	Eye,
 } from "lucide-react";
 import { IoLogoGooglePlaystore } from "react-icons/io5";
 import Link from "next/link";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { getRepositoryStats, type RepositoryStats } from "@/utils/github";
 
 interface Project {
 	position: number;
@@ -51,12 +54,24 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
 	const [readme, setReadme] = useState<string>("");
 	const [isLoadingReadme, setIsLoadingReadme] = useState(false);
 	const [readmeError, setReadmeError] = useState<string>("");
+	const [repoStats, setRepoStats] = useState<RepositoryStats | null>(null);
 
 	useEffect(() => {
 		if (project?.githubLink && isOpen) {
 			fetchReadme(project.githubLink);
+			fetchRepoStats(project.githubLink);
 		}
 	}, [project, isOpen]);
+
+	const fetchRepoStats = async (githubUrl: string) => {
+		try {
+			const stats = await getRepositoryStats(githubUrl);
+			setRepoStats(stats);
+		} catch (error) {
+			console.error("Failed to fetch repository stats:", error);
+			setRepoStats(null);
+		}
+	};
 
 	const fetchReadme = async (githubUrl: string) => {
 		try {
@@ -546,6 +561,17 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
 												Play Store
 											</Link>
 										</Button>
+									)}
+									{/* GitHub Stats - Rightmost */}
+									{project.githubLink && repoStats && repoStats.stars > 0 && (
+										<div className="flex items-center gap-2 ml-auto">
+											<div className="flex items-center gap-1 px-2 py-1 bg-orange-500/10 rounded-md border border-orange-500/30">
+												<Star className="w-3 h-3 text-orange-400" />
+												<span className="text-orange-200 text-xs font-medium">
+													{repoStats.stars.toLocaleString()}
+												</span>
+											</div>
+										</div>
 									)}
 								</div>
 							</div>
