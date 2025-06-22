@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useSwipeable } from "react-swipeable";
 import {
 	Dialog,
 	DialogContent,
@@ -55,6 +56,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
 	const [isLoadingReadme, setIsLoadingReadme] = useState(false);
 	const [readmeError, setReadmeError] = useState<string>("");
 	const [repoStats, setRepoStats] = useState<RepositoryStats | null>(null);
+	const [currentTab, setCurrentTab] = useState<string>("overview");
 
 	useEffect(() => {
 		if (project?.githubLink && isOpen) {
@@ -62,6 +64,35 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
 			fetchRepoStats(project.githubLink);
 		}
 	}, [project, isOpen]);
+
+	// Swipe handlers for tab navigation
+	const handleSwipeLeft = () => {
+		const tabs = ["overview", "tech", "readme"];
+		const currentIndex = tabs.indexOf(currentTab);
+		if (currentIndex < tabs.length - 1) {
+			const nextTab = tabs[currentIndex + 1];
+			// Only allow navigation to README tab if githubLink exists
+			if (nextTab === "readme" && !project?.githubLink) {
+				return;
+			}
+			setCurrentTab(nextTab);
+		}
+	};
+
+	const handleSwipeRight = () => {
+		const tabs = ["overview", "tech", "readme"];
+		const currentIndex = tabs.indexOf(currentTab);
+		if (currentIndex > 0) {
+			setCurrentTab(tabs[currentIndex - 1]);
+		}
+	};
+
+	const swipeHandlers = useSwipeable({
+		onSwipedLeft: handleSwipeLeft,
+		onSwipedRight: handleSwipeRight,
+		delta: 50, // Minimum swipe distance
+		swipeDuration: 500, // Maximum swipe duration
+	});
 
 	const fetchRepoStats = async (githubUrl: string) => {
 		try {
@@ -481,7 +512,11 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
 					</DialogTitle>
 				</DialogHeader>
 
-				<Tabs defaultValue="overview" className="flex-1 overflow-hidden">
+				<Tabs
+					value={currentTab}
+					onValueChange={setCurrentTab}
+					className="flex-1 overflow-hidden"
+				>
 					<TabsList className="grid w-full grid-cols-3 bg-gray-800/50 border border-gray-700">
 						<TabsTrigger
 							value="overview"
@@ -507,7 +542,10 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
 						</TabsTrigger>
 					</TabsList>
 
-					<div className="mt-4 sm:mt-6 overflow-y-auto max-h-[60vh] px-1">
+					<div
+						{...swipeHandlers}
+						className="mt-4 sm:mt-6 overflow-y-auto max-h-[60vh] px-1"
+					>
 						<TabsContent value="overview" className="space-y-4 sm:space-y-6">
 							{/* Status and Links */}
 							<div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center gap-3 p-3 sm:p-4 bg-gray-800/30 rounded-lg border border-gray-700">
