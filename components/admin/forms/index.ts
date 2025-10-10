@@ -4,12 +4,12 @@ export { default as DeleteProjectsForm } from "./DeleteProjectsForm";
 export { default as ReorderProjectsForm } from "./ReorderProjectsForm";
 export { default as UpdateSocialsForm } from "./UpdateSocialsForm";
 export { default as AutoAddProjectsForm } from "./AutoAddProjectsForm";
+export { default as EditEducationForm } from "./EditEducationForm";
 export {
 	AddNotableProjectForm,
 	EditNotableProjectsForm,
 	DeleteNotableProjectsForm,
 	ReorderNotableProjectsForm,
-	EditEducationForm,
 	EditResponsibilitiesForm,
 	AddSkillForm,
 } from "./PlaceholderForms"; 

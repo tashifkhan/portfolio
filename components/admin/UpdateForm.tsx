@@ -25,10 +25,10 @@ import {
 	EditNotableProjectsForm,
 	DeleteNotableProjectsForm,
 	ReorderNotableProjectsForm,
-	EditEducationForm,
 	EditResponsibilitiesForm,
 	AddSkillForm,
 } from "./forms/PlaceholderForms";
+import { EditEducationForm } from "./forms";
 import { ActionType } from "./types";
 
 export default function UpdateForm() {
@@ -240,7 +240,7 @@ export default function UpdateForm() {
 					)}
 					{selectedAction === "updateEducation" && (
 						<EditEducationForm
-							education={education}
+							initialData={education as any}
 							onSuccess={() => {
 								showMessage("success", "Education updated successfully!");
 								fetchData();
