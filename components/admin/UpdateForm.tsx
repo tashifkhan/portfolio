@@ -19,6 +19,7 @@ import DeleteProjectsForm from "./forms/DeleteProjectsForm";
 import ReorderProjectsForm from "./forms/ReorderProjectsForm";
 import UpdateSocialsForm from "./forms/UpdateSocialsForm";
 import AutoAddProjectsForm from "./forms/AutoAddProjectsForm";
+import EditExperienceForm from "./forms/EditExperienceForm";
 import {
 	AddNotableProjectForm,
 	EditNotableProjectsForm,
@@ -40,6 +41,7 @@ export default function UpdateForm() {
 	);
 	const [skills, setSkills] = useState<Skill[]>([]);
 	const [socials, setSocials] = useState<Socials | null>(null);
+	const [experiences, setExperiences] = useState<any[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [message, setMessage] = useState<{
 		type: "success" | "error";
@@ -108,6 +110,14 @@ export default function UpdateForm() {
 			console.error("Error fetching data:", error);
 		} finally {
 			setLoading(false);
+		}
+
+		if (selectedAction === "manageExperience") {
+			const response = await fetch("/api/experience");
+			if (response.ok) {
+				const data = await response.json();
+				setExperiences(data);
+			}
 		}
 	};
 
@@ -266,6 +276,15 @@ export default function UpdateForm() {
 						<AutoAddProjectsForm
 							onSuccess={() => {
 								showMessage("success", "Projects auto-added successfully!");
+								fetchData();
+							}}
+						/>
+					)}
+					{selectedAction === "manageExperience" && (
+						<EditExperienceForm
+							experiences={experiences}
+							onSuccess={() => {
+								showMessage("success", "Experience updated successfully!");
 								fetchData();
 							}}
 						/>
