@@ -51,6 +51,7 @@ export default function ActionMenu({ onActionSelect }: ActionMenuProps) {
 			action: "reorderNotableProjects" as ActionType,
 		},
 		{ label: "Auto Add Projects", action: "autoAddProjects" as ActionType },
+		{ label: "Manage Experience", action: "manageExperience" as ActionType },
 	];
 
 	return (

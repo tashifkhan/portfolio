@@ -13,3 +13,4 @@ export {
 	EditResponsibilitiesForm,
 	AddSkillForm,
 } from "./PlaceholderForms"; 
+export { default as EditExperienceForm } from "./EditExperienceForm";

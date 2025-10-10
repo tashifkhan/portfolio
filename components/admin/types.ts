@@ -11,4 +11,5 @@ export type ActionType =
 	| "updateNotableProjects"
 	| "deleteNotableProjects"
 	| "reorderNotableProjects"
-	| "autoAddProjects"; 
+	| "autoAddProjects"
+	| "manageExperience"; 
