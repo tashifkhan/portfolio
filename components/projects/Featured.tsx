@@ -8,6 +8,7 @@ import Link from "next/link";
 // import Image from "next/image";
 import { getFeaturedProjects } from "@/hooks/get-project-data";
 import ProjectModal from "@/components/ProjectModal";
+import { Building2, ExternalLinkIcon } from "lucide-react";
 
 interface ProjectFrontmatter {
 	external: string;
@@ -70,6 +71,12 @@ const Featured: React.FC = () => {
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.6 }}
 				>
+					<div className="flex justify-center">
+						<div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-200 text-sm font-medium mb-6">
+							<Building2 className="w-4 h-4" />
+							Projects
+						</div>
+					</div>
 					<h2 className="text-4xl font-mono text-center">
 						Some Things I have Built
 					</h2>
@@ -78,6 +85,8 @@ const Featured: React.FC = () => {
 							href="/collection"
 							className="text-orange-300 text-center mb-2 p-1 md:mb-10"
 						>
+							<ExternalLinkIcon className="w-4 h-4 inline-block mr-1" />
+							{"  "}
 							view the complete collection
 						</Link>
 					</div>
