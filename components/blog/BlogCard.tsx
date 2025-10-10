@@ -4,6 +4,7 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ExternalLink, Calendar, Clock, ArrowRight } from "lucide-react";
+import { log } from "console";
 
 export interface BlogPost {
 	id: string;
@@ -18,10 +19,6 @@ export interface BlogPost {
 
 export default function BlogCard({ post }: { post: BlogPost }) {
 	const targetLink = post.link ?? `https://blog.tashif.codes/blog/${post.id}`;
-	const displayReadTime =
-		post.readTime ?? (post as any).readingTimeMinutes
-			? `${(post as any).readingTimeMinutes} min read`
-			: undefined;
 	return (
 		<Card className="group relative overflow-hidden bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 hover:border-orange-500/30 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-orange-500/20">
 			<CardHeader className="pb-4">
@@ -67,7 +64,7 @@ export default function BlogCard({ post }: { post: BlogPost }) {
 				<div className="flex items-center justify-between pt-2">
 					<div className="flex items-center gap-2 text-xs text-white/50">
 						<Clock className="w-3 h-3" />
-						{displayReadTime}
+						{post.readTime}
 					</div>
 					<a
 						href={targetLink}

@@ -20,6 +20,7 @@ export async function fetchPosts(): Promise<Post[]> {
     }
 
     const data = await res.json();
+    // console.log('Fetched posts data:', data);
 
     // Accept array directly, or { posts: [...] }, or object of values
     if (Array.isArray(data)) return data as Post[];
