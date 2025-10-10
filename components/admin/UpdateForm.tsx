@@ -22,7 +22,6 @@ import AutoAddProjectsForm from "./forms/AutoAddProjectsForm";
 import EditExperienceForm from "./forms/EditExperienceForm";
 import {
 	AddNotableProjectForm,
-	EditNotableProjectsForm,
 	DeleteNotableProjectsForm,
 	ReorderNotableProjectsForm,
 } from "./forms/PlaceholderForms";
@@ -30,6 +29,7 @@ import { EditSkillsForm } from "./forms";
 import {
 	EditEducationForm,
 	EditResponsibilitiesForm as RealEditResponsibilitiesForm,
+	EditNotableProjectsForm,
 } from "./forms";
 import { ActionType } from "./types";
 

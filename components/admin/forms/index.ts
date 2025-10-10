@@ -7,9 +7,9 @@ export { default as AutoAddProjectsForm } from "./AutoAddProjectsForm";
 export { default as EditEducationForm } from "./EditEducationForm";
 export { default as EditResponsibilitiesForm } from "./EditResponsibilitiesForm";
 export { default as EditSkillsForm } from "./EditSkillsForm";
+export { default as EditNotableProjectsForm } from "./EditNotableProjectsForm";
 export {
 	AddNotableProjectForm,
-	EditNotableProjectsForm,
 	DeleteNotableProjectsForm,
 	ReorderNotableProjectsForm,
 	AddSkillForm,
