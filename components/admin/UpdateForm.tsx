@@ -25,8 +25,8 @@ import {
 	EditNotableProjectsForm,
 	DeleteNotableProjectsForm,
 	ReorderNotableProjectsForm,
-	AddSkillForm,
 } from "./forms/PlaceholderForms";
+import { EditSkillsForm } from "./forms";
 import {
 	EditEducationForm,
 	EditResponsibilitiesForm as RealEditResponsibilitiesForm,
@@ -41,7 +41,7 @@ export default function UpdateForm() {
 	const [responsibilities, setResponsibilities] = useState<Responsibility[]>(
 		[]
 	);
-	const [skills, setSkills] = useState<Skill[]>([]);
+	const [skills, setSkills] = useState<any>(null);
 	const [socials, setSocials] = useState<Socials | null>(null);
 	const [experiences, setExperiences] = useState<any[]>([]);
 	const [loading, setLoading] = useState(false);
@@ -94,7 +94,7 @@ export default function UpdateForm() {
 			}
 
 			if (selectedAction.includes("Skills")) {
-				const response = await fetch("/api/skills");
+				const response = await fetch("/api/skills/edit-skills");
 				if (response.ok) {
 					const data = await response.json();
 					setSkills(data);
@@ -270,9 +270,10 @@ export default function UpdateForm() {
 						/>
 					)}
 					{selectedAction === "addSkills" && (
-						<AddSkillForm
+						<EditSkillsForm
+							initialData={skills}
 							onSuccess={() => {
-								showMessage("success", "Skill added successfully!");
+								showMessage("success", "Skills updated successfully!");
 								fetchData();
 							}}
 						/>

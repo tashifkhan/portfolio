@@ -52,20 +52,15 @@ export async function PUT(req: Request) {
                responsibilitiesData: body.responsibilitiesData
             }
          },
-         { returnDocument: "after" }
+         { returnDocument: "after", upsert: true }
       )
 
-      if (!result || !result.value) {
-         return NextResponse.json(
-            { error: "Failed to update data" },
-            { status: 404 }
-         )
+      const updated = result?.value ?? (await collection.findOne({}))
+      if (!updated) {
+         return NextResponse.json({ error: "Failed to update data" }, { status: 500 })
       }
 
-      return NextResponse.json({
-         message: "Data updated successfully",
-         data: result.value
-      })
+      return NextResponse.json({ message: "Data updated successfully", data: updated })
    } catch (error: any) {
       return NextResponse.json(
          { error: `Failed to update data: ${error}` },

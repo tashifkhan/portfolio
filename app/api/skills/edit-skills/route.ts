@@ -38,12 +38,14 @@ export async function GET() {
       const collection: Collection = client.db("Portfolio").collection("SkillsDesc")
       
       const data = await collection.findOne({})
-      
       if (!data) {
-         return NextResponse.json(
-            { error: "No skills data found" },
-            { status: 404 }
-         )
+         // Return a default empty structure to allow the editor to initialize gracefully
+         return NextResponse.json({
+            languages: [],
+            frameworks: [],
+            tools: [],
+            softSkills: []
+         })
       }
 
       return NextResponse.json(data)
@@ -87,20 +89,16 @@ export async function PUT(req: Request) {
                softSkills: body.softSkills
             }
          },
-         { returnDocument: "after" }
+         { returnDocument: "after", upsert: true }
       )
 
-      if (!result || !result.value) {
-         return NextResponse.json(
-            { error: "Failed to update skills data" },
-            { status: 404 }
-         )
+      // If upserted, some drivers may not return value in older modes; refetch to be safe
+      const updated = result?.value ?? (await collection.findOne({}))
+      if (!updated) {
+         return NextResponse.json({ error: "Failed to update skills data" }, { status: 500 })
       }
 
-      return NextResponse.json({
-         message: "Skills data updated successfully",
-         data: result.value
-      })
+      return NextResponse.json({ message: "Skills data updated successfully", data: updated })
    } catch (error: any) {
       return NextResponse.json(
          { error: `Failed to update skills data: ${error}` },

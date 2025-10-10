@@ -6,6 +6,7 @@ export { default as UpdateSocialsForm } from "./UpdateSocialsForm";
 export { default as AutoAddProjectsForm } from "./AutoAddProjectsForm";
 export { default as EditEducationForm } from "./EditEducationForm";
 export { default as EditResponsibilitiesForm } from "./EditResponsibilitiesForm";
+export { default as EditSkillsForm } from "./EditSkillsForm";
 export {
 	AddNotableProjectForm,
 	EditNotableProjectsForm,
