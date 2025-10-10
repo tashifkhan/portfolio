@@ -23,7 +23,7 @@ interface ActionMenuProps {
 
 export default function ActionMenu({ onActionSelect }: ActionMenuProps) {
 	const actions = [
-		{ label: "Add Skills", action: "addSkills" as ActionType },
+		{ label: "Update Skills", action: "addSkills" as ActionType },
 		{ label: "Update Education", action: "updateEducation" as ActionType },
 		{
 			label: "Edit Responsibilities",

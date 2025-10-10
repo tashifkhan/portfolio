@@ -35,7 +35,7 @@ interface SkillsData {
 export async function GET() {
    try {
       const client = await clientPromise
-      const collection: Collection = client.db("Portfolio").collection("SkillsDesc")
+      const collection: Collection = client.db("Portfolio").collection("SkillDesc")
       
       const data = await collection.findOne({})
       if (!data) {
@@ -68,7 +68,7 @@ export async function PUT(req: Request) {
       }
 
       const client = await clientPromise
-      const collection: Collection = client.db("Portfolio").collection("SkillsDesc")
+      const collection: Collection = client.db("Portfolio").collection("SkillDesc")
       
       const body: SkillsData = await req.json()
       
