@@ -25,10 +25,12 @@ import {
 	EditNotableProjectsForm,
 	DeleteNotableProjectsForm,
 	ReorderNotableProjectsForm,
-	EditResponsibilitiesForm,
 	AddSkillForm,
 } from "./forms/PlaceholderForms";
-import { EditEducationForm } from "./forms";
+import {
+	EditEducationForm,
+	EditResponsibilitiesForm as RealEditResponsibilitiesForm,
+} from "./forms";
 import { ActionType } from "./types";
 
 export default function UpdateForm() {
@@ -248,10 +250,13 @@ export default function UpdateForm() {
 						/>
 					)}
 					{selectedAction === "editResponsibilities" && (
-						<EditResponsibilitiesForm
-							responsibilities={responsibilities}
+						<RealEditResponsibilitiesForm
+							initialData={education as any}
 							onSuccess={() => {
-								showMessage("success", "Responsibility updated successfully!");
+								showMessage(
+									"success",
+									"Responsibilities updated successfully!"
+								);
 								fetchData();
 							}}
 						/>

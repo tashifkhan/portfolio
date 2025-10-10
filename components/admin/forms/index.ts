@@ -5,12 +5,12 @@ export { default as ReorderProjectsForm } from "./ReorderProjectsForm";
 export { default as UpdateSocialsForm } from "./UpdateSocialsForm";
 export { default as AutoAddProjectsForm } from "./AutoAddProjectsForm";
 export { default as EditEducationForm } from "./EditEducationForm";
+export { default as EditResponsibilitiesForm } from "./EditResponsibilitiesForm";
 export {
 	AddNotableProjectForm,
 	EditNotableProjectsForm,
 	DeleteNotableProjectsForm,
 	ReorderNotableProjectsForm,
-	EditResponsibilitiesForm,
 	AddSkillForm,
 } from "./PlaceholderForms"; 
 export { default as EditExperienceForm } from "./EditExperienceForm";
