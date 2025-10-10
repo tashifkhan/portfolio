@@ -7,6 +7,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LoginForm } from "../admin/LoginForm";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
+import { HiChevronDown } from "react-icons/hi2";
 import Image from "next/image";
 import logo from "@/app/icon.png";
 
@@ -17,6 +18,8 @@ function Header() {
 	const [showLoginModal, setShowLoginModal] = useState(false);
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+	const [hoveredDropdown, setHoveredDropdown] = useState<string | null>(null);
+	const [clickedDropdown, setClickedDropdown] = useState<string | null>(null);
 
 	useEffect(() => {
 		// Check authentication status
@@ -104,11 +107,30 @@ function Header() {
 							<div className="flex items-center space-x-8">
 								{links.map((link) => {
 									const isActive = activeSection === link.hash;
+									const hasSubLinks = link.subLinks && link.subLinks.length > 0;
+									const isDropdownOpen =
+										hoveredDropdown === link.name ||
+										clickedDropdown === link.name;
 
 									return (
-										<motion.div key={link.hash} className="relative">
+										<motion.div
+											key={link.hash}
+											className="relative"
+											onMouseEnter={() =>
+												hasSubLinks && setHoveredDropdown(link.name)
+											}
+											onMouseLeave={() => setHoveredDropdown(null)}
+										>
 											<Link
 												href={link.hash || "#"}
+												onClick={(e) => {
+													if (hasSubLinks) {
+														e.preventDefault();
+														setClickedDropdown(
+															clickedDropdown === link.name ? null : link.name
+														);
+													}
+												}}
 												className={`
                                        relative flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-sm
                                        transition-all duration-300 hover:bg-white/5 hover:scale-105
@@ -121,6 +143,14 @@ function Header() {
 											>
 												<span className="text-lg">{link.icon}</span>
 												{link.name}
+												{hasSubLinks && (
+													<motion.span
+														animate={{ rotate: isDropdownOpen ? 180 : 0 }}
+														transition={{ duration: 0.2 }}
+													>
+														<HiChevronDown className="text-sm" />
+													</motion.span>
+												)}
 
 												{isActive && (
 													<motion.div
@@ -134,6 +164,38 @@ function Header() {
 													/>
 												)}
 											</Link>
+
+											{/* Dropdown Menu */}
+											<AnimatePresence>
+												{hasSubLinks && isDropdownOpen && (
+													<motion.div
+														initial={{ opacity: 0, y: -10 }}
+														animate={{ opacity: 1, y: 0 }}
+														exit={{ opacity: 0, y: -10 }}
+														transition={{ duration: 0.2 }}
+														className="absolute top-full left-0 mt-2 w-56 bg-black/95 backdrop-blur-xl rounded-xl border border-white/10 shadow-2xl overflow-hidden z-50"
+														onMouseLeave={() => {
+															setHoveredDropdown(null);
+															setClickedDropdown(null);
+														}}
+													>
+														{link.subLinks?.map((subLink, index) => (
+															<Link
+																key={subLink.hash}
+																href={subLink.hash}
+																onClick={() => {
+																	setHoveredDropdown(null);
+																	setClickedDropdown(null);
+																}}
+																className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 transition-all duration-200 border-b border-white/5 last:border-b-0"
+															>
+																<span className="text-lg">{subLink.icon}</span>
+																<span className="text-sm">{subLink.name}</span>
+															</Link>
+														))}
+													</motion.div>
+												)}
+											</AnimatePresence>
 										</motion.div>
 									);
 								})}
@@ -235,10 +297,13 @@ function Header() {
 								</div>
 
 								{/* Menu Items */}
-								<nav className="flex-1 px-6 py-8">
-									<ul className="space-y-4">
+								<nav className="flex-1 px-6 py-8 overflow-y-auto">
+									<ul className="space-y-2">
 										{links.map((link, index) => {
 											const isActive = activeSection === link.hash;
+											const hasSubLinks =
+												link.subLinks && link.subLinks.length > 0;
+											const isExpanded = clickedDropdown === link.name;
 
 											return (
 												<motion.li
@@ -247,10 +312,20 @@ function Header() {
 													animate={{ opacity: 1, x: 0 }}
 													transition={{ delay: index * 0.1 }}
 												>
-													<Link
-														href={link.hash || "#"}
-														onClick={() => setIsMobileMenuOpen(false)}
-														className={`
+													<div>
+														<Link
+															href={link.hash || "#"}
+															onClick={(e) => {
+																if (hasSubLinks) {
+																	e.preventDefault();
+																	setClickedDropdown(
+																		isExpanded ? null : link.name
+																	);
+																} else {
+																	setIsMobileMenuOpen(false);
+																}
+															}}
+															className={`
                                              flex items-center gap-4 p-4 rounded-xl transition-all duration-300
                                              ${
 																								isActive
@@ -258,17 +333,63 @@ function Header() {
 																									: "text-gray-300 hover:text-white hover:bg-white/5"
 																							}
                                           `}
-													>
-														<span className="text-xl">{link.icon}</span>
-														<span className="font-medium">{link.name}</span>
-														{isActive && (
-															<motion.div
-																className="ml-auto w-2 h-2 bg-orange-500 rounded-full"
-																layoutId="mobileMenuIndicator"
-																transition={{ type: "spring", bounce: 0.2 }}
-															/>
-														)}
-													</Link>
+														>
+															<span className="text-xl">{link.icon}</span>
+															<span className="font-medium flex-1">
+																{link.name}
+															</span>
+															{hasSubLinks && (
+																<motion.span
+																	animate={{ rotate: isExpanded ? 180 : 0 }}
+																	transition={{ duration: 0.2 }}
+																	className="text-gray-400"
+																>
+																	<HiChevronDown />
+																</motion.span>
+															)}
+															{isActive && !hasSubLinks && (
+																<motion.div
+																	className="w-2 h-2 bg-orange-500 rounded-full"
+																	layoutId="mobileMenuIndicator"
+																	transition={{ type: "spring", bounce: 0.2 }}
+																/>
+															)}
+														</Link>
+
+														{/* Mobile Submenu */}
+														<AnimatePresence>
+															{hasSubLinks && isExpanded && (
+																<motion.div
+																	initial={{ height: 0, opacity: 0 }}
+																	animate={{ height: "auto", opacity: 1 }}
+																	exit={{ height: 0, opacity: 0 }}
+																	transition={{ duration: 0.2 }}
+																	className="overflow-hidden"
+																>
+																	<div className="pl-8 pt-2 space-y-2">
+																		{link.subLinks?.map((subLink) => (
+																			<Link
+																				key={subLink.hash}
+																				href={subLink.hash}
+																				onClick={() => {
+																					setIsMobileMenuOpen(false);
+																					setClickedDropdown(null);
+																				}}
+																				className="flex items-center gap-3 p-3 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-all duration-200"
+																			>
+																				<span className="text-lg">
+																					{subLink.icon}
+																				</span>
+																				<span className="text-sm">
+																					{subLink.name}
+																				</span>
+																			</Link>
+																		))}
+																	</div>
+																</motion.div>
+															)}
+														</AnimatePresence>
+													</div>
 												</motion.li>
 											);
 										})}
